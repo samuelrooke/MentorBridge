@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Before publishing, search for these placeholders and replace them:
+    [CONTACT EMAIL]  FAQ and bottom section, including the mailto links
+    [TEAM NAMES]     footer
+-->
+<title>MentorBridge: prepared interns, less pressure on your team</title>
+<meta name="description" content="A student team from The Hague University of Applied Sciences is testing an idea: experienced professionals who prepare and support interns. Would it help your organisation? Take our 6-minute survey.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MentorBridge: prepared interns, less pressure on your team">
+<meta property="og:description" content="A student team from The Hague University of Applied Sciences is testing an idea for government organisations that take on interns. Would it help yours?">
+<meta name="theme-color" content="#2142A8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232142A8'/%3E%3Ctext x='32' y='45' font-family='Arial,Helvetica,sans-serif' font-size='38' font-weight='700' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&amp;display=swap">
+<style>
+:root {
+  --paper: #F6F7FB;
+  --ink: #141D4F;
+  --muted: #48527E;
+  --mist: #E3E7F4;
+  --accent: #2142A8;
+  --accent-hover: #1A3690;
+  --accent-text: #2142A8;
+  --on-accent: #FFFFFF;
+  --on-accent-soft: rgba(255, 255, 255, 0.86);
+  --panel: #FFFFFF;
+  --panel-ink: #141D4F;
+  --panel-muted: #48527E;
+  --rule: rgba(20, 29, 79, 0.2);
+  --focus: #141D4F;
+  --pad-x: clamp(20px, 5vw, 64px);
+  --font: 'Archivo', 'Helvetica Neue', Helvetica, 'Segoe UI', sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0E1330;
+    --ink: #E9EDFA;
+    --muted: #AEB7DB;
+    --mist: #161D45;
+    --accent-text: #9DB1F5;
+    --rule: rgba(233, 237, 250, 0.18);
+    --focus: #E9EDFA;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 18px;
+  line-height: 1.55;
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 { text-wrap: balance; overflow-wrap: break-word; }
+p, dd { text-wrap: pretty; }
+
+a { color: var(--accent-text); text-underline-offset: 3px; }
+a:hover { color: var(--ink); }
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.on-accent :focus-visible { outline-color: #FFFFFF; }
+.on-accent .panel :focus-visible { outline-color: #141D4F; }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: var(--pad-x); }
+.on-accent { background: var(--accent); color: var(--on-accent); }
+.muted { color: var(--muted); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 30px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+}
+.btn-light { background: #FFFFFF; color: var(--accent); }
+.btn-light:hover { background: #E9EDF8; color: var(--accent); }
+.btn-accent { background: var(--accent); color: #FFFFFF; }
+.btn-accent:hover { background: var(--accent-hover); color: #FFFFFF; }
+.btn-small { min-height: 44px; padding: 0 18px; font-size: 16px; line-height: 1; }
+.btn-block { display: flex; width: 100%; padding: 0 24px; }
+
+/* Header */
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-top: 24px;
+}
+.wordmark {
+  font-size: clamp(18px, 4.6vw, 22px);
+  font-weight: 800;
+  font-stretch: 118%;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* Hero */
+.hero .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: clamp(36px, 5vw, 64px);
+  padding-top: clamp(40px, 6vw, 88px);
+  padding-bottom: clamp(56px, 7vw, 96px);
+}
+.hero-copy {
+  flex: 3 1 520px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  font-stretch: 112.5%;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.lead {
+  margin: 0;
+  max-width: 36ch;
+  font-size: clamp(1.1875rem, 1.5vw, 1.3125rem);
+  line-height: 1.5;
+}
+.panel {
+  flex: 2 1 340px;
+  min-width: 0;
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--panel-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.panel h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  font-stretch: 112.5%;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+.panel p { margin: 0; font-size: 17px; }
+.panel-cta { display: flex; flex-direction: column; gap: 10px; padding-top: 8px; }
+.panel .note { font-size: 15px; line-height: 1.4; color: var(--panel-muted); text-align: center; }
+
+/* Content sections */
+.section { padding-block: clamp(64px, 8vw, 104px); }
+.section .wrap { display: flex; flex-direction: column; gap: clamp(36px, 4vw, 48px); }
+.section-mist { background: var(--mist); }
+.h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 800;
+  font-stretch: 112.5%;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.h3 { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.25; }
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(28px, 4vw, 56px);
+}
+
+/* How it would work */
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(32px, 4vw, 56px);
+}
+.steps li { display: flex; flex-direction: column; gap: 12px; }
+.steps p { margin: 0; }
+.step-num {
+  font-size: 64px;
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent-text);
+}
+.notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  gap: 20px clamp(32px, 4vw, 56px);
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+}
+.notes p { margin: 0; }
+.notes strong { font-weight: 700; }
+
+/* What we've heard */
+.section-intro { max-width: 46rem; display: flex; flex-direction: column; gap: 12px; }
+.section-intro p { margin: 0; }
+.finding { display: flex; flex-direction: column; gap: 10px; }
+.finding p { margin: 0; }
+
+/* FAQ */
+.faq {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr));
+  gap: clamp(28px, 3.5vw, 44px) clamp(32px, 4vw, 56px);
+}
+.faq > div { display: flex; flex-direction: column; gap: 8px; }
+.faq dt { font-size: 20px; font-weight: 700; line-height: 1.3; }
+.faq dd { margin: 0; color: var(--muted); }
+
+/* Final ask */
+.ask .wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding-block: clamp(64px, 9vw, 112px);
+}
+.ask h2 {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+  font-weight: 800;
+  font-stretch: 112.5%;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+.ask .lead { max-width: 46ch; color: rgba(255, 255, 255, 0.88); }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-top: 4px; }
+.cta-row span { font-size: 15px; color: var(--on-accent-soft); }
+.alt { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; font-size: 16px; color: rgba(255, 255, 255, 0.88); }
+.alt p { margin: 0; }
+.alt a { color: #FFFFFF; }
+.alt a:hover { color: #FFFFFF; text-decoration-thickness: 2px; }
+
+/* Footer */
+.site-footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 32px;
+  padding-top: 40px;
+  padding-bottom: 48px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.site-footer .wordmark { font-size: 18px; color: var(--ink); }
+.site-footer p { margin: 0; max-width: 60ch; }
+</style>
+</head>
+<body>
+
+<header class="site-header on-accent">
+  <div class="wrap">
+    <span class="wordmark">MentorBridge</span>
+    <a class="btn btn-light btn-small" href="https://docs.google.com/forms/d/e/1FAIpQLSeQ-jtkp8CYnAq05FXqAcnbut3jgRV8PpjMCdvbKyi0_U34Eg/viewform" target="_blank" rel="noopener">Take the survey</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero on-accent" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 id="hero-title">Prepared interns. Less pressure on your team.</h1>
+        <p class="lead">MentorBridge would match students with experienced professionals from their field. The mentor prepares the student before the internship and helps with everyday questions during it, so your supervisor has more time for their own work.</p>
+      </div>
+      <div class="panel">
+        <h2>We're students, and this is still an idea</h2>
+        <p>We're a team from The Hague University of Applied Sciences. Before anyone builds MentorBridge, we want to find out if it's really needed.</p>
+        <p>We'd love to know if your municipality, or another government organisation, would be interested.</p>
+        <div class="panel-cta">
+          <a class="btn btn-accent btn-block" href="https://docs.google.com/forms/d/e/1FAIpQLSeQ-jtkp8CYnAq05FXqAcnbut3jgRV8PpjMCdvbKyi0_U34Eg/viewform" target="_blank" rel="noopener">Take the 6-minute survey</a>
+          <p class="note">Opens in Google Forms. No commitment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="wrap">
+      <h2 class="h2" id="how-title">How it would work</h2>
+      <ol class="steps">
+        <li>
+          <span class="step-num" aria-hidden="true">1</span>
+          <h3 class="h3">A student gets a mentor</h3>
+          <p class="muted">An experienced or recently retired professional from the student's own field.</p>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">2</span>
+          <h3 class="h3">The mentor prepares them</h3>
+          <p class="muted">What the work is really like, plus feedback on their CV and interviews. Mentors can also introduce prepared students to organisations like yours.</p>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">3</span>
+          <h3 class="h3">The mentor stays involved</h3>
+          <p class="muted">During the internship, the student brings everyday questions to the mentor first.</p>
+        </li>
+      </ol>
+      <div class="notes">
+        <p><strong>Your supervisor stays in charge.</strong> The mentor is extra help for the intern, not a replacement.</p>
+        <p><strong>Students pay nothing.</strong> The organisation that takes the intern pays a placement fee, and the mentor is paid from that.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-mist" aria-labelledby="heard-title">
+    <div class="wrap">
+      <div class="section-intro">
+        <h2 class="h2" id="heard-title">What we've heard so far</h2>
+        <p class="muted">From our interviews with organisations and our research with students.</p>
+      </div>
+      <div class="grid-3">
+        <div class="finding">
+          <h3 class="h3">Interns come on top of the normal workload</h3>
+          <p class="muted">Supervisors don't get lighter work when an intern starts. When they're busy, colleagues step in, and guidance becomes less consistent.</p>
+        </div>
+        <div class="finding">
+          <h3 class="h3">Organisations want interns to add real value</h3>
+          <p class="muted">With little time for feedback, it takes longer before an intern can do meaningful work.</p>
+        </div>
+        <div class="finding">
+          <h3 class="h3">Students want someone from the field</h3>
+          <p class="muted">All 20 students we asked said they wished they could talk to someone working in their field.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="faq-title">
+    <div class="wrap">
+      <h2 class="h2" id="faq-title">Questions you might have</h2>
+      <dl class="faq">
+        <div>
+          <dt>Is MentorBridge a real service?</dt>
+          <dd>Not yet. We're testing whether it's needed before anything gets built. That's why your answer matters, even if it's no.</dd>
+        </div>
+        <div>
+          <dt>What are you asking from us?</dt>
+          <dd>Six minutes for the survey. If you'd rather talk, reply to our email or write to <a href="mailto:srooke50@gmail.com"></a>srooke50@gmail.com</dd>
+        </div>
+        <div>
+          <dt>Who would the mentors be?</dt>
+          <dd>Experienced professionals from the student's field: people close to retirement, recently retired, or with a few spare hours next to their job.</dd>
+        </div>
+        <div>
+          <dt>Is this only for municipalities?</dt>
+          <dd>No. We'd like to hear from any government organisation in the Netherlands or Belgium that takes on interns. If you know one that should see this, please pass it on.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="ask on-accent" aria-labelledby="ask-title">
+    <div class="wrap">
+      <h2 id="ask-title">Would this help your organisation?</h2>
+      <p class="lead">Tell us in the survey. We'd rather hear “no” now than build something nobody needs.</p>
+      <div class="cta-row">
+        <a class="btn btn-light" href="https://docs.google.com/forms/d/e/1FAIpQLSeQ-jtkp8CYnAq05FXqAcnbut3jgRV8PpjMCdvbKyi0_U34Eg/viewform" target="_blank" rel="noopener">Take the 6-minute survey</a>
+        <span>Opens in Google Forms</span>
+      </div>
+      <div class="alt">
+        <p>Rather talk? Email <a href="mailto:srooke50@gmail.com">srooke50@gmail.com</a></p>
+        <p>Know another government organisation that takes on interns? Feel free to forward them this page.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span class="wordmark">MentorBridge</span>
+    <p>A student project at The Hague University of Applied Sciences, 2026. Made by Samuel Rooke, Anastassiya Rochcshina, Hubert Szpit, Sharon Gopie.</p>
+  </div>
+</footer>
+
+</body>
+</html>
