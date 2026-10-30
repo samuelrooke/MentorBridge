@@ -3,6 +3,10 @@ import { requireAuth, requireRole } from '../middleware/auth.js'
 import { supabaseAdmin } from '../supabase.js'
 
 const router = Router()
+router.use((_req, res, next) => {
+  if (!supabaseAdmin) return res.status(503).json({ error: 'Admin routes need SUPABASE_SERVICE_ROLE_KEY on the server' })
+  next()
+})
 router.use(requireAuth, requireRole('admin'))
 
 // Everyone available for manual matching, with their intake answers.
