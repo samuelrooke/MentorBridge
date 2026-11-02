@@ -5,7 +5,7 @@ MentorBridge connects students with experienced professionals 2–3 months befor
 ## Project structure
 
 ```
-index.html            Landing page / validation survey (static, standalone)
+index.html            Old validation-survey page (no longer used, to be replaced)
 client/               React + Vite + TypeScript web app
   src/context/        Supabase auth state (session + profile)
   src/pages/          Login, Dashboard, Profile (intake), Admin (manual matching)
