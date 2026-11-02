@@ -12,6 +12,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/login" element={<Login />} />
           <Route
             element={
@@ -20,7 +21,7 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Dashboard />} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
             <Route
               path="admin"

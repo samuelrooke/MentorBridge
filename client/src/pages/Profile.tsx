@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/auth'
 import { supabase, type Role } from '../lib/supabase'
 
 type Field = { name: string; label: string; type?: 'text' | 'textarea' | 'date' }

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { Navigate, useLocation, useSearchParams } from 'react-router-dom'
+import { useAuth } from '../context/auth'
 import { supabase } from '../lib/supabase'
 
 type Mode = 'login' | 'signup'
@@ -15,7 +15,8 @@ const roleLabels: Record<SignupRole, string> = {
 export default function Login() {
   const { session } = useAuth()
   const location = useLocation()
-  const [mode, setMode] = useState<Mode>('login')
+  const [searchParams] = useSearchParams()
+  const [mode, setMode] = useState<Mode>(searchParams.get('mode') === 'signup' ? 'signup' : 'login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [fullName, setFullName] = useState('')
@@ -24,7 +25,7 @@ export default function Login() {
   const [info, setInfo] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
-  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/'
+  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/dashboard'
   if (session) return <Navigate to={from} replace />
 
   async function handleSubmit(e: FormEvent) {
