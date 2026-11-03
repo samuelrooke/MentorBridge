@@ -8,6 +8,7 @@ dist
 # Markdown notes and docs
 *.md
 !README.md
+!CHANGELOG.md
 
 # Local env variants and backups (keep the examples)
 .env.*
