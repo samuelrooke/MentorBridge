@@ -2,6 +2,12 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.1.1] - 2026-11-03
+
+### Fixed
+
+- Vercel builds of the landing page and platform app: install dependencies from the repository root, so build tools like Vite are available in the monorepo.
+
 ## [0.1.0] - 2026-11-03
 
 First release: the validation landing page for students, the API that stores sign-ups, and the foundation of the platform app.
@@ -45,4 +51,5 @@ First release: the validation landing page for students, the API that stores sig
 - Screens for the preparation plan, sessions, messages, consent and feedback (the database tables and access rules exist).
 - Social media links and the GoatCounter code on the landing page.
 
+[0.1.1]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.1.1
 [0.1.0]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.1.0
