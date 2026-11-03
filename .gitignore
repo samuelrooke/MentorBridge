@@ -16,3 +16,6 @@ dist
 
 # Vercel CLI project links
 .vercel
+
+# Created by an editor extension, not used (the project uses ESLint)
+.oxlintrc.json
