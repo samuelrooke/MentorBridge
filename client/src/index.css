@@ -9,16 +9,16 @@
   accent on white 6.6 · muted on white 7.1 · muted on paper 6.6
 */
 @theme {
-  --color-accent: #2B5CA8;
-  --color-navy: #172A46;
-  --color-ice: #DCE5F1;
-  --color-paper: #F5F7FB;
-  --color-accent-tint: #E8EFF8;
+  --color-accent: #2F5B8A;
+  --color-navy: #14243A;
+  --color-ice: #E3EAF2;
+  --color-paper: #F5F7FA;
+  --color-accent-tint: #E8EEF5;
   --color-muted: #4B5A6B;
   --color-danger: #9B2C2C;
   --color-danger-tint: #FBECEC;
-  --shadow-card: 0 1px 2px rgb(23 42 70 / 0.05), 0 6px 20px -8px rgb(23 42 70 / 0.10);
-  --shadow-lift: 0 2px 4px rgb(23 42 70 / 0.05), 0 24px 48px -20px rgb(23 42 70 / 0.22);
+  --shadow-card: 0 1px 2px rgb(20 36 58 / 0.05), 0 6px 20px -8px rgb(20 36 58 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(20 36 58 / 0.05), 0 24px 48px -20px rgb(20 36 58 / 0.22);
   --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
   --font-sans: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -55,13 +55,15 @@
   .stack-sm { @apply flex flex-col items-start gap-3; }
 
   /* Wordmark: MENTOR + bar / bar + BRIDGE */
+  .logo-img { @apply h-10 w-auto sm:h-12; }
+  .auth-intro .logo-img { @apply h-12 self-start sm:h-14; }
   .wordmark { @apply inline-flex flex-col font-display text-xl leading-none tracking-wide text-navy uppercase no-underline; }
   .wordmark-line { @apply flex items-center gap-1.5; }
   .wordmark-bar { @apply inline-block h-2.5 w-7 rounded-full bg-accent; }
 
   /* Top bar */
   .topbar { @apply sticky top-0 z-40 border-b border-navy/10 bg-white/90 backdrop-blur-md; }
-  .topbar-inner { @apply flex h-[72px] items-center justify-between gap-6; }
+  .topbar-inner { @apply flex h-20 items-center justify-between gap-6; }
   .topnav { @apply flex items-center gap-1 text-[15px] font-semibold; }
   .topnav a { @apply rounded-lg px-3 py-2 text-muted no-underline transition-colors hover:bg-accent-tint hover:text-navy; }
   .topnav a.active { @apply bg-accent-tint text-navy; }

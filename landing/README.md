@@ -34,9 +34,8 @@ The landing page deploys to Vercel (Root Directory `landing`) and talks to the A
 
 ## Placeholders to fill in
 
-- `landing/public/hero.jpg`: the hero image (landscape, currently 1264 × 848).
+- The hero image is an HTML illustration in `index.html` (`.bridge-vis`), so there is no image file to replace.
 - GoatCounter: in `index.html`, replace `YOUR-CODE` in `https://YOUR-CODE.goatcounter.com/count`.
-- Contact email: in `index.html`, replace both `[CONTACT EMAIL]` in the footer.
 
 ## Measuring
 
