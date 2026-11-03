@@ -1,0 +1,49 @@
+{
+  "name": "mentorbridge",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "client",
+    "server",
+    "landing"
+  ],
+  "scripts": {
+    "dev": "concurrently -n client,server,landing -c blue,green,magenta \"npm run dev -w client\" \"npm run dev -w server\" \"npm run dev -w landing\"",
+    "build": "npm run build -w client && npm run build -w landing",
+    "start": "npm run start -w server",
+    "lint": "eslint .",
+    "test": "npm run test --workspaces --if-present",
+    "dev:landing": "concurrently -n server,landing -c green,magenta \"npm run dev -w server\" \"npm run dev -w landing\"",
+    "pilot-requests": "npm run pilot-requests -w server",
+    "setup": "node scripts/setup.mjs",
+    "setup:local": "node scripts/setup.mjs --local",
+    "doctor": "node scripts/doctor.mjs",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:status": "supabase status",
+    "db:reset": "supabase db reset",
+    "db:new": "supabase migration new",
+    "db:link": "supabase link",
+    "db:push": "supabase db push",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.6",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.14.0",
+    "supabase": "^3.0.0",
+    "typescript-eslint": "^8.72.1"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.9"
+  }
+}

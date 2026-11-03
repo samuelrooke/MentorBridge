@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MentorBridge: find your internship with a mentor from your field</title>
+    <meta
+      name="description"
+      content="MentorBridge matches students with an experienced professional from their field, who helps with your CV, your applications and your interviews. Free for students."
+    />
+    <meta name="theme-color" content="#14243A" />
+    <link rel="icon" href="/icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700;800&display=swap"
+    />
+    <script>document.documentElement.classList.add('js')</script>
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="module" src="/src/main.js"></script>
+    <!-- GoatCounter (cookieless visitor counting). PLACEHOLDER: replace YOUR-CODE with your GoatCounter code. -->
+    <script data-goatcounter="https://YOUR-CODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header class="site-header">
+      <div class="wrap flex h-20 items-center justify-between gap-6">
+        <a href="#top" class="logo" aria-label="MentorBridge, back to top">
+          <img src="/logo.png" alt="MentorBridge" width="1600" height="332" />
+        </a>
+        <nav class="site-nav" aria-label="Main">
+          <a href="#help">What you get</a>
+          <a href="#how">How it works</a>
+          <a href="#platform">The platform</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <nav class="audience-nav" aria-label="For mentors and organizations">
+            <a href="#mentors">For mentors</a>
+            <a href="#organizations">For organizations</a>
+          </nav>
+          <a href="#signup" class="btn btn-primary btn-sm" data-role="student">Sign up free</a>
+        </div>
+      </div>
+      <!-- On small screens the menu is hidden, so mentors and organizations get their own row -->
+      <nav class="audience-strip" aria-label="For mentors and organizations">
+        <a href="#mentors">For mentors</a>
+        <a href="#organizations">For organizations</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <!-- Hero -->
+      <section id="top" class="hero" aria-labelledby="hero-title">
+        <!-- Soft light-blue streaks behind the hero -->
+        <div class="hero-streaks" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="hero-wrap">
+          <div class="hero-card">
+            <div class="hero-copy">
+              <p class="pill reveal" style="--delay: 0.1s"><span class="pill-dot" aria-hidden="true"></span>For students looking for an internship</p>
+
+              <h1 id="hero-title" class="hero-title reveal" style="--delay: 0.2s">
+                Find your internship with a mentor from <span class="underline-bridge">your field.</span>
+              </h1>
+
+              <p class="hero-lead reveal" style="--delay: 0.35s">
+                Heard nothing back after another application? An experienced professional from your field tells you
+                what to improve, practises interviews with you and shows you what the work is really like.
+              </p>
+
+              <div class="flex flex-col items-start gap-5 reveal" style="--delay: 0.5s">
+                <a href="#signup" class="btn btn-primary btn-xl" data-role="student">Sign up as a student</a>
+                <ul class="hero-points" aria-label="What you get">
+                  <li><span class="tick" aria-hidden="true">✓</span>Free for students</li>
+                  <li><span class="tick" aria-hidden="true">✓</span>A mentor from your field</li>
+                  <li><span class="tick" aria-hidden="true">✓</span>Short, flexible sessions</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Hero image: how the service works, as three steps joined like a bridge. -->
+            <figure
+              class="bridge-vis"
+              role="img"
+              aria-label="How MentorBridge works in three steps: you tell us your field and what you need help with, we match you with a professional from your field, and you meet in a few short sessions about your CV, applications, interviews and the work itself."
+            >
+              <div class="bv-card" style="--i: 0">
+                <p class="bv-label">Step 1</p>
+                <span class="bv-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5Z" /><path d="M6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5" /></svg>
+                </span>
+                <p class="bv-title">You sign up</p>
+                <p class="bv-sub">Your field of study and what you want help with.</p>
+              </div>
+
+              <span class="bv-link" style="--i: 1" aria-hidden="true"></span>
+
+              <div class="bv-card" style="--i: 2">
+                <p class="bv-label">Step 2</p>
+                <span class="bv-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
+                </span>
+                <p class="bv-title">We match you</p>
+                <p class="bv-sub">With a professional who works in your field.</p>
+              </div>
+
+              <span class="bv-link" style="--i: 3" aria-hidden="true"></span>
+
+              <div class="bv-card" style="--i: 4">
+                <p class="bv-label">Step 3</p>
+                <span class="bv-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-5 4v-14Z" /><path d="M8 9.5h8M8 12.5h5" /></svg>
+                </span>
+                <p class="bv-title">You meet</p>
+                <p class="bv-sub">A few short sessions on your CV, interviews and the work.</p>
+              </div>
+            </figure>
+          </div>
+
+          <!-- Real number from our mentor survey, close to the call to action -->
+          <p class="proof-line reveal" style="--delay: 0.7s">
+            <span class="proof-badge">36 of 38</span> professionals we surveyed would consider mentoring a student
+          </p>
+        </div>
+      </section>
+
+      <!-- Problem -->
+      <section class="section-sm band" aria-labelledby="problem-title">
+        <div class="wrap grid items-center gap-8 scroll-reveal lg:grid-cols-[auto_1fr] lg:gap-20">
+          <p class="problem-figure">
+            <span class="problem-number">20–30</span>
+            <span class="problem-caption">applications sent by most students we spoke to</span>
+          </p>
+          <div class="flex flex-col gap-4">
+            <h2 id="problem-title" class="kicker">The problem</h2>
+            <p class="statement">
+              Few got an answer, and the rejections <mark class="hl">never said what to improve</mark>. Some started to
+              doubt their own skills.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- What you get: one tinted card per kind of help -->
+      <section id="help" class="section" aria-labelledby="benefits-title">
+        <div class="wrap">
+          <div class="section-head scroll-reveal">
+            <p class="kicker">What you get</p>
+            <h2 id="benefits-title" class="h2">What your mentor helps with</h2>
+            <p class="lead">Someone who has done the work you're applying for, in a few short sessions.</p>
+          </div>
+          <div class="mt-12 grid gap-5 md:grid-cols-3">
+            <article class="help-card help-accent scroll-reveal">
+              <div class="help-text">
+                <h3 class="h3">Your CV and applications</h3>
+                <p>Honest feedback, so you know what to improve before you send it.</p>
+              </div>
+              <div class="vignette" aria-hidden="true">
+                <div class="doc">
+                  <span class="doc-line w-1/2 bg-navy"></span>
+                  <span class="doc-line w-full"></span>
+                  <span class="doc-line w-5/6"></span>
+                  <span class="doc-line w-2/3"></span>
+                  <span class="doc-line w-4/5"></span>
+                </div>
+                <div class="note note-right">Put your project at the top.</div>
+              </div>
+            </article>
+            <article class="help-card help-ice scroll-reveal" style="--delay: 0.1s">
+              <div class="help-text">
+                <h3 class="h3">Interview practice</h3>
+                <p>Practise with someone who knows what the work is really like.</p>
+              </div>
+              <div class="vignette" aria-hidden="true">
+                <div class="bubble bubble-left">Tell me about a project you're proud of.</div>
+                <div class="bubble bubble-right"><span class="doc-line w-28 bg-white/60"></span><span class="doc-line w-20 bg-white/60"></span></div>
+                <div class="tag">Practice round 2</div>
+              </div>
+            </article>
+            <article class="help-card help-white scroll-reveal" style="--delay: 0.2s">
+              <div class="help-text">
+                <h3 class="h3">Your first weeks</h3>
+                <p>Once you have a place, get ready for the tools and the work, and ask basic questions after.</p>
+              </div>
+              <div class="vignette" aria-hidden="true">
+                <ul class="checks">
+                  <li class="done"><b>✓</b>Laptop and accounts set up</li>
+                  <li class="done"><b>✓</b>Team tools explained</li>
+                  <li><b></b>First task, day one</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how" class="section bg-paper" aria-labelledby="how-title">
+        <div class="wrap">
+          <div class="section-head scroll-reveal">
+            <p class="kicker">How it works</p>
+            <h2 id="how-title" class="h2">Three steps to your mentor</h2>
+          </div>
+          <ol class="steps">
+            <li class="step scroll-reveal">
+              <span class="step-number" aria-hidden="true">1</span>
+              <h3 class="h3">Tell us what you're looking for</h3>
+              <p>Your field, the internship you want, and where you get stuck.</p>
+            </li>
+            <li class="step scroll-reveal" style="--delay: 0.1s">
+              <span class="step-number" aria-hidden="true">2</span>
+              <h3 class="h3">We match you with a mentor</h3>
+              <p>An experienced professional from your field, not a generic coach.</p>
+            </li>
+            <li class="step scroll-reveal" style="--delay: 0.2s">
+              <span class="step-number" aria-hidden="true">3</span>
+              <h3 class="h3">Apply with confidence</h3>
+              <p>A few short sessions on your CV, applications and interviews, and help with your first weeks once you have a place.</p>
+            </li>
+          </ol>
+          <div class="mt-12 flex justify-center scroll-reveal">
+            <a href="#signup" class="btn btn-primary" data-role="student">Sign up as a student</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- The platform: mockup + what it does -->
+      <section id="platform" class="section on-dark overflow-hidden" aria-labelledby="platform-title">
+        <div class="wrap grid items-center gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <div class="flex flex-col gap-6 scroll-reveal">
+            <p class="pill pill-dark"><span class="pill-dot" aria-hidden="true"></span>The platform</p>
+            <h2 id="platform-title" class="h2">From your first application to your first day</h2>
+            <p class="lead text-ice">Everything you and your mentor need, in one place.</p>
+            <ul class="features">
+              <li>
+                <span class="feature-icon" aria-hidden="true">1</span>
+                <div>
+                  <h3>Your profile</h3>
+                  <p>Your field of study, the internship you're looking for and what you want help with.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feature-icon" aria-hidden="true">2</span>
+                <div>
+                  <h3>A mentor from your field</h3>
+                  <p>We match you by hand with a professional who knows the work you're applying for.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feature-icon" aria-hidden="true">3</span>
+                <div>
+                  <h3>A plan for your search</h3>
+                  <p>Clear steps to work through with your mentor: your CV, your applications and interview practice.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feature-icon" aria-hidden="true">4</span>
+                <div>
+                  <h3>Sessions and messages</h3>
+                  <p>Plan sessions and ask questions in one place, with a reminder before each session.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Mockup of the student dashboard, built in HTML so it stays sharp -->
+          <figure class="scroll-reveal" style="--delay: 0.15s">
+            <div
+              class="mockup"
+              role="img"
+              aria-label="Preview of the MentorBridge dashboard: a student's plan for finding a software internship with 2 of 4 steps done, the next session with their mentor, and a message from the mentor."
+            >
+              <div class="mockup-bar" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <div class="mockup-url">MentorBridge · Dashboard</div>
+              </div>
+              <div class="mockup-body" aria-hidden="true">
+                <nav class="mockup-nav">
+                  <div class="mockup-logo"><i></i><i></i></div>
+                  <span class="active">Plan</span>
+                  <span>Sessions</span>
+                  <span>Messages</span>
+                  <span>Profile</span>
+                </nav>
+                <div class="mockup-main">
+                  <div class="mockup-panel mockup-plan">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <p class="mockup-label">Your plan</p>
+                        <p class="mockup-title">Find a software internship</p>
+                      </div>
+                      <span class="mockup-pill">In progress</span>
+                    </div>
+                    <div class="mockup-progress"><span style="width: 50%"></span></div>
+                    <p class="mockup-small">2 of 4 steps done</p>
+                    <ul class="mockup-list">
+                      <li class="done"><b></b>Update your CV with feedback</li>
+                      <li class="done"><b></b>Pick companies to apply to</li>
+                      <li><b></b>Practise a technical interview</li>
+                      <li><b></b>Send your applications</li>
+                    </ul>
+                  </div>
+                  <div class="mockup-side">
+                    <div class="mockup-panel">
+                      <p class="mockup-label">Next session</p>
+                      <p class="mockup-title">Interview practice</p>
+                      <p class="mockup-small">Thursday with your mentor</p>
+                    </div>
+                    <div class="mockup-panel">
+                      <p class="mockup-label">Message from your mentor</p>
+                      <p class="mockup-message">Your CV is much clearer now. On Thursday we'll practise the questions they usually ask.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption class="mt-4 text-sm text-ice">Preview of the student dashboard.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Social proof: only numbers from our own research -->
+      <section class="section" aria-labelledby="proof-title">
+        <div class="wrap">
+          <div class="section-head scroll-reveal">
+            <p class="kicker">Our research</p>
+            <h2 id="proof-title" class="h2">Built on what students and mentors told us</h2>
+            <p class="lead">Research with 13 students, 7 organizations and 38 professionals.</p>
+          </div>
+          <div class="mt-12 grid gap-5 md:grid-cols-3">
+            <p class="stat scroll-reveal">
+              <span class="stat-number"><span data-count="36">36</span>/38</span>
+              professionals we surveyed would consider mentoring a student.
+            </p>
+            <p class="stat scroll-reveal" style="--delay: 0.1s">
+              <span class="stat-number"><span data-count="7">7</span>/13</span>
+              students we spoke to want feedback on their CV and applications.
+            </p>
+            <p class="stat scroll-reveal" style="--delay: 0.2s">
+              <span class="stat-number"><span data-count="58">58</span>%</span>
+              of the professionals we surveyed want to mentor to pass on their knowledge.
+            </p>
+          </div>
+          <figure class="quote mt-5 scroll-reveal">
+            <blockquote>
+              <p>“We chose a better candidate.”</p>
+            </blockquote>
+            <figcaption>The kind of rejection most students we spoke to got, with no word on what to improve.</figcaption>
+          </figure>
+          <p class="mt-10 text-center text-sm text-muted scroll-reveal">Developed at The Hague University of Applied Sciences.</p>
+        </div>
+      </section>
+
+      <!-- Mentors and host organizations -->
+      <section id="others" class="section band" aria-labelledby="others-title">
+        <div class="wrap">
+          <div class="flex flex-col gap-4 scroll-reveal">
+            <p class="kicker">Get involved</p>
+            <h2 id="others-title" class="h2">Not a student?</h2>
+          </div>
+          <div class="mt-10 grid gap-5 md:grid-cols-2">
+            <article id="mentors" class="audience scroll-reveal">
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
+              </span>
+              <h3 class="h3">For mentors</h3>
+              <p>
+                Working in your field with a few hours a month to spare? Help a student find their internship and get
+                ready for it, in short, flexible sessions.
+              </p>
+              <a href="#signup" class="text-link" data-role="mentor">Sign up as a mentor</a>
+            </article>
+            <article id="organizations" class="audience scroll-reveal" style="--delay: 0.1s">
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5V5.5l8-3 8 3v15" /><path d="M2.5 20.5h19" /><path d="M9 20.5v-4h6v4" /><path d="M8.5 8.5h1M14.5 8.5h1M8.5 12.5h1M14.5 12.5h1" /></svg>
+              </span>
+              <h3 class="h3">For organizations</h3>
+              <p>
+                Taking on interns? A mentor from your field prepares your intern before day one, so your team keeps its
+                focus.
+              </p>
+              <a href="#signup" class="text-link" data-role="company">Request a free pilot</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ: honest answers to the usual doubts -->
+      <section id="faq" class="section" aria-labelledby="faq-title">
+        <div class="wrap grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+          <div class="flex flex-col gap-4 scroll-reveal">
+            <p class="kicker">Questions</p>
+            <h2 id="faq-title" class="h2">Good to know</h2>
+            <p class="lead">Something else you want to ask? Email us at <a href="mailto:26110636@student.hhs.nl" class="font-semibold text-accent underline underline-offset-4">26110636@student.hhs.nl</a>.</p>
+          </div>
+          <div class="faq scroll-reveal" style="--delay: 0.1s">
+            <details>
+              <summary>Is it really free for students?</summary>
+              <p>Yes. Students never pay. The plan is that organizations that take on interns pay for MentorBridge.</p>
+            </details>
+            <details>
+              <summary>Who are the mentors?</summary>
+              <p>Experienced professionals from your field who have some free time next to their job. We match you by hand, based on your field and what you want help with.</p>
+            </details>
+            <details>
+              <summary>How much time does it take?</summary>
+              <p>A few short sessions with your mentor, online or in person, planned around your schedule.</p>
+            </details>
+            <details>
+              <summary>Can you guarantee me an internship?</summary>
+              <p>No. Nobody can promise that. Your mentor helps you understand what to improve, apply with more confidence and prepare well, which gives you a better chance.</p>
+            </details>
+            <details>
+              <summary>What happens with my details?</summary>
+              <p>We only use them to contact you about MentorBridge, and we delete them when the project ends. MentorBridge is a student project at The Hague University of Applied Sciences.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sign-up: students first; mentors and organizations can switch role -->
+      <section id="signup" class="section signup" aria-labelledby="pilot-title">
+        <div class="wrap grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          <div class="flex flex-col gap-5 lg:pt-6">
+            <p class="kicker">Sign up</p>
+            <h2 id="pilot-title" class="h2" data-copy="heading">Find your internship with a mentor</h2>
+            <p class="lead" data-copy="text">
+              Leave your details and we'll get in touch when we can match you with a mentor from your field. Free for
+              students.
+            </p>
+            <div class="next-steps">
+              <p class="font-bold">What happens next</p>
+              <ol>
+                <li><span>1</span>You leave your email and your field.</li>
+                <li><span>2</span>We look for a good match in your field.</li>
+                <li><span>3</span>We get in touch by email.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="form-card" id="pilot-panel">
+            <form id="pilot-form" class="flex flex-col gap-5" novalidate>
+              <fieldset class="role-picker">
+                <legend>I'm signing up as</legend>
+                <div class="role-options">
+                  <label><input type="radio" name="role" value="student" checked /><span>Student</span></label>
+                  <label><input type="radio" name="role" value="mentor" /><span>Mentor</span></label>
+                  <label><input type="radio" name="role" value="company" /><span>Organization</span></label>
+                </div>
+              </fieldset>
+
+              <div class="field">
+                <label for="email" data-copy="emailLabel">Email</label>
+                <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" />
+              </div>
+
+              <div class="field" data-for-role="student mentor">
+                <label for="field" data-copy="fieldLabel">Field of study</label>
+                <input id="field" name="field" type="text" required maxlength="200" />
+              </div>
+
+              <div class="flex flex-col gap-5" data-for-role="company" hidden>
+                <div class="field">
+                  <label for="company">Organization name</label>
+                  <input id="company" name="company" type="text" required maxlength="200" autocomplete="organization" disabled />
+                </div>
+                <div class="field">
+                  <label for="interns_per_year">Interns per year</label>
+                  <select id="interns_per_year" name="interns_per_year" required disabled>
+                    <option value="" disabled selected>Choose an option</option>
+                    <option value="1-2">1–2</option>
+                    <option value="3-5">3–5</option>
+                    <option value="6-10">6–10</option>
+                    <option value="10+">More than 10</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Honeypot: hidden from people, bots fill it in. -->
+              <div class="honeypot" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <p id="form-error" class="form-error" role="alert" hidden></p>
+
+              <button type="submit" class="btn btn-primary btn-lg w-full" data-copy="button">Sign up as a student</button>
+              <p class="text-sm text-muted">
+                We only use your details to contact you about MentorBridge, and delete them when the project ends.
+              </p>
+            </form>
+
+            <!-- Step 2 for students: four optional questions -->
+            <form id="answers-form" class="flex flex-col gap-6" tabindex="-1" novalidate hidden>
+              <div class="flex flex-col gap-1">
+                <p class="text-sm font-bold text-accent">You're signed up</p>
+                <h3 class="h3">Help us match you better</h3>
+                <p class="text-muted">Four quick questions. All of them are optional.</p>
+              </div>
+
+              <fieldset class="question">
+                <legend>1. Do you already have an internship place?</legend>
+                <div class="choices">
+                  <label><input type="radio" name="has_placement" value="yes" /><span>Yes</span></label>
+                  <label><input type="radio" name="has_placement" value="no" /><span>No, still looking</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="question">
+                <legend>2. How many applications have you sent so far?</legend>
+                <div class="choices">
+                  <label><input type="radio" name="applications_sent" value="0" /><span>None yet</span></label>
+                  <label><input type="radio" name="applications_sent" value="1-10" /><span>1–10</span></label>
+                  <label><input type="radio" name="applications_sent" value="11-30" /><span>11–30</span></label>
+                  <label><input type="radio" name="applications_sent" value="30+" /><span>More than 30</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="question">
+                <legend>3. What would help you most? <span class="font-normal text-muted">Choose any.</span></legend>
+                <div class="choices">
+                  <label><input type="checkbox" name="help_wanted" value="cv" /><span>CV and applications</span></label>
+                  <label><input type="checkbox" name="help_wanted" value="interviews" /><span>Interview practice</span></label>
+                  <label><input type="checkbox" name="help_wanted" value="insight" /><span>What the work is really like</span></label>
+                  <label><input type="checkbox" name="help_wanted" value="introductions" /><span>Introductions to companies</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="question">
+                <legend>4. When does your internship start, or when do you need one by?</legend>
+                <div class="choices">
+                  <label><input type="radio" name="needed_by" value="0-3" /><span>Within 3 months</span></label>
+                  <label><input type="radio" name="needed_by" value="3-6" /><span>In 3 to 6 months</span></label>
+                  <label><input type="radio" name="needed_by" value="later" /><span>Later</span></label>
+                </div>
+              </fieldset>
+
+              <p id="answers-error" class="form-error" role="alert" hidden></p>
+
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <button type="submit" class="btn btn-primary">Send answers</button>
+                <button type="button" id="answers-skip" class="btn text-muted hover:text-navy">Skip</button>
+              </div>
+            </form>
+
+            <div id="pilot-thanks" class="flex flex-col gap-3" tabindex="-1" hidden>
+              <h3 class="h3">Thank you</h3>
+              <p>We've received your details and will get in touch.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer on-dark">
+      <div class="wrap">
+        <div class="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:gap-8">
+          <div class="flex flex-col items-start gap-5">
+            <a href="#top" class="logo-light" aria-label="MentorBridge, back to top">
+              <img src="/icon.png" alt="" width="512" height="512" />
+              <span>Mentor<span class="text-[#8FB0D6]">Bridge</span></span>
+            </a>
+            <p class="max-w-[30ch] text-ice">Find your internship with a mentor from your field.</p>
+            <!-- PLACEHOLDER: replace the social media URLs with your own pages. -->
+            <ul class="socials" aria-label="MentorBridge on social media">
+              <li>
+                <a href="https://www.linkedin.com/company/YOUR-PAGE" aria-label="MentorBridge on LinkedIn">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" /></svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/YOUR-PAGE" aria-label="MentorBridge on Instagram">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" /></svg>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.tiktok.com/@YOUR-PAGE" aria-label="MentorBridge on TikTok">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.6 2h-3.4v13.4a2.9 2.9 0 1 1-2.1-2.8V9.1a6.3 6.3 0 1 0 5.5 6.3V8.6a7.9 7.9 0 0 0 4.6 1.5V6.7a4.6 4.6 0 0 1-4.6-4.7Z" /></svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <nav aria-label="MentorBridge" class="footer-col">
+            <h2>MentorBridge</h2>
+            <a href="#help">What you get</a>
+            <a href="#how">How it works</a>
+            <a href="#platform">The platform</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+
+          <nav aria-label="Get involved" class="footer-col">
+            <h2>Get involved</h2>
+            <a href="#signup" data-role="student">Sign up as a student</a>
+            <a href="#signup" data-role="mentor">Become a mentor</a>
+            <a href="#signup" data-role="company">Request a free pilot</a>
+          </nav>
+
+          <div class="footer-col">
+            <h2>Contact</h2>
+            <a href="mailto:26110636@student.hhs.nl">26110636@student.hhs.nl</a>
+            <p>The Hague University of Applied Sciences</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 border-t border-white/10 py-6 text-sm text-ice sm:flex-row sm:justify-between">
+          <p>© 2026 MentorBridge. A student startup project at The Hague University of Applied Sciences.</p>
+          <p>We only use your details to contact you, and delete them when the project ends.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

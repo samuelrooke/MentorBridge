@@ -1,0 +1,18 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+
+# Markdown notes and docs
+*.md
+!README.md
+!CHANGELOG.md
+
+# Local env variants and backups (keep the examples)
+.env.*
+!.env.example
+
+# Vercel CLI project links
+.vercel
