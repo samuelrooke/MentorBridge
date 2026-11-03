@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/auth'
+import Wordmark from '../components/Wordmark'
 import { supabase } from '../lib/supabase'
 
 type Mode = 'login' | 'signup'
@@ -8,7 +9,7 @@ type SignupRole = 'student' | 'company' | 'mentor'
 
 const roleLabels: Record<SignupRole, string> = {
   student: 'Student preparing for an internship',
-  company: 'Company hosting an intern',
+  company: 'Organization hosting an intern',
   mentor: 'Professional who wants to mentor',
 }
 
@@ -55,9 +56,9 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="auth-intro">
-        <span className="wordmark">MentorBridge</span>
+        <Wordmark />
         <h1>Start your internship prepared.</h1>
-        <p>Students, companies and experienced professionals, working together before the first day.</p>
+        <p>Students, organizations and experienced professionals, working together before the first day.</p>
       </div>
 
       <form className="card auth-card" onSubmit={handleSubmit}>

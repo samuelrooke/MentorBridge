@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+# The platform app and landing page only hold public values (URL, publishable key).
+# server/.env stays out: the API gets its secrets at runtime, never baked into an image.
+!client/.env
+!landing/.env
+.git
+.github
+supabase
+*.md
+index.html

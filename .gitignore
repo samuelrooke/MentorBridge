@@ -8,3 +8,10 @@ dist
 # Markdown notes and docs
 *.md
 !README.md
+
+# Local env variants and backups (keep the examples)
+.env.*
+!.env.example
+
+# Vercel CLI project links
+.vercel
