@@ -1,56 +1,52 @@
 # MentorBridge
 
-MentorBridge connects students with experienced professionals 2–3 months before their internship, so they start prepared and companies get interns who contribute from day one.
+MentorBridge matches students with experienced professionals from their own field, who help them find their internship and prepare for it. Free for students.
 
 ## Project structure
 
 ```
-index.html            Old validation-survey page (no longer used, to be replaced)
-client/               React + Vite + TypeScript web app
-  src/context/        Supabase auth state (session + profile)
-  src/pages/          Login, Dashboard, Profile (intake), Admin (manual matching)
-server/               Node.js + Express API
-  src/middleware/     Verifies Supabase access tokens, role checks
-  src/routes/         /api/me, /api/admin
-supabase/migrations/  Database schema and row level security policies
+landing/              Landing page (Vite, plain HTML/JS, Tailwind)
+client/               Platform web app (React, Vite, TypeScript, Tailwind)
+server/               Node.js + Express API (api/ is the Vercel entry point)
+supabase/             Migrations, local seed data and Supabase CLI config
+scripts/              setup and doctor scripts
+docker-compose.yml    Runs API, platform app and landing page in Docker
 ```
 
-The browser talks to Supabase directly for auth and for anything row level security allows (profiles, plan, messages, sessions). The Node backend handles trusted work that needs the service-role key, starting with manual matching.
+## Run locally
 
-## Setup
+```sh
+npm install
+npm run setup     # creates the .env files from the examples; fill in the Supabase keys
+npm run doctor    # checks .env files, Supabase connection and migrations
+npm run dev       # platform app :5173 · landing page :5174 · API :4000
+```
 
-1. **Create a Supabase project** at https://supabase.com.
-2. **Create the database:** open the SQL editor and run [supabase/migrations/0001_init.sql](supabase/migrations/0001_init.sql).
-3. **Add environment variables:**
-   - Copy `client/.env.example` to `client/.env` and fill in the project URL and anon key.
-   - Copy `server/.env.example` to `server/.env` and fill in the URL, anon key and service-role key. Keep the service-role key out of the client.
+Or everything in Docker: `npm run docker:up` (API :4000 · platform app :8080 · landing page :8081).
 
-   You can find these under *Project settings → API*.
-4. **Install and run:**
-   ```sh
-   npm install
-   npm run dev
-   ```
-   The app runs at http://localhost:5173 and the API at http://localhost:4000. Vite forwards `/api` to the API.
+## Deploy on Vercel
 
-## Roles
+Create three Vercel projects from this repository, each with its own **Root Directory**. Build settings are in each folder's `vercel.json`.
 
-People choose **student**, **company** or **mentor** when they sign up. To make someone an **admin** who can do manual matching, run this in the SQL editor after they sign up:
+| Project | Root Directory | Environment variables |
+| --- | --- | --- |
+| API | `server` | `NODE_ENV=production`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CLIENT_ORIGIN`, `LANDING_ORIGIN` |
+| Landing page | `landing` | `VITE_API_URL` |
+| Platform app | `client` | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_API_URL` |
+
+1. Deploy the **API** first and copy its URL.
+2. Deploy the **landing page** and **platform app** with `VITE_API_URL` set to that URL.
+3. Set `LANDING_ORIGIN` and `CLIENT_ORIGIN` on the API to their two URLs and redeploy it. In production, CORS only allows these two.
+4. In Supabase, under **Authentication → URL Configuration**, set the platform app's URL as Site URL so confirmation emails link back to it.
+
+`VITE_` variables are built into the page, so redeploy after changing them.
+
+## Database
+
+Schema changes are migration files in `supabase/migrations`. Migrations 0001 to 0004 are already applied to the shared project. For new ones: `npm run db:new <name>`, then `npm run db:link` (once) and `npm run db:push`. Before the very first push, run `npx supabase migration repair --status applied 0001 0002 0003 0004` once, so the CLI knows those are already in.
+
+Admins are set by hand in the Supabase SQL editor:
 
 ```sql
 update public.profiles set role = 'admin' where email = 'you@example.com';
 ```
-
-## MVP scope (MoSCoW Must-haves)
-
-| Feature | Where |
-| --- | --- |
-| Student, company, mentor registration and intake | `profiles`, `*_profiles` tables, Profile page |
-| Manual matching | `matches` table, Admin page, `POST /api/admin/matches` |
-| Consent before data is shared with the company | `consents` table; company access depends on it |
-| Structured preparation plan | `plan_activities` table |
-| Communication | `messages` table |
-| Session scheduling | `sessions` table |
-| Feedback | `feedback` table |
-
-The tables and access rules are in place for consent, the plan, messages, sessions and feedback. Their screens still need to be built.

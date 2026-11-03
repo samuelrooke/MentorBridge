@@ -35,6 +35,7 @@
           <a href="#help">What you get</a>
           <a href="#how">How it works</a>
           <a href="#platform">The platform</a>
+          <a href="#faq">FAQ</a>
         </nav>
         <div class="flex items-center gap-2">
           <nav class="audience-nav" aria-label="For mentors and organizations">
@@ -101,13 +102,19 @@
       </section>
 
       <!-- Problem -->
-      <section class="section-sm bg-paper" aria-labelledby="problem-title">
-        <div class="wrap max-w-4xl text-center scroll-reveal">
-          <h2 id="problem-title" class="eyebrow">The problem</h2>
-          <p class="statement">
-            Most students we spoke to sent <mark class="hl">20 to 30 applications</mark>. Few got an answer, and the
-            rejections <mark class="hl">never said what to improve</mark>.
+      <section class="section-sm band" aria-labelledby="problem-title">
+        <div class="wrap grid items-center gap-8 scroll-reveal lg:grid-cols-[auto_1fr] lg:gap-20">
+          <p class="problem-figure">
+            <span class="problem-number">20–30</span>
+            <span class="problem-caption">applications sent by most students we spoke to</span>
           </p>
+          <div class="flex flex-col gap-4">
+            <h2 id="problem-title" class="kicker">The problem</h2>
+            <p class="statement">
+              Few got an answer, and the rejections <mark class="hl">never said what to improve</mark>. Some started to
+              doubt their own skills.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -115,6 +122,7 @@
       <section id="help" class="section" aria-labelledby="benefits-title">
         <div class="wrap">
           <div class="section-head scroll-reveal">
+            <p class="kicker">What you get</p>
             <h2 id="benefits-title" class="h2">What your mentor helps with</h2>
             <p class="lead">Someone who has done the work you're applying for, in a few short sessions.</p>
           </div>
@@ -167,7 +175,8 @@
       <section id="how" class="section bg-paper" aria-labelledby="how-title">
         <div class="wrap">
           <div class="section-head scroll-reveal">
-            <h2 id="how-title" class="h2">How it works</h2>
+            <p class="kicker">How it works</p>
+            <h2 id="how-title" class="h2">Three steps to your mentor</h2>
           </div>
           <ol class="steps">
             <li class="step scroll-reveal">
@@ -291,6 +300,7 @@
       <section class="section" aria-labelledby="proof-title">
         <div class="wrap">
           <div class="section-head scroll-reveal">
+            <p class="kicker">Our research</p>
             <h2 id="proof-title" class="h2">Built on what students and mentors told us</h2>
             <p class="lead">Research with 13 students, 7 organizations and 38 professionals.</p>
           </div>
@@ -319,12 +329,18 @@
       </section>
 
       <!-- Mentors and host organizations -->
-      <section id="others" class="section-sm bg-paper" aria-labelledby="others-title">
+      <section id="others" class="section band" aria-labelledby="others-title">
         <div class="wrap">
-          <h2 id="others-title" class="h2 scroll-reveal">Not a student?</h2>
-          <div class="mt-8 grid gap-5 md:grid-cols-2">
+          <div class="flex flex-col gap-4 scroll-reveal">
+            <p class="kicker">Get involved</p>
+            <h2 id="others-title" class="h2">Not a student?</h2>
+          </div>
+          <div class="mt-10 grid gap-5 md:grid-cols-2">
             <article id="mentors" class="audience scroll-reveal">
-              <h3 class="h3">Mentors</h3>
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
+              </span>
+              <h3 class="h3">For mentors</h3>
               <p>
                 Working in your field with a few hours a month to spare? Help a student find their internship and get
                 ready for it, in short, flexible sessions.
@@ -332,7 +348,10 @@
               <a href="#signup" class="text-link" data-role="mentor">Sign up as a mentor</a>
             </article>
             <article id="organizations" class="audience scroll-reveal" style="--delay: 0.1s">
-              <h3 class="h3">Organizations</h3>
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5V5.5l8-3 8 3v15" /><path d="M2.5 20.5h19" /><path d="M9 20.5v-4h6v4" /><path d="M8.5 8.5h1M14.5 8.5h1M8.5 12.5h1M14.5 12.5h1" /></svg>
+              </span>
+              <h3 class="h3">For organizations</h3>
               <p>
                 Taking on interns? A mentor from your field prepares your intern before day one, so your team keeps its
                 focus.
@@ -343,15 +362,57 @@
         </div>
       </section>
 
+      <!-- FAQ: honest answers to the usual doubts -->
+      <section id="faq" class="section" aria-labelledby="faq-title">
+        <div class="wrap grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+          <div class="flex flex-col gap-4 scroll-reveal">
+            <p class="kicker">Questions</p>
+            <h2 id="faq-title" class="h2">Good to know</h2>
+            <p class="lead">Something else you want to ask? Write to us at the address at the bottom of the page.</p>
+          </div>
+          <div class="faq scroll-reveal" style="--delay: 0.1s">
+            <details>
+              <summary>Is it really free for students?</summary>
+              <p>Yes. Students never pay. The plan is that organizations that take on interns pay for MentorBridge.</p>
+            </details>
+            <details>
+              <summary>Who are the mentors?</summary>
+              <p>Experienced professionals from your field who have some free time next to their job. We match you by hand, based on your field and what you want help with.</p>
+            </details>
+            <details>
+              <summary>How much time does it take?</summary>
+              <p>A few short sessions with your mentor, online or in person, planned around your schedule.</p>
+            </details>
+            <details>
+              <summary>Can you guarantee me an internship?</summary>
+              <p>No. Nobody can promise that. Your mentor helps you understand what to improve, apply with more confidence and prepare well, which gives you a better chance.</p>
+            </details>
+            <details>
+              <summary>What happens with my details?</summary>
+              <p>We only use them to contact you about MentorBridge, and we delete them when the project ends. MentorBridge is a student project at The Hague University of Applied Sciences.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
       <!-- Sign-up: students first; mentors and organizations can switch role -->
-      <section id="signup" class="section bg-accent-tint" aria-labelledby="pilot-title">
+      <section id="signup" class="section signup" aria-labelledby="pilot-title">
         <div class="wrap grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div class="flex flex-col gap-5 lg:pt-6">
+            <p class="kicker">Sign up</p>
             <h2 id="pilot-title" class="h2" data-copy="heading">Find your internship with a mentor</h2>
             <p class="lead" data-copy="text">
               Leave your details and we'll get in touch when we can match you with a mentor from your field. Free for
               students.
             </p>
+            <div class="next-steps">
+              <p class="font-bold">What happens next</p>
+              <ol>
+                <li><span>1</span>You leave your email and your field.</li>
+                <li><span>2</span>We look for a good match in your field.</li>
+                <li><span>3</span>We get in touch by email.</li>
+              </ol>
+            </div>
           </div>
 
           <div class="form-card" id="pilot-panel">
@@ -502,6 +563,7 @@
             <a href="#help">What you get</a>
             <a href="#how">How it works</a>
             <a href="#platform">The platform</a>
+            <a href="#faq">FAQ</a>
           </nav>
 
           <nav aria-label="Get involved" class="footer-col">

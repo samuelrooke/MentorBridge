@@ -15,6 +15,9 @@
   --color-paper: #F5F7FB;
   --color-accent-tint: #E8EFF8;
   --color-muted: #4B5A6B;
+  /* Soft, layered shadows (hairline + diffuse), the same depth everywhere */
+  --shadow-card: 0 1px 2px rgb(23 42 70 / 0.05), 0 6px 20px -8px rgb(23 42 70 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(23 42 70 / 0.05), 0 24px 48px -20px rgb(23 42 70 / 0.22);
   --font-display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
   --font-sans: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -40,6 +43,17 @@
   .section-sm { @apply py-16 lg:py-20; }
   .section-head { @apply mx-auto flex max-w-2xl flex-col items-center gap-4 text-center; }
   .on-dark { @apply bg-navy text-white; }
+  .band { @apply border-y border-navy/[0.06] bg-paper; }
+  .signup { @apply border-t border-navy/[0.06] bg-accent-tint/60; }
+
+  /* Small label above section headings, with a short bar from the wordmark */
+  .kicker { @apply inline-flex items-center gap-2.5 text-sm font-bold tracking-[0.14em] text-accent uppercase; }
+  .kicker::before { content: ''; @apply h-1.5 w-6 rounded-full bg-accent; }
+
+  /* The problem: one large figure next to the statement */
+  .problem-figure { @apply flex flex-col gap-2; }
+  .problem-number { @apply font-display text-[clamp(4.5rem,11vw,8rem)] leading-[0.9] text-navy tabular-nums; }
+  .problem-caption { @apply max-w-[22ch] text-[15px] font-semibold text-muted; }
 
   .skip-link {
     @apply absolute top-4 left-4 z-50 -translate-y-24 rounded-lg bg-navy px-5 py-3 font-semibold text-white focus:translate-y-0;
@@ -88,7 +102,7 @@
   .lead { @apply max-w-[46ch] text-xl leading-relaxed text-muted; }
   .on-dark .lead { @apply text-ice; }
   .eyebrow { @apply text-sm font-bold tracking-[0.18em] text-muted uppercase; }
-  .statement { @apply mt-5 text-[clamp(1.6rem,3.5vw,2.5rem)] leading-snug font-bold tracking-[-0.02em]; }
+  .statement { @apply max-w-[30ch] text-[clamp(1.6rem,3.2vw,2.4rem)] leading-snug font-bold tracking-[-0.02em]; }
   .hl { @apply rounded-md bg-accent-tint px-1 text-navy; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
   /* Pill label above headings */
@@ -153,12 +167,12 @@
 
   /* Help cards: soft tinted panels with a small UI vignette, like ADPList */
   .help-card {
-    @apply flex flex-col gap-8 overflow-hidden rounded-3xl p-7 sm:p-8;
+    @apply flex flex-col gap-8 overflow-hidden rounded-3xl border border-navy/[0.06] p-7 shadow-card sm:p-8;
     @apply transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0;
   }
   .help-accent { @apply bg-accent-tint; }
   .help-ice { @apply bg-ice/60; }
-  .help-white { @apply border border-navy/10 bg-paper; }
+  .help-white { @apply bg-paper; }
   .help-text { @apply flex flex-col gap-2; }
   .help-text p { @apply text-muted; }
 
@@ -185,10 +199,10 @@
     content: '';
     @apply absolute top-6 right-[17%] left-[17%] hidden h-0.5 bg-navy/15 md:block;
   }
-  .step { @apply relative flex flex-col items-center gap-3; }
+  .step { @apply relative flex flex-col items-center gap-3 px-2; }
   .step p { @apply max-w-[32ch] text-muted; }
   .step-number {
-    @apply relative grid size-12 place-items-center rounded-full bg-navy font-display text-xl text-white ring-8 ring-paper;
+    @apply relative grid size-12 place-items-center rounded-full bg-navy font-display text-xl text-white shadow-card ring-8 ring-paper;
   }
 
   /* Platform band */
@@ -227,24 +241,48 @@
   .mockup-message { @apply mt-2 rounded-xl rounded-tl-sm bg-paper p-3 text-sm leading-snug; }
 
   /* Social proof */
-  .stat { @apply flex flex-col gap-2 rounded-3xl border border-navy/10 bg-white p-8 text-muted; }
-  .stat-number { @apply font-display text-6xl leading-none text-navy; }
+  .stat { @apply flex flex-col gap-3 rounded-3xl border border-navy/[0.08] bg-white p-8 text-muted shadow-card; }
+  .stat-number { @apply font-display text-6xl leading-none text-navy tabular-nums; }
   .quote { @apply flex flex-col gap-3 rounded-3xl bg-navy p-8 text-white sm:flex-row sm:items-center sm:gap-10 sm:p-10; }
   .quote blockquote { @apply shrink-0 text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl; }
   .quote figcaption { @apply text-ice; }
 
   /* Mentors and organizations */
-  .audience { @apply flex min-h-60 flex-col gap-3 rounded-3xl border border-navy/10 bg-white p-8; }
+  .audience {
+    @apply flex min-h-72 flex-col gap-3 rounded-3xl border border-navy/[0.08] bg-white p-8 shadow-card sm:p-10;
+    @apply transition duration-300 hover:-translate-y-1 hover:shadow-lift motion-reduce:transition-none motion-reduce:hover:translate-y-0;
+  }
+  .audience-icon { @apply mb-3 grid size-12 place-items-center rounded-2xl bg-accent-tint text-accent; }
+
+  /* FAQ */
+  .faq { @apply divide-y divide-navy/10 border-y border-navy/10; }
+  .faq summary {
+    @apply flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-bold;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after {
+    content: '';
+    @apply size-3 shrink-0 rotate-45 border-r-2 border-b-2 border-navy/50 transition-transform duration-200;
+  }
+  .faq details[open] summary::after { @apply -rotate-[135deg]; }
+  .faq summary:hover { @apply text-accent; }
+  .faq details p { @apply max-w-[60ch] pb-6 text-muted; }
+
+  /* What happens next, beside the form */
+  .next-steps { @apply mt-4 flex flex-col gap-4 rounded-2xl border border-navy/[0.08] bg-white/70 p-6; }
+  .next-steps ol { @apply flex flex-col gap-3; }
+  .next-steps li { @apply flex items-center gap-3 text-muted; }
+  .next-steps span { @apply grid size-7 shrink-0 place-items-center rounded-full bg-navy text-sm font-bold text-white; }
   .audience p { @apply max-w-[48ch] text-muted; }
 
   /* Form */
-  .form-card { @apply rounded-3xl bg-white p-7 shadow-xl shadow-navy/10 sm:p-9; }
+  .form-card { @apply rounded-3xl border border-navy/[0.06] bg-white p-7 shadow-lift sm:p-9; }
   .field { @apply flex flex-col gap-2; }
   .field label { @apply font-semibold; }
   .field input,
   .field select {
-    @apply min-h-12 w-full rounded-xl border border-navy/20 bg-white px-4 text-lg text-navy;
-    @apply transition-colors focus:border-navy;
+    @apply min-h-12 w-full rounded-xl border border-navy/20 bg-white px-4 text-lg text-navy shadow-[inset_0_1px_2px_rgb(23_42_70/0.05)];
+    @apply transition focus:border-accent focus:ring-4 focus:ring-accent/15 focus:outline-none;
   }
   .role-picker legend { @apply mb-2 font-semibold; }
   .role-options { @apply grid grid-cols-3 gap-1 rounded-xl bg-paper p-1; }

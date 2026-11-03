@@ -26,24 +26,15 @@ This prints every sign-up (date, role, email, company, interns per year, field) 
 
 ## Deploy
 
-The landing page and the API deploy separately.
+The landing page deploys to Vercel (Root Directory `landing`) and talks to the API, which deploys separately. The steps for both are in the main [README](../README.md#deploy). In short:
 
-**1. API** (any Node host, e.g. Render or Railway)
-- Root directory `server`, start command `npm start`.
-- Environment variables:
-  - `NODE_ENV=production`
-  - `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-  - `LANDING_ORIGIN`: the landing page's public URL, e.g. `https://mentorbridge.netlify.app`. In production, CORS only allows this origin (and `CLIENT_ORIGIN`, if set). Localhost is only allowed outside production.
-
-**2. Landing page** (any static host, e.g. Netlify)
-- Base directory `landing`, build command `npm run build`, publish directory `landing/dist`.
-- Environment variable `VITE_API_URL` = the API's public URL, e.g. `https://mentorbridge-api.onrender.com`. Vite builds it into the page, so redeploy after changing it.
-
-Deploy the API first, so you know its URL before building the landing page.
+- Deploy the API first and note its URL.
+- On the landing page's Vercel project, set `VITE_API_URL` to that URL. Vite builds it into the page, so redeploy after changing it.
+- On the API, set `LANDING_ORIGIN` to the landing page's Vercel URL. In production, CORS only allows that origin and `CLIENT_ORIGIN`.
 
 ## Placeholders to fill in
 
-- `landing/public/hero.jpg`: the hero image. The page expects a portrait image (4:5).
+- `landing/public/hero.jpg`: the hero image (landscape, currently 1264 × 848).
 - GoatCounter: in `index.html`, replace `YOUR-CODE` in `https://YOUR-CODE.goatcounter.com/count`.
 - Contact email: in `index.html`, replace both `[CONTACT EMAIL]` in the footer.
 

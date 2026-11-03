@@ -1,5 +1,6 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/auth'
+import Wordmark from './Wordmark'
 
 export default function Layout() {
   const { profile, signOut } = useAuth()
@@ -7,15 +8,21 @@ export default function Layout() {
   return (
     <>
       <header className="topbar">
-        <Link to="/dashboard" className="wordmark">MentorBridge</Link>
-        <nav>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/profile">Profile</Link>
-          {profile?.role === 'admin' && <Link to="/admin">Matching</Link>}
-          <button className="btn btn-ghost" onClick={signOut}>Sign out</button>
-        </nav>
+        <div className="wrap topbar-inner">
+          <Link to="/dashboard" className="no-underline">
+            <Wordmark />
+          </Link>
+          <nav className="topnav" aria-label="Main">
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/profile">Profile</NavLink>
+            {profile?.role === 'admin' && <NavLink to="/admin">Matching</NavLink>}
+          </nav>
+          <button className="btn btn-ghost btn-sm" onClick={signOut}>
+            Sign out
+          </button>
+        </div>
       </header>
-      <main className="container">
+      <main className="wrap page">
         <Outlet />
       </main>
     </>
