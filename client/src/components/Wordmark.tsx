@@ -1,4 +1,11 @@
-// The MentorBridge logo (public/logo.png), the same as on the landing page.
+// The MentorBridge logo: the arch icon (public/icon.png) with the name, as on the landing page.
 export default function Wordmark() {
-  return <img src="/logo.png" alt="MentorBridge" width={1600} height={332} className="logo-img" />
+  return (
+    <span className="logo">
+      <img src="/icon.png" alt="" width={512} height={512} />
+      <span>
+        Mentor<span className="text-accent">Bridge</span>
+      </span>
+    </span>
+  )
 }

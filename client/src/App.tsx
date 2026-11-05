@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
+import Account from './pages/Account'
 import Admin from './pages/Admin'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
@@ -23,6 +24,7 @@ export default function App() {
           >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="account" element={<Account />} />
             <Route
               path="admin"
               element={

@@ -1,11 +1,17 @@
 {
   "name": "landing",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
+    "i18n": "node scripts/build-nl.mjs",
+    "predev": "node scripts/build-nl.mjs",
     "dev": "vite --port 5174",
     "build": "vite build",
-    "preview": "vite preview --port 5174"
+    "preview": "vite preview --port 5174",
+    "prebuild": "node scripts/build-nl.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
   }
 }

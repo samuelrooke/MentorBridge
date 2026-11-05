@@ -35,9 +35,17 @@ The landing page deploys to Vercel (Root Directory `landing`) and talks to the A
 ## Placeholders to fill in
 
 - The hero image is an HTML illustration in `index.html` (`.bridge-vis`), so there is no image file to replace.
-- GoatCounter: in `index.html`, replace `YOUR-CODE` in `https://YOUR-CODE.goatcounter.com/count`.
 
 ## Measuring
 
 - **Visitors:** GoatCounter (cookieless, so no cookie banner).
 - **Conversions:** rows in `pilot_requests`, by `role`. GoatCounter also counts the events `pilot-request`, `signup-student` and `signup-mentor`. The main conversion rate is student sign-ups ÷ visitors.
+- **Google Tag Manager (optional):** set `VITE_GTM_ID` (e.g. `GTM-XXXXXXX`) in `landing/.env` and on Vercel. Visitors then see a cookie bar, and GTM only loads after they click Accept (Google Consent Mode v2, analytics only, no advertising). Sign-ups are pushed to the data layer as `sign_up` events with a `role`. GoatCounter keeps counting everyone without cookies.
+
+## Languages
+
+The page exists in English (`/`) and Dutch (`/nl/`), with an EN | NL switch in the header that remembers the visitor's choice.
+
+- `nl/index.html` is **generated**: edit `index.html` and add the Dutch text to `i18n/nl.json`, never edit `nl/index.html` itself. It is rebuilt automatically on `npm run dev` and `npm run build`, or with `npm run i18n -w landing`.
+- The generator warns about any English text without a Dutch translation.
+- Texts set from JavaScript (form headings per role, errors, "Sending…") are in the `UI` and `COPY` objects at the top of `src/main.js`.

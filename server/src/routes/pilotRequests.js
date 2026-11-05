@@ -17,6 +17,8 @@ const text = (value) => (typeof value === 'string' ? value.trim() : '')
 
 // Returns the cleaned fields, or { error } with a reason the form can show.
 export function validatePilotRequest(body) {
+  const variant = ['a', 'b'].includes(body?.variant) ? body.variant : undefined
+  const withVariant = (fields) => (variant ? { ...fields, variant } : fields)
   const role = body?.role ?? 'company'
   const email = text(body?.email).toLowerCase()
 
@@ -31,13 +33,13 @@ export function validatePilotRequest(body) {
     if (!INTERNS_PER_YEAR.includes(body?.interns_per_year)) {
       return { error: 'Please choose how many interns you take per year.' }
     }
-    return { role, email, company, interns_per_year: body.interns_per_year }
+    return withVariant({ role, email, company, interns_per_year: body.interns_per_year })
   }
 
   const field = text(body?.field)
   if (!field) return { error: role === 'student' ? 'Please enter your field of study.' : 'Please enter your field of work.' }
   if (field.length > 200) return { error: 'Field must be 200 characters or fewer.' }
-  return { role, email, field }
+  return withVariant({ role, email, field })
 }
 
 // Validates the optional follow-up answers. Every question may be skipped,
