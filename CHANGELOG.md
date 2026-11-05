@@ -2,6 +2,12 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.2.1] - 2026-11-05
+
+### Changed
+
+- Footer links to Instagram (@mentorbridgenl); placeholder LinkedIn and TikTok links removed.
+
 ## [0.2.0] - 2026-11-05
 
 ### Landing page
@@ -70,6 +76,7 @@ First release: the validation landing page for students, the API that stores sig
 - Screens for the preparation plan, sessions, messages, consent and feedback (the database tables and access rules exist).
 - Social media links and the GoatCounter code on the landing page.
 
+[0.2.1]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.2.1
 [0.2.0]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.2.0
 [0.1.1]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.1.1
 [0.1.0]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.1.0
