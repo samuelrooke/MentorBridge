@@ -2,6 +2,24 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.3.0] - 2026-11-05
+
+### Landing page
+- Hero slideshow uses the team's own photos: you sign up, your mentor helps you in, you start your internship.
+- Benefits rewritten as a finished story: a better chance of landing your internship.
+- Footer links to LinkedIn.
+- Cleaner, calmer design: decorative shapes, labels, scroll animations, repeated numbers and the research section removed.
+- Captions on the slideshow have a stronger dark fade, so the text is easier to read.
+
+### Platform app
+- Reset a forgotten password by email, and change your password on the account page.
+- Clearer login errors, and a button to resend the confirmation email.
+- Accessibility: main landmark on the login and reset pages; the log in / create account switch uses toggle buttons.
+
+### Removed
+- The old survey page in the repository root.
+- Unused dependencies and CSS.
+
 ## [0.2.1] - 2026-11-05
 
 ### Changed
