@@ -2,6 +2,25 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.2.0] - 2026-11-05
+
+### Landing page
+- New hero: "Find your match." with a three-slide illustrated slideshow (sign up, match, meet), 4 seconds per slide, with pause and dots.
+- Dutch version at /nl/ with an EN | NL switch that remembers the visitor's choice.
+- A/B test of the hero headline; every sign-up stores the variant it saw.
+- "Without a mentor" vs "With MentorBridge" section, team section, contact form, shorter texts.
+- New arch logo, deep wine colours, dark header with a log in button, section highlighting and a phone menu.
+- Google Analytics 4 and Tag Manager, loaded only after cookie consent; sign-ups are sent as sign_up events.
+- Contact email removed from the page; questions go through the contact form.
+
+### Platform app
+- New logo, simple dashboard and account page with log out.
+
+### API and database
+- POST /api/contact for the contact form.
+- Sign-ups store the A/B variant.
+- Migration 0005: variant column and contact_messages table.
+
 ## [0.1.1] - 2026-11-03
 
 ### Fixed
@@ -51,5 +70,6 @@ First release: the validation landing page for students, the API that stores sig
 - Screens for the preparation plan, sessions, messages, consent and feedback (the database tables and access rules exist).
 - Social media links and the GoatCounter code on the landing page.
 
+[0.2.0]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.2.0
 [0.1.1]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.1.1
 [0.1.0]: https://github.com/samuelrooke/MentorBridge/releases/tag/v0.1.0
