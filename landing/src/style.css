@@ -507,3 +507,7 @@
   .mobile-links > a[aria-current] { @apply text-[#E8A9A2]; }
   .lang-switch-menu { @apply bg-white/10; }
 }
+
+@layer components {
+  .contrast-result { @apply text-lg font-bold text-white; }
+}
