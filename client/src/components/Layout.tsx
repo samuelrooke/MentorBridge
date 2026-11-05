@@ -15,10 +15,11 @@ export default function Layout() {
           <nav className="topnav" aria-label="Main">
             <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/profile">Profile</NavLink>
+            <NavLink to="/account">Account</NavLink>
             {profile?.role === 'admin' && <NavLink to="/admin">Matching</NavLink>}
           </nav>
           <button className="btn btn-ghost btn-sm" onClick={signOut}>
-            Sign out
+            Log out
           </button>
         </div>
       </header>

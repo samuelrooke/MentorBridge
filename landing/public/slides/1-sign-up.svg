@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="A laptop with a short sign-up form, under an arch with stars">
+  <rect width="600" height="450" fill="#4A0211"/>
+  <defs><path id="s" d="M0,-1 C0.1,-0.3 0.3,-0.1 1,0 C0.3,0.1 0.1,0.3 0,1 C-0.1,0.3 -0.3,0.1 -1,0 C-0.3,-0.1 -0.1,-0.3 0,-1Z" fill="#FCEEDD"/></defs>
+  <use href="#s" transform="translate(470 105) scale(26)"/>
+  <use href="#s" transform="translate(512 160) scale(13)"/>
+  <use href="#s" transform="translate(128 140) scale(15)"/>
+  <path d="M170 392V200a130 130 0 0 1 260 0v192" fill="none" stroke="#FCEEDD" stroke-width="10" stroke-linejoin="round"/>
+  <rect x="212" y="212" width="176" height="112" rx="10" fill="#5E0A1D" stroke="#FCEEDD" stroke-width="6"/>
+  <rect x="234" y="234" width="84" height="9" rx="4.5" fill="#FCEEDD"/>
+  <rect x="234" y="256" width="132" height="16" rx="5" fill="none" stroke="#FCEEDD" stroke-width="3"/>
+  <rect x="242" y="262" width="46" height="4" rx="2" fill="#E8A9A2"/>
+  <rect x="234" y="282" width="64" height="18" rx="9" fill="#E8A9A2"/>
+  <path d="M190 334h220l-16 16H206z" fill="#FCEEDD"/>
+  <path d="M110 392h380" stroke="#FCEEDD" stroke-width="6" stroke-linecap="round"/>
+</svg>

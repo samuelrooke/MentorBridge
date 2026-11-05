@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="A student and a mentor in two arches, joined by a bridge under the stars">
+  <rect width="600" height="450" fill="#4A0211"/>
+  <defs><path id="s" d="M0,-1 C0.1,-0.3 0.3,-0.1 1,0 C0.3,0.1 0.1,0.3 0,1 C-0.1,0.3 -0.3,0.1 -1,0 C-0.3,-0.1 -0.1,-0.3 0,-1Z" fill="#FCEEDD"/></defs>
+  <use href="#s" transform="translate(300 128) scale(30)"/>
+  <use href="#s" transform="translate(252 170) scale(13)"/>
+  <use href="#s" transform="translate(350 168) scale(10)"/>
+  <path d="M60 380V240a70 70 0 0 1 140 0v140" fill="#5E0A1D" stroke="#FCEEDD" stroke-width="8"/>
+  <path d="M400 380V240a70 70 0 0 1 140 0v140" fill="#5E0A1D" stroke="#FCEEDD" stroke-width="8"/>
+  <circle cx="130" cy="282" r="21" fill="#FCEEDD"/>
+  <path d="M94 362c4-36 18-52 36-52s32 16 36 52z" fill="#FCEEDD"/>
+  <circle cx="470" cy="282" r="21" fill="#E8A9A2"/>
+  <path d="M434 362c4-36 18-52 36-52s32 16 36 52z" fill="#E8A9A2"/>
+  <path d="M204 318Q300 196 396 318" fill="none" stroke="#FCEEDD" stroke-width="14" stroke-linecap="round"/>
+  <path d="M232 294v24M268 268v50M300 258v60M332 268v50M368 294v24" stroke="#FCEEDD" stroke-width="5" stroke-linecap="round"/>
+  <path d="M204 318h192" stroke="#FCEEDD" stroke-width="8" stroke-linecap="round"/>
+  <path d="M30 380h540" stroke="#FCEEDD" stroke-width="6" stroke-linecap="round"/>
+</svg>
