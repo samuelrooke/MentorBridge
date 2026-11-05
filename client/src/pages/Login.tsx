@@ -99,7 +99,7 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-page">
+    <main className="auth-page">
       <div className="auth-intro">
         <Wordmark />
         <h1>Start your internship prepared.</h1>
@@ -113,11 +113,11 @@ export default function Login() {
             <p className="muted">Enter your email and we&rsquo;ll send you a link to set a new password.</p>
           </div>
         ) : (
-          <div className="tabs" role="tablist">
-            <button type="button" role="tab" aria-selected={mode === 'login'} onClick={() => switchMode('login')}>
+          <div className="tabs" role="group" aria-label="Log in or create an account">
+            <button type="button" aria-pressed={mode === 'login'} onClick={() => switchMode('login')}>
               Log in
             </button>
-            <button type="button" role="tab" aria-selected={mode === 'signup'} onClick={() => switchMode('signup')}>
+            <button type="button" aria-pressed={mode === 'signup'} onClick={() => switchMode('signup')}>
               Create account
             </button>
           </div>
@@ -176,7 +176,7 @@ export default function Login() {
           </p>
         )}
 
-        <button className="btn btn-primary" disabled={busy}>
+        <button type="submit" className="btn btn-primary" disabled={busy}>
           {busy ? 'Please wait…' : mode === 'login' ? 'Log in' : mode === 'signup' ? 'Create account' : 'Send reset link'}
         </button>
 
@@ -191,6 +191,6 @@ export default function Login() {
           </button>
         )}
       </form>
-    </div>
+    </main>
   )
 }

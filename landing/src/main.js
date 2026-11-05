@@ -267,32 +267,7 @@ answersForm.addEventListener('submit', async (event) => {
 form.elements.role.value = 'student'
 setRole('student')
 
-// Sections rise in as they scroll into view, and stats count up once.
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-function countUp(el) {
-  const target = Number(el.dataset.count)
-  const start = performance.now()
-  const step = (now) => {
-    const t = Math.min((now - start) / 1200, 1)
-    el.textContent = Math.round(target * (1 - (1 - t) ** 3))
-    if (t < 1) requestAnimationFrame(step)
-  }
-  requestAnimationFrame(step)
-}
-
-const observer = new IntersectionObserver(
-  (entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue
-      entry.target.classList.add('is-visible')
-      if (!reduceMotion) entry.target.querySelectorAll('[data-count]').forEach(countUp)
-      observer.unobserve(entry.target)
-    }
-  },
-  { threshold: 0.15 },
-)
-document.querySelectorAll('.scroll-reveal').forEach((el) => observer.observe(el))
 
 // ---- Google Analytics and Tag Manager, only with consent ----
 // Both set cookies, so they load only after the visitor accepts (Google Consent Mode v2,
