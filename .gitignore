@@ -19,3 +19,6 @@ dist
 
 # Created by an editor extension, not used (the project uses ESLint)
 .oxlintrc.json
+
+# Generated from landing/index.html + landing/i18n/nl.json by landing/scripts/build-nl.mjs
+landing/nl/index.html

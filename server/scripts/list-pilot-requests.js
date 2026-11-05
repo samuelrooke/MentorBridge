@@ -9,7 +9,7 @@ if (!supabaseAdmin) {
 
 const { data, error } = await supabaseAdmin
   .from('pilot_requests')
-  .select('created_at, role, email, company, interns_per_year, field, has_placement, applications_sent, help_wanted, needed_by')
+  .select('created_at, role, email, company, interns_per_year, field, has_placement, applications_sent, help_wanted, needed_by, variant')
   .order('created_at', { ascending: false })
 
 if (error) {
@@ -53,4 +53,21 @@ if (answered.length) {
   console.log('Applications sent:', tally('applications_sent'))
   console.log('Help wanted:', tally('help_wanted'))
   console.log('Internship needed within (months):', tally('needed_by'))
+}
+
+// A/B test: student sign-ups per hero headline variant (visits per variant are in GoatCounter: ab/hero-a, ab/hero-b)
+const perVariant = (v) => data.filter((r) => r.role === 'student' && r.variant === v).length
+console.log(`\nA/B test, student sign-ups: variant A ${perVariant('a')} · variant B ${perVariant('b')}`)
+
+// Contact form messages
+const { data: messages, error: messagesError } = await supabaseAdmin
+  .from('contact_messages')
+  .select('created_at, name, email, message')
+  .order('created_at', { ascending: false })
+if (messagesError) console.log(`\nContact messages: not available (${messagesError.message})`)
+else {
+  console.log(`\nContact messages: ${messages.length}`)
+  for (const m of messages) {
+    console.log(`- ${new Date(m.created_at).toLocaleString('en-GB')} ${m.name} <${m.email}>: ${m.message}`)
+  }
 }

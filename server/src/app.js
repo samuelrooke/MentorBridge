@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import adminRouter from './routes/admin.js'
+import contactRouter from './routes/contact.js'
 import meRouter from './routes/me.js'
 import pilotRequestsRouter from './routes/pilotRequests.js'
 
@@ -26,6 +27,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true }))
 app.use('/api/me', meRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/pilot-requests', pilotRequestsRouter)
+app.use('/api/contact', contactRouter)
 
 app.use((err, _req, res, _next) => {
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Request body must be valid JSON.' })

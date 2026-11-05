@@ -118,3 +118,26 @@ describe('PATCH /api/pilot-requests/:id/answers', () => {
     expect(res.status).toBe(400)
   })
 })
+
+describe('A/B variant on sign-ups', () => {
+  it('keeps a valid variant and drops anything else', () => {
+    expect(validatePilotRequest({ role: 'student', email: 'a@b.nl', field: 'ICT', variant: 'b' }).variant).toBe('b')
+    expect(validatePilotRequest({ role: 'student', email: 'a@b.nl', field: 'ICT', variant: 'z' })).not.toHaveProperty('variant')
+  })
+})
+
+describe('POST /api/contact', () => {
+  it('validates the message', async () => {
+    const { validateContact } = await import('../src/routes/contact.js')
+    expect(validateContact({ name: ' Sam ', email: 'S@x.nl', message: ' Hi ' })).toEqual({ name: 'Sam', email: 's@x.nl', message: 'Hi' })
+    expect(validateContact({ name: '', email: 's@x.nl', message: 'Hi' }).error).toContain('name')
+    expect(validateContact({ name: 'Sam', email: 'nope', message: 'Hi' }).error).toContain('valid email')
+    expect(validateContact({ name: 'Sam', email: 's@x.nl', message: '' }).error).toContain('message')
+    expect(validateContact({ name: 'Sam', email: 's@x.nl', message: 'x'.repeat(2001) }).error).toContain('2000')
+  })
+
+  it('returns 400 on invalid input and 201 for the honeypot', async () => {
+    expect((await request(app).post('/api/contact').send({ name: 'Sam', email: 'x', message: 'Hi' })).status).toBe(400)
+    expect((await request(app).post('/api/contact').send({ website: 'spam' })).status).toBe(201)
+  })
+})
