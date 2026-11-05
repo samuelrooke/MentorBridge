@@ -1,3 +1,4 @@
+import PasswordForm from '../components/PasswordForm'
 import { useAuth } from '../context/auth'
 
 export default function Account() {
@@ -19,7 +20,11 @@ export default function Account() {
         <dt>Member since</dt>
         <dd>{profile ? new Date(profile.created_at).toLocaleDateString('en-GB') : '–'}</dd>
       </dl>
-      <button type="button" className="btn btn-primary self-start" onClick={signOut}>
+      <div className="stack-sm border-t border-ink/10 pt-6">
+        <h2>Change password</h2>
+        <PasswordForm submitLabel="Save new password" />
+      </div>
+      <button type="button" className="btn btn-ghost self-start" onClick={signOut}>
         Log out
       </button>
     </section>

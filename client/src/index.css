@@ -95,6 +95,8 @@
   .btn-ghost { @apply border border-ink/15 bg-white text-ink hover:border-ink/40 hover:bg-accent-tint; }
   .btn-sm { @apply min-h-11 px-4 text-[15px]; }
 
+  .link-button { @apply cursor-pointer text-[15px] font-semibold text-accent underline underline-offset-4 hover:text-ink disabled:opacity-60; }
+  .alert-error .link-button { @apply mt-2 block text-danger; }
   .alert { @apply rounded-xl px-4 py-3 text-[15px] font-medium; }
   .alert-error { @apply bg-danger-tint text-danger; }
   .alert-info { @apply bg-accent-tint text-ink; }
