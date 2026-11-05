@@ -26,13 +26,14 @@ function renderLogin(url = '/login') {
 describe('Login', () => {
   it('shows the login form by default', () => {
     renderLogin()
-    expect(screen.getByRole('button', { name: 'Log in' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Log in', pressed: true })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Log in' }).at(-1)).toHaveAttribute('type', 'submit')
     expect(screen.queryByLabelText('Full name')).not.toBeInTheDocument()
   })
 
   it('switches to sign up and asks for a name and role', async () => {
     renderLogin()
-    await userEvent.click(screen.getByRole('tab', { name: 'Create account' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Create account', pressed: false }))
     expect(screen.getByLabelText('Full name')).toBeInTheDocument()
     expect(screen.getByLabelText(/Student preparing/)).toBeChecked()
   })

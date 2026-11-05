@@ -62,9 +62,6 @@
   .logo img { @apply size-10 rounded-xl sm:size-11; }
   .auth-intro .logo { @apply self-start text-2xl sm:text-3xl; }
   .auth-intro .logo img { @apply size-12 sm:size-14; }
-  .wordmark { @apply inline-flex flex-col font-display text-xl leading-none tracking-wide text-ink uppercase no-underline; }
-  .wordmark-line { @apply flex items-center gap-1.5; }
-  .wordmark-bar { @apply inline-block h-2.5 w-7 rounded-full bg-cta; }
 
   /* Top bar */
   .topbar { @apply sticky top-0 z-40 border-b border-ink/10 bg-white/90 backdrop-blur-md; }
@@ -95,26 +92,19 @@
   .btn-ghost { @apply border border-ink/15 bg-white text-ink hover:border-ink/40 hover:bg-accent-tint; }
   .btn-sm { @apply min-h-11 px-4 text-[15px]; }
 
+  .link-button { @apply cursor-pointer text-[15px] font-semibold text-accent underline underline-offset-4 hover:text-ink disabled:opacity-60; }
+  .alert-error .link-button { @apply mt-2 block text-danger; }
   .alert { @apply rounded-xl px-4 py-3 text-[15px] font-medium; }
   .alert-error { @apply bg-danger-tint text-danger; }
   .alert-info { @apply bg-accent-tint text-ink; }
 
-  .list { @apply w-full divide-y divide-ink/10; }
-  .list li { @apply flex flex-wrap items-center justify-between gap-2 py-3; }
   .badge { @apply rounded-full bg-accent-tint px-2.5 py-1 text-xs font-bold tracking-wide text-accent uppercase; }
 
-  /* Login page: light, with soft blue streaks like the landing hero */
+  /* Login page */
   .auth-page {
-    @apply relative isolate grid min-h-screen items-center gap-12 overflow-hidden bg-white px-4 py-12;
+    @apply grid min-h-screen items-center gap-12 bg-white px-4 py-12;
     @apply lg:grid-cols-[1fr_minmax(0,28rem)] lg:gap-20 lg:px-[max(2rem,calc((100vw-72rem)/2))];
   }
-  .auth-page::before,
-  .auth-page::after {
-    content: '';
-    @apply pointer-events-none absolute -z-10 rounded-full blur-2xl;
-  }
-  .auth-page::before { @apply -top-20 -left-32 h-40 w-[40rem] -rotate-[18deg] bg-[#F2D3CF]; }
-  .auth-page::after { @apply -right-24 -bottom-16 h-48 w-[36rem] -rotate-[18deg] bg-[#F4DAD6]; }
   .auth-intro { @apply flex max-w-lg flex-col gap-5; }
   .auth-intro h1 { @apply text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.04] tracking-[-0.035em]; }
   .auth-intro p { @apply text-xl text-muted; }
@@ -124,5 +114,5 @@
   .tabs button {
     @apply min-h-11 flex-1 rounded-lg text-[15px] font-semibold text-muted transition-colors hover:text-ink;
   }
-  .tabs button[aria-selected='true'] { @apply bg-white text-ink shadow-sm; }
+  .tabs button[aria-pressed='true'] { @apply bg-white text-ink shadow-sm; }
 }
