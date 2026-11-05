@@ -511,3 +511,18 @@
 @layer components {
   .contrast-result { @apply text-lg font-bold text-white; }
 }
+
+/* Photo slideshow: caption laid over the bottom of each photo */
+@layer components {
+  .slide { @apply relative; }
+  .slide-media { @apply relative; }
+  .slide-media::after {
+    content: '';
+    @apply pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#2E1015]/90 via-[#2E1015]/45 to-transparent;
+  }
+  .slide img { @apply object-cover; }
+  .slide figcaption { @apply absolute inset-x-0 bottom-0 z-10 px-6 pb-5 sm:px-8 sm:pb-7; }
+  .slide-title { @apply text-2xl drop-shadow sm:text-3xl; }
+  .slide-sub { @apply max-w-[40ch] text-white/90; }
+  .slide-controls { @apply pt-4; }
+}
