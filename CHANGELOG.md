@@ -5,7 +5,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 ## [0.3.2] - 2026-11-06
 
 ### Fixed
-- The API accepts several landing page URLs in  (and client URLs in ), separated by commas, so the forms work on every address Vercel gives the landing page.
+- The API accepts several landing page URLs in `LANDING_ORIGIN` (and client URLs in `CLIENT_ORIGIN`), separated by commas, so the forms work on every address Vercel gives the landing page.
 
 ## [0.3.1] - 2026-11-06
 
