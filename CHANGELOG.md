@@ -2,6 +2,11 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.3.4] - 2026-11-06
+
+### Removed
+- The mentor survey line under the hero button.
+
 ## [0.3.3] - 2026-11-06
 
 ### Added

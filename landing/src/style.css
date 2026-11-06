@@ -152,9 +152,6 @@
   .hero-points { @apply flex flex-wrap gap-x-5 gap-y-1 text-[15px] font-medium text-muted; }
   .hero-points li { @apply flex items-center gap-2; }
   .hero-points li::before { content: ''; @apply size-1.5 shrink-0 rounded-full bg-rose; }
-  /* One line of evidence from our own mentor survey */
-  .hero-proof { @apply flex max-w-[46ch] flex-col gap-0.5 border-l-2 border-rose pl-4 text-[15px] leading-snug text-ink; }
-  .hero-proof-source { @apply text-sm text-muted; }
 
   /* ---------- Hero slideshow: three photos, cross-fade, 4 s each ---------- */
   .slideshow { @apply relative w-full overflow-hidden rounded-[2rem] bg-black text-white shadow-lift; }
