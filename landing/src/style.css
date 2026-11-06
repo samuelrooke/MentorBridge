@@ -149,9 +149,12 @@
   .hero-title { @apply max-w-[14ch] text-[clamp(2.5rem,5.6vw,4.6rem)] leading-[1.03] font-extrabold tracking-[-0.035em]; }
   .underline-bridge { @apply underline decoration-rose decoration-[0.12em] underline-offset-[0.14em]; }
   .hero-lead { @apply max-w-[46ch] text-lg leading-relaxed text-muted sm:text-xl; }
-  /* "Free for students · A mentor from your field · …" */
-  .hero-points { @apply flex flex-wrap gap-x-3 gap-y-1 text-[15px] font-medium text-muted; }
-  .hero-points li + li::before { content: '·'; @apply mr-3 text-ink/40; }
+  .hero-points { @apply flex flex-wrap gap-x-5 gap-y-1 text-[15px] font-medium text-muted; }
+  .hero-points li { @apply flex items-center gap-2; }
+  .hero-points li::before { content: ''; @apply size-1.5 shrink-0 rounded-full bg-rose; }
+  /* One line of evidence from our own mentor survey */
+  .hero-proof { @apply flex max-w-[46ch] flex-col gap-0.5 border-l-2 border-rose pl-4 text-[15px] leading-snug text-ink; }
+  .hero-proof-source { @apply text-sm text-muted; }
 
   /* ---------- Hero slideshow: three photos, cross-fade, 4 s each ---------- */
   .slideshow { @apply relative w-full overflow-hidden rounded-[2rem] bg-black text-white shadow-lift; }
