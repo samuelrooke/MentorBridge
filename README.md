@@ -43,7 +43,7 @@ Create three Vercel projects from this repository, each with its own **Root Dire
 
 ## Database
 
-Schema changes are migration files in `supabase/migrations`. Migrations 0001 to 0004 are already applied to the shared project. For new ones: `npm run db:new <name>`, then `npm run db:link` (once) and `npm run db:push`. Before the very first push, run `npx supabase migration repair --status applied 0001 0002 0003 0004` once, so the CLI knows those are already in.
+Schema changes are migration files in `supabase/migrations`. Migrations 0001 to 0005 are already applied to the shared project. For new ones: `npm run db:new <name>`, then `npm run db:link` (once) and `npm run db:push`. Before the very first push, run `npx supabase migration repair --status applied 0001 0002 0003 0004` once, so the CLI knows those are already in.
 
 Admins are set by hand in the Supabase SQL editor:
 
