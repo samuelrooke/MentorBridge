@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
-import app from '../src/app.js'
+import app, { parseOrigins } from '../src/app.js'
 import { validateAnswers, validatePilotRequest } from '../src/routes/pilotRequests.js'
 
 const valid = { email: 'Lead@Example.com', company: 'Acme', interns_per_year: '3-5' }
@@ -81,6 +81,10 @@ describe('CORS', () => {
   it('does not allow other origins', async () => {
     const res = await request(app).get('/api/health').set('Origin', 'https://evil.example')
     expect(res.headers['access-control-allow-origin']).toBeUndefined()
+  })
+
+  it('reads several comma-separated origins', () => {
+    expect(parseOrigins('https://a.example/, https://b.example', undefined)).toEqual(['https://a.example', 'https://b.example'])
   })
 })
 
