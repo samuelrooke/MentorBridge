@@ -2,6 +2,14 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.3.3] - 2026-11-06
+
+### Added
+- Social proof under the hero button: "36 of the 38 professionals we asked would consider mentoring a student." (mentor survey, October 2026).
+
+### Changed
+- The three hero points each have their own dot, so they wrap cleanly on small screens.
+
 ## [0.3.2] - 2026-11-06
 
 ### Fixed
