@@ -4,7 +4,7 @@ A one-page validation test aimed at students looking for an internship. Its main
 
 ## Run locally
 
-1. **Database (once).** In the Supabase SQL editor, run [`0002_pilot_requests.sql`](../supabase/migrations/0002_pilot_requests.sql) then [`0003_pilot_request_roles.sql`](../supabase/migrations/0003_pilot_request_roles.sql), then [`0004_student_answers.sql`](../supabase/migrations/0004_student_answers.sql).
+1. **Database (once).** Apply the migrations in [`supabase/migrations`](../supabase/migrations) (see the main README). The landing page uses the `pilot_requests` and `contact_messages` tables.
 2. **API settings.** `server/.env` must include `SUPABASE_SERVICE_ROLE_KEY`, because the API needs it to store requests.
 3. **Landing page settings.** Copy `landing/.env.example` to `landing/.env`. The default `VITE_API_URL=http://localhost:4000` points at the local API.
 4. **Start both.** From the repo root:
@@ -38,9 +38,10 @@ The landing page deploys to Vercel (Root Directory `landing`) and talks to the A
 
 ## Measuring
 
-- **Visitors:** GoatCounter (cookieless, so no cookie banner).
+- **Visitors:** GoatCounter, cookieless, counts everyone.
 - **Conversions:** rows in `pilot_requests`, by `role`. GoatCounter also counts the events `pilot-request`, `signup-student` and `signup-mentor`. The main conversion rate is student sign-ups ÷ visitors.
-- **Google Tag Manager (optional):** set `VITE_GTM_ID` (e.g. `GTM-XXXXXXX`) in `landing/.env` and on Vercel. Visitors then see a cookie bar, and GTM only loads after they click Accept (Google Consent Mode v2, analytics only, no advertising). Sign-ups are pushed to the data layer as `sign_up` events with a `role`. GoatCounter keeps counting everyone without cookies.
+- **Google Analytics 4 and Tag Manager (optional):** set `VITE_GA_ID` and `VITE_GTM_ID` in `landing/.env` and on Vercel. Visitors then see a cookie bar, and Google only loads after they click Accept (Consent Mode v2, analytics only, no advertising). Sign-ups are sent as `sign_up` events with a `role` and the A/B `variant`.
+- **A/B test:** the hero headline has two versions. GoatCounter counts `ab/hero-a` and `ab/hero-b` visits and every sign-up stores its variant, so `npm run pilot-requests` shows conversion per variant. Force one with `?variant=a` or `?variant=b`.
 
 ## Languages
 
