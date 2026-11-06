@@ -351,7 +351,7 @@ if (GTM_ID || GA_ID) {
 
 
 // ---- A/B test of the hero headline ----
-// Variant A: "Find your match." Variant B: "Find your internship with a mentor from your field."
+// Variant A: "Find your match." Variant B: "Find your internship with a mentor."
 // Each visitor keeps their variant (localStorage). ?variant=a or ?variant=b forces one, for checking.
 // GoatCounter gets one event per visit (ab/hero-a or ab/hero-b), and every sign-up stores its variant,
 // so conversion per variant = sign-ups with that variant ÷ ab/hero-<variant> visits.
