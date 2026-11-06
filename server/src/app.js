@@ -8,8 +8,14 @@ import pilotRequestsRouter from './routes/pilotRequests.js'
 const app = express()
 
 // Only the platform client and the landing page may call the API from a browser.
+// Each variable may hold several URLs separated by commas, because Vercel gives a page more than one address.
 // Localhost is allowed outside production for local development.
-const allowedOrigins = [process.env.CLIENT_ORIGIN, process.env.LANDING_ORIGIN].filter(Boolean)
+export const parseOrigins = (...values) =>
+  values
+    .flatMap((value) => (value ?? '').split(','))
+    .map((url) => url.trim().replace(/\/$/, ''))
+    .filter(Boolean)
+const allowedOrigins = parseOrigins(process.env.CLIENT_ORIGIN, process.env.LANDING_ORIGIN)
 const isLocalhost = (origin) => /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
 
 app.use(

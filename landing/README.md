@@ -30,7 +30,7 @@ The landing page deploys to Vercel (Root Directory `landing`) and talks to the A
 
 - Deploy the API first and note its URL.
 - On the landing page's Vercel project, set `VITE_API_URL` to that URL. Vite builds it into the page, so redeploy after changing it.
-- On the API, set `LANDING_ORIGIN` to the landing page's Vercel URL. In production, CORS only allows that origin and `CLIENT_ORIGIN`.
+- On the API, set `LANDING_ORIGIN` to the landing page's Vercel URLs, separated by commas if it has more than one. In production, CORS only allows those and `CLIENT_ORIGIN`.
 
 ## Placeholders to fill in
 
