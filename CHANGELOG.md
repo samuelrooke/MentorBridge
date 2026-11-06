@@ -2,6 +2,19 @@
 
 All notable changes to MentorBridge. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
+## [0.3.1] - 2026-11-06
+
+### Changed
+- Shorter hero text: "A professional from your field helps you land your internship."
+- Shorter B headline in the A/B test: "Find your internship with a mentor."
+
+### Fixed
+- The landing page now lists its own build tools (Vite, Tailwind), so it builds on its own.
+- Landing page and main README match the current setup (migrations 0001 to 0005, analytics, A/B test).
+
+### Removed
+- Unused Dutch translations.
+
 ## [0.3.0] - 2026-11-05
 
 ### Landing page
