@@ -9,34 +9,49 @@ if (!supabaseAdmin) {
 
 const { data, error } = await supabaseAdmin
   .from('pilot_requests')
-  .select('created_at, role, email, company, interns_per_year, field, has_placement, applications_sent, help_wanted, needed_by, variant')
+  .select(
+    'created_at, role, name, email, sector, company, job_title, company_size, interest, age_range, hours_per_month, availability, skills_help, ' +
+      'interns_per_year, field, has_placement, applications_sent, help_wanted, needed_by, variant, utm_source, utm_medium, utm_campaign, referrer',
+  )
   .order('created_at', { ascending: false })
 
 if (error) {
-  console.error('Could not load pilot requests:', error.message)
+  console.error('Could not load sign-ups:', error.message)
   process.exit(1)
 }
 
+// Earlier sign-ups (before the waiting list) have field / interns_per_year instead of the new fields.
 console.table(
   data.map((r) => ({
     date: new Date(r.created_at).toLocaleString('en-GB'),
     role: r.role,
+    name: r.name ?? '',
     email: r.email,
-    company: r.company ?? '',
-    interns_per_year: r.interns_per_year ?? '',
-    field: r.field ?? '',
-    has_place: r.has_placement ?? '',
-    applications: r.applications_sent ?? '',
-    help: (r.help_wanted ?? []).join(', '),
-    needed_by: r.needed_by ?? '',
+    sector: r.sector ?? r.field ?? '',
+    details:
+      r.role === 'company'
+        ? [r.company, r.job_title, r.company_size, r.interest].filter(Boolean).join(' · ')
+        : r.role === 'mentor'
+          ? [r.age_range, r.hours_per_month && `${r.hours_per_month} h/month`].filter(Boolean).join(' · ')
+          : (r.skills_help ?? ''),
+    available: (r.availability ?? []).join(', '),
+    source: [r.utm_source, r.utm_medium, r.utm_campaign].filter(Boolean).join(' / ') || r.referrer || '',
   })),
 )
 
 const count = (role) => data.filter((r) => r.role === role).length
-console.log(`Pilot requests (companies): ${count('company')}`)
+console.log(`Organization sign-ups: ${count('company')}`)
 console.log(`Student sign-ups: ${count('student')}`)
 console.log(`Mentor sign-ups: ${count('mentor')}`)
 console.log(`Total: ${data.length}`)
+
+// Where sign-ups came from: UTM source, else the referring site, else "direct"
+const bySource = data.reduce((acc, r) => {
+  const key = r.utm_source ?? r.referrer ?? 'direct'
+  acc[key] = (acc[key] ?? 0) + 1
+  return acc
+}, {})
+console.log('\nSign-ups per source:', bySource)
 
 // Follow-up answers from students
 const answered = data.filter(

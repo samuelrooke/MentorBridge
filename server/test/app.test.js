@@ -3,7 +3,17 @@ import { describe, expect, it } from 'vitest'
 import app, { parseOrigins } from '../src/app.js'
 import { validateAnswers, validatePilotRequest } from '../src/routes/pilotRequests.js'
 
-const valid = { email: 'Lead@Example.com', company: 'Acme', interns_per_year: '3-5' }
+const valid = {
+  role: 'company',
+  name: 'Mark Bakker',
+  email: 'Lead@Example.com',
+  company: 'Acme',
+  job_title: 'HR manager',
+  sector: 'construction',
+  consent: true,
+}
+const mentor = { role: 'mentor', name: 'Pieter', email: 'p@x.nl', age_range: '60-64', hours_per_month: '3-5', availability: ['evenings'], consent: true }
+const student = { role: 'student', name: 'Lisa', email: 'l@x.nl', sector: 'ict', skills_help: 'both', availability: ['weekdays', 'weekends'], consent: true }
 
 describe('GET /api/health', () => {
   it('responds ok', async () => {
@@ -21,34 +31,66 @@ describe('auth', () => {
 })
 
 describe('validatePilotRequest', () => {
-  it('accepts and cleans a valid request', () => {
-    expect(validatePilotRequest(valid)).toEqual({
+  it('accepts and cleans a company sign-up', () => {
+    expect(validatePilotRequest({ ...valid, company_size: '250-999', interest: 'internal', interns_per_year: '3-5' })).toEqual({
       role: 'company',
+      name: 'Mark Bakker',
       email: 'lead@example.com',
+      sector: 'construction',
       company: 'Acme',
-      interns_per_year: '3-5',
+      job_title: 'HR manager',
+      company_size: '250-999',
+      interest: 'internal',
     })
   })
 
-  it('accepts a student or mentor with a field, ignoring company fields', () => {
-    expect(validatePilotRequest({ role: 'student', email: 'S@x.nl', field: ' ICT ', company: 'Acme' })).toEqual({
-      role: 'student',
-      email: 's@x.nl',
-      field: 'ICT',
+  it('accepts a mentor without a sector and a student with one', () => {
+    expect(validatePilotRequest(mentor)).toEqual({
+      role: 'mentor', name: 'Pieter', email: 'p@x.nl', availability: ['evenings'], age_range: '60-64', hours_per_month: '3-5',
     })
-    expect(validatePilotRequest({ role: 'mentor', email: 'm@x.nl', field: 'Backend' }).role).toBe('mentor')
+    expect(validatePilotRequest({ ...mentor, sector: 'logistics' }).sector).toBe('logistics')
+    expect(validatePilotRequest({ ...student, availability: ['weekends', 'weekdays', 'weekends'] })).toEqual({
+      role: 'student', name: 'Lisa', email: 'l@x.nl', sector: 'ict', availability: ['weekdays', 'weekends'], skills_help: 'both',
+    })
+  })
+
+  it('keeps the visitor source and drops anything odd', () => {
+    const result = validatePilotRequest({
+      ...student,
+      utm_source: ' LinkedIn ',
+      utm_medium: 'social',
+      utm_campaign: 'x'.repeat(150),
+      referrer: 'www.linkedin.com',
+      landing_path: '/students/',
+    })
+    expect(result).toMatchObject({ utm_source: 'linkedin', utm_medium: 'social', referrer: 'www.linkedin.com', landing_path: '/students/' })
+    expect(result.utm_campaign).toHaveLength(100)
+    const odd = validatePilotRequest({ ...student, referrer: 'https://x.com/a?b', landing_path: 'http://evil' })
+    expect(odd).not.toHaveProperty('referrer')
+    expect(odd).not.toHaveProperty('landing_path')
   })
 
   it.each([
     [{ ...valid, email: '' }, 'your email'],
     [{ ...valid, email: 'not-an-email' }, 'valid email'],
-    [{ ...valid, email: `${'a'.repeat(250)}@x.com` }, 'valid email'],
+    [{ ...valid, email: 'a'.repeat(250) + '@x.com' }, 'valid email'],
+    [{ ...valid, name: ' ' }, 'contact name'],
     [{ ...valid, company: '  ' }, 'organization name'],
     [{ ...valid, company: 'x'.repeat(201) }, '200 characters'],
-    [{ ...valid, interns_per_year: '100' }, 'interns'],
+    [{ ...valid, job_title: '' }, 'your role'],
+    [{ ...valid, sector: undefined }, 'choose a sector'],
+    [{ ...valid, sector: 'mining' }, 'sector from the list'],
+    [{ ...valid, company_size: '5' }, 'company size'],
+    [{ ...valid, interest: 'resell' }, 'how you would like'],
     [{ ...valid, role: 'admin' }, 'student, mentor or organization'],
-    [{ role: 'student', email: 'a@b.co' }, 'field of study'],
-    [{ role: 'mentor', email: 'a@b.co', field: 'x'.repeat(201) }, '200 characters'],
+    [{ ...valid, role: undefined }, 'student, mentor or organization'],
+    [{ ...valid, consent: 'yes' }, 'privacy statement'],
+    [{ ...mentor, age_range: '50' }, 'age range'],
+    [{ ...mentor, hours_per_month: undefined }, 'hours a month'],
+    [{ ...mentor, availability: [] }, 'when you are available'],
+    [{ ...student, availability: ['nights'] }, 'listed times'],
+    [{ ...student, skills_help: 'cv' }, 'help with'],
+    [{ ...student, sector: '' }, 'choose a sector'],
   ])('rejects %j', (body, reason) => {
     expect(validatePilotRequest(body).error).toContain(reason)
   })
@@ -125,8 +167,8 @@ describe('PATCH /api/pilot-requests/:id/answers', () => {
 
 describe('A/B variant on sign-ups', () => {
   it('keeps a valid variant and drops anything else', () => {
-    expect(validatePilotRequest({ role: 'student', email: 'a@b.nl', field: 'ICT', variant: 'b' }).variant).toBe('b')
-    expect(validatePilotRequest({ role: 'student', email: 'a@b.nl', field: 'ICT', variant: 'z' })).not.toHaveProperty('variant')
+    expect(validatePilotRequest({ ...student, variant: 'b' }).variant).toBe('b')
+    expect(validatePilotRequest({ ...student, variant: 'z' })).not.toHaveProperty('variant')
   })
 })
 

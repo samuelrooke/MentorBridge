@@ -1,12 +1,10 @@
 const API_URL = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
-const form = document.querySelector('#pilot-form')
-const button = form.querySelector('button[type="submit"]')
-const errorBox = document.querySelector('#form-error')
-const thanks = document.querySelector('#pilot-thanks')
+// Every page loads this script, but not every page has every part (the front page has no
+// waiting list form, only the student page has the slideshow), so each part checks first.
 
 // ---- Language ----
-// The Dutch page (nl/index.html) is generated from index.html; texts set from JavaScript live here.
+// The Dutch pages (nl/...) are generated from the English ones; texts set from JavaScript live here.
 const LANG = document.documentElement.lang === 'nl' ? 'nl' : 'en'
 
 const UI = {
@@ -19,6 +17,7 @@ const UI = {
     errorOffline: "Sorry, we couldn't send your details. Check your connection and try again.",
     errorOfflineAnswers: "Sorry, we couldn't send your answers. Check your connection and try again, or skip.",
     errorOfflineMessage: "Sorry, we couldn't send your message. Check your connection and try again.",
+    errorAvailability: 'Please choose when you are available.',
     play: 'Play slideshow',
     pause: 'Pause slideshow',
   },
@@ -31,35 +30,51 @@ const UI = {
     errorOffline: 'Sorry, we konden je gegevens niet versturen. Controleer je verbinding en probeer het opnieuw.',
     errorOfflineAnswers: 'Sorry, we konden je antwoorden niet versturen. Controleer je verbinding en probeer het opnieuw, of sla over.',
     errorOfflineMessage: 'Sorry, we konden je bericht niet versturen. Controleer je verbinding en probeer het opnieuw.',
+    errorAvailability: 'Kies wanneer je beschikbaar bent.',
     play: 'Diavoorstelling afspelen',
     pause: 'Diavoorstelling pauzeren',
   },
 }
 const t = UI[LANG]
 
-// The API answers in English; on the Dutch page its validation messages are translated here.
+// The API answers in English; on the Dutch pages its validation messages are translated here.
 const SERVER_NL = {
   'Please choose student, mentor or organization.': 'Kies student, mentor of organisatie.',
+  'Please enter your name.': 'Vul je naam in.',
+  'Please enter your contact name.': 'Vul de naam van de contactpersoon in.',
+  'Name must be 100 characters or fewer.': 'Je naam mag maximaal 100 tekens zijn.',
   'Please enter your email.': 'Vul je e-mailadres in.',
   'Please enter a valid email address.': 'Vul een geldig e-mailadres in.',
+  'Please choose a sector.': 'Kies een sector.',
+  'Please choose a sector from the list.': 'Kies een sector uit de lijst.',
   'Please enter your organization name.': 'Vul de naam van je organisatie in.',
   'Organization name must be 200 characters or fewer.': 'De naam van je organisatie mag maximaal 200 tekens zijn.',
-  'Please choose how many interns you take per year.': 'Kies hoeveel stagiairs je per jaar aanneemt.',
-  'Please enter your field of study.': 'Vul je opleiding in.',
-  'Please enter your field of work.': 'Vul je vakgebied in.',
-  'Field must be 200 characters or fewer.': 'Dit veld mag maximaal 200 tekens zijn.',
+  'Please enter your role.': 'Vul je functie in.',
+  'Role must be 100 characters or fewer.': 'Je functie mag maximaal 100 tekens zijn.',
+  'Please choose a company size from the list.': 'Kies een aantal medewerkers uit de lijst.',
+  'Please choose how you would like to use MentorBridge.': 'Kies hoe je MentorBridge wilt gebruiken.',
+  'Please choose when you are available.': 'Kies wanneer je beschikbaar bent.',
+  'Please choose from the listed times.': 'Kies uit de genoemde tijden.',
+  'Please choose your age range.': 'Kies je leeftijd.',
+  'Please choose how many hours a month you have.': 'Kies hoeveel uur per maand je hebt.',
+  'Please choose what you want help with.': 'Kies waar je hulp bij wilt.',
+  'Please agree to the privacy statement.': 'Ga akkoord met de privacyverklaring.',
   'Please choose yes or no.': 'Kies ja of nee.',
   'Please choose how many applications you sent.': 'Kies hoeveel sollicitaties je hebt verstuurd.',
   'Please choose when you need your internship.': 'Kies wanneer je je stage nodig hebt.',
   'Please choose from the listed kinds of help.': 'Kies uit de genoemde soorten hulp.',
-  'Please enter your name.': 'Vul je naam in.',
-  'Name must be 100 characters or fewer.': 'Je naam mag maximaal 100 tekens zijn.',
   'Please write a message.': 'Schrijf een bericht.',
   'Message must be 2000 characters or fewer.': 'Je bericht mag maximaal 2000 tekens zijn.',
 }
 function serverError(message, fallback) {
   if (!message) return fallback
   return LANG === 'nl' ? (SERVER_NL[message] ?? fallback) : message
+}
+
+// GoatCounter loads async; events sent before it's ready wait (up to 10 s).
+function countEvent(path, title = path, tries = 20) {
+  if (window.goatcounter?.count) window.goatcounter.count({ path, title, event: true })
+  else if (tries > 0) setTimeout(() => countEvent(path, title, tries - 1), 500)
 }
 
 // Remember the chosen language for the next visit.
@@ -73,201 +88,218 @@ for (const link of document.querySelectorAll('[data-lang]')) {
   })
 }
 
-// Text that changes with the chosen role.
-const COPY = {
-  en: {
-    student: {
-      heading: 'Find your match',
-      text: "Leave your details and we'll get in touch when we can match you with a mentor from your field. Free for students.",
-      emailLabel: 'Email',
-      fieldLabel: 'Field of study',
-      button: 'Sign up as a student',
-      event: 'signup-student',
-    },
-    mentor: {
-      heading: 'Help a student find their internship',
-      text: "Leave your details and we'll get in touch when there's a student from your field.",
-      emailLabel: 'Email',
-      fieldLabel: 'Your field of work',
-      button: 'Sign up as a mentor',
-      event: 'signup-mentor',
-    },
-    company: {
-      heading: 'Try it with your next intern',
-      text: "We're running free pilots with a small number of organizations. Leave your details and we'll get in touch.",
-      emailLabel: 'Work email',
-      button: 'Request a free pilot',
-      event: 'pilot-request',
-    },
-  },
-  nl: {
-    student: {
-      heading: 'Vind jouw match',
-      text: 'Laat je gegevens achter, dan nemen we contact op zodra we je kunnen koppelen aan een mentor uit je vakgebied. Gratis voor studenten.',
-      emailLabel: 'E-mail',
-      fieldLabel: 'Opleiding',
-      button: 'Aanmelden als student',
-      event: 'signup-student',
-    },
-    mentor: {
-      heading: 'Help een student aan een stage',
-      text: 'Laat je gegevens achter, dan nemen we contact op zodra er een student uit jouw vakgebied is.',
-      emailLabel: 'E-mail',
-      fieldLabel: 'Jouw vakgebied',
-      button: 'Aanmelden als mentor',
-      event: 'signup-mentor',
-    },
-    company: {
-      heading: 'Probeer het met je volgende stagiair',
-      text: 'We draaien gratis pilots met een klein aantal organisaties. Laat je gegevens achter, dan nemen we contact op.',
-      emailLabel: 'Zakelijk e-mailadres',
-      button: 'Vraag een gratis pilot aan',
-      event: 'pilot-request',
-    },
-  },
-}
-const copy = COPY[LANG]
-
-// Show the fields for one role. Hidden fields are disabled, so they are
-// neither validated nor sent.
-function setRole(role) {
-  const text = copy[role]
-  for (const el of document.querySelectorAll('[data-copy]')) {
-    if (text[el.dataset.copy]) el.textContent = text[el.dataset.copy]
+// ---- Where the visitor came from ----
+// UTM tags from the link, the referring site (host name only) and the first page of the visit.
+// Kept for the browser session and sent with the sign-up. A link with new UTM tags replaces them.
+// The tag names the team uses are in docs/utm.md.
+const SOURCE_KEY = 'mb-source'
+function readSource() {
+  const params = new URLSearchParams(location.search)
+  const fresh = {
+    utm_source: params.get('utm_source') ?? undefined,
+    utm_medium: params.get('utm_medium') ?? undefined,
+    utm_campaign: params.get('utm_campaign') ?? undefined,
+    referrer: undefined,
+    landing_path: location.pathname,
   }
+  try {
+    const host = document.referrer ? new URL(document.referrer).hostname : ''
+    if (host && host !== location.hostname) fresh.referrer = host
+  } catch {
+    // Not a valid URL: no referrer.
+  }
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(SOURCE_KEY) ?? 'null')
+    if (saved && !fresh.utm_source && !fresh.utm_medium && !fresh.utm_campaign) return saved
+    sessionStorage.setItem(SOURCE_KEY, JSON.stringify(fresh))
+  } catch {
+    // Storage blocked: use what this page knows.
+  }
+  return fresh
+}
+const source = readSource()
+
+// ---- A/B test of the hero headline (student page only) ----
+// Variant A: "Find your match." Variant B: "Find your internship with a mentor."
+// Each visitor keeps their variant (localStorage). ?variant=a or ?variant=b forces one, for checking.
+// GoatCounter gets one event per visit (ab/hero-a or ab/hero-b), and every sign-up stores its variant,
+// so conversion per variant = sign-ups with that variant ÷ ab/hero-<variant> visits.
+const AB_KEY = 'mb-ab-hero'
+function pickVariant() {
+  const forced = new URLSearchParams(location.search).get('variant')
+  if (forced === 'a' || forced === 'b') return forced
+  try {
+    const saved = localStorage.getItem(AB_KEY)
+    if (saved === 'a' || saved === 'b') return saved
+    const fresh = Math.random() < 0.5 ? 'a' : 'b'
+    localStorage.setItem(AB_KEY, fresh)
+    return fresh
+  } catch {
+    return Math.random() < 0.5 ? 'a' : 'b'
+  }
+}
+const variantEls = document.querySelectorAll('[data-variant]')
+const variant = variantEls.length ? pickVariant() : undefined
+if (variant) {
+  for (const el of variantEls) el.hidden = el.dataset.variant !== variant
+  countEvent(`ab/hero-${variant}`)
+}
+
+// ---- Waiting list form ----
+// One form for all three segments. The page says which segment it is (<body data-segment>).
+// GoatCounter counts page views per page (/students/, /mentors/, /companies/ and the /nl/ versions),
+// plus the events form-start-<segment> and signup-<segment>, so
+// conversion per segment = signup-<segment> ÷ views of that segment's pages.
+const form = document.querySelector('#pilot-form')
+if (form) {
+  const segment = document.body.dataset.segment
+  const button = form.querySelector('button[type="submit"]')
+  const errorBox = document.querySelector('#form-error')
+  const thanks = document.querySelector('#pilot-thanks')
+  const answersForm = document.querySelector('#answers-form')
+  const answersButton = answersForm.querySelector('button[type="submit"]')
+  const answersError = document.querySelector('#answers-error')
+  const availability = form.querySelector('[data-availability]')
+  let signupId = null
+
+  const BUTTON = {
+    en: { student: 'Join the waiting list', mentor: 'Join as a mentor', company: 'Join as an organization' },
+    nl: { student: 'Meld je aan voor de wachtlijst', mentor: 'Meld je aan als mentor', company: 'Meld je aan als organisatie' },
+  }
+
+  // Show the fields for this segment. Hidden fields are disabled, so they are neither checked nor sent.
   for (const group of form.querySelectorAll('[data-for-role]')) {
-    const visible = group.dataset.forRole.split(' ').includes(role)
+    const visible = group.dataset.forRole.split(' ').includes(segment)
     group.hidden = !visible
     for (const input of group.querySelectorAll('input, select')) input.disabled = !visible
   }
-  errorBox.hidden = true
-}
+  // Sector is optional for mentors only.
+  form.elements.sector.required = segment !== 'mentor'
+  button.textContent = BUTTON[LANG][segment]
 
-form.addEventListener('change', (event) => {
-  if (event.target.name === 'role') setRole(event.target.value)
-})
+  const showError = (message) => {
+    errorBox.textContent = message
+    errorBox.hidden = false
+  }
 
-// "Sign up as a student/mentor" buttons pick the role before jumping to the form.
-for (const link of document.querySelectorAll('a[data-role]')) {
-  link.addEventListener('click', () => {
-    form.elements.role.value = link.dataset.role
-    setRole(link.dataset.role)
-  })
-}
+  // Count the first time someone starts filling in the form.
+  form.addEventListener('focusin', () => countEvent(`form-start-${segment}`, `Form started: ${segment}`), { once: true })
 
-function showError(message) {
-  errorBox.textContent = message
-  errorBox.hidden = false
-}
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    errorBox.hidden = true
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault()
-  errorBox.hidden = true
-
-  // Let the browser explain missing or invalid fields first.
-  if (!form.reportValidity()) return
-
-  const role = form.elements.role.value
-  const data = { ...Object.fromEntries(new FormData(form)), variant }
-  const label = button.textContent
-  button.disabled = true
-  button.textContent = t.sending
-
-  try {
-    const res = await fetch(`${API_URL}/api/pilot-requests`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-
-    if (res.ok) {
-      // Count the conversion in GoatCounter, if it has loaded.
-      window.goatcounter?.count?.({ path: copy[role].event, title: copy[role].button, event: true })
-      window.dataLayer?.push({ event: 'sign_up', role, variant })
-      if (document.querySelector('#ga-script')) window.gtag('event', 'sign_up', { role, variant })
-      const body = await res.json().catch(() => ({}))
-      form.hidden = true
-      // Students get four optional follow-up questions; everyone else sees the thank-you.
-      if (role === 'student' && body.id) showAnswers(body.id)
-      else showThanks()
+    // Let the browser explain missing or invalid fields first.
+    if (!form.reportValidity()) return
+    const fields = new FormData(form)
+    // Checkbox groups can't be marked required in HTML, so check "at least one" here.
+    if (availability && !availability.hidden && !fields.getAll('availability').length) {
+      showError(t.errorAvailability)
+      availability.querySelector('input').focus()
       return
     }
 
-    const body = await res.json().catch(() => ({}))
-    showError(res.status === 400 ? serverError(body.error, t.errorGeneric) : t.errorGeneric)
-  } catch {
-    showError(t.errorOffline)
-  } finally {
-    button.disabled = false
-    button.textContent = label
+    const data = {
+      ...Object.fromEntries(fields),
+      availability: fields.getAll('availability'),
+      consent: form.elements.consent.checked,
+      variant,
+      ...source,
+    }
+    const label = button.textContent
+    button.disabled = true
+    button.textContent = t.sending
+
+    try {
+      const res = await fetch(`${API_URL}/api/pilot-requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      const body = await res.json().catch(() => ({}))
+
+      if (res.ok) {
+        countEvent(`signup-${segment}`, `Signed up: ${segment}`)
+        window.dataLayer?.push({ event: 'sign_up', role: segment, variant })
+        if (document.querySelector('#ga-script')) window.gtag('event', 'sign_up', { role: segment, variant })
+        form.hidden = true
+        // Students get four optional follow-up questions; everyone else sees the thank-you.
+        if (segment === 'student' && body.id) showAnswers(body.id)
+        else showThanks()
+        return
+      }
+      // Already on the list for this segment: nothing to fix, so say so kindly.
+      if (res.status === 409 && body.duplicate) {
+        form.hidden = true
+        showThanks({ duplicate: true })
+        return
+      }
+      showError(res.status === 400 ? serverError(body.error, t.errorGeneric) : t.errorGeneric)
+    } catch {
+      showError(t.errorOffline)
+    } finally {
+      button.disabled = false
+      button.textContent = label
+    }
+  })
+
+  function showThanks({ duplicate = false } = {}) {
+    answersForm.hidden = true
+    thanks.querySelector('[data-thanks="new"]').hidden = duplicate
+    thanks.querySelector('[data-thanks="duplicate"]').hidden = !duplicate
+    thanks.hidden = false
+    thanks.focus()
   }
-})
 
-function showThanks() {
-  answersForm.hidden = true
-  thanks.hidden = false
-  thanks.focus()
-}
-
-// ---- Step 2: optional follow-up questions for students ----
-const answersForm = document.querySelector('#answers-form')
-const answersButton = answersForm.querySelector('button[type="submit"]')
-const answersError = document.querySelector('#answers-error')
-let signupId = null
-
-function showAnswers(id) {
-  signupId = id
-  answersForm.hidden = false
-  answersForm.focus()
-}
-
-document.querySelector('#answers-skip').addEventListener('click', showThanks)
-
-answersForm.addEventListener('submit', async (event) => {
-  event.preventDefault()
-  answersError.hidden = true
-
-  const fields = new FormData(answersForm)
-  const answers = {
-    has_placement: fields.get('has_placement'),
-    applications_sent: fields.get('applications_sent'),
-    help_wanted: fields.getAll('help_wanted'),
-    needed_by: fields.get('needed_by'),
-  }
-  // Nothing chosen is the same as skipping.
-  if (!answers.has_placement && !answers.applications_sent && !answers.help_wanted.length && !answers.needed_by) {
-    return showThanks()
+  // ---- Step 2: optional follow-up questions for students ----
+  function showAnswers(id) {
+    signupId = id
+    answersForm.hidden = false
+    answersForm.focus()
   }
 
-  answersButton.disabled = true
-  answersButton.textContent = t.sending
-  try {
-    const res = await fetch(`${API_URL}/api/pilot-requests/${signupId}/answers`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers),
-    })
-    if (res.ok) {
-      window.goatcounter?.count?.({ path: 'student-answers', title: 'Student answered questions', event: true })
+  document.querySelector('#answers-skip').addEventListener('click', () => showThanks())
+
+  answersForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    answersError.hidden = true
+
+    const fields = new FormData(answersForm)
+    const answers = {
+      has_placement: fields.get('has_placement'),
+      applications_sent: fields.get('applications_sent'),
+      help_wanted: fields.getAll('help_wanted'),
+      needed_by: fields.get('needed_by'),
+    }
+    // Nothing chosen is the same as skipping.
+    if (!answers.has_placement && !answers.applications_sent && !answers.help_wanted.length && !answers.needed_by) {
       return showThanks()
     }
-    const body = await res.json().catch(() => ({}))
-    answersError.textContent = res.status === 400 ? serverError(body.error, t.errorAnswers) : t.errorAnswers
-    answersError.hidden = false
-  } catch {
-    answersError.textContent = t.errorOfflineAnswers
-    answersError.hidden = false
-  } finally {
-    answersButton.disabled = false
-    answersButton.textContent = t.sendAnswers
-  }
-})
 
-// The hero speaks to students first, so the form starts on the student role.
-form.elements.role.value = 'student'
-setRole('student')
-
-
+    answersButton.disabled = true
+    answersButton.textContent = t.sending
+    try {
+      const res = await fetch(`${API_URL}/api/pilot-requests/${signupId}/answers`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(answers),
+      })
+      if (res.ok) {
+        countEvent('student-answers', 'Student answered questions')
+        return showThanks()
+      }
+      const body = await res.json().catch(() => ({}))
+      answersError.textContent = res.status === 400 ? serverError(body.error, t.errorAnswers) : t.errorAnswers
+      answersError.hidden = false
+    } catch {
+      answersError.textContent = t.errorOfflineAnswers
+      answersError.hidden = false
+    } finally {
+      answersButton.disabled = false
+      answersButton.textContent = t.sendAnswers
+    }
+  })
+}
 
 // ---- Google Analytics and Tag Manager, only with consent ----
 // Both set cookies, so they load only after the visitor accepts (Google Consent Mode v2,
@@ -349,75 +381,47 @@ if (GTM_ID || GA_ID) {
   else if (consent !== 'denied') cookieBar.hidden = false
 }
 
-
-// ---- A/B test of the hero headline ----
-// Variant A: "Find your match." Variant B: "Find your internship with a mentor."
-// Each visitor keeps their variant (localStorage). ?variant=a or ?variant=b forces one, for checking.
-// GoatCounter gets one event per visit (ab/hero-a or ab/hero-b), and every sign-up stores its variant,
-// so conversion per variant = sign-ups with that variant ÷ ab/hero-<variant> visits.
-const AB_KEY = 'mb-ab-hero'
-function pickVariant() {
-  const forced = new URLSearchParams(location.search).get('variant')
-  if (forced === 'a' || forced === 'b') return forced
-  try {
-    const saved = localStorage.getItem(AB_KEY)
-    if (saved === 'a' || saved === 'b') return saved
-    const fresh = Math.random() < 0.5 ? 'a' : 'b'
-    localStorage.setItem(AB_KEY, fresh)
-    return fresh
-  } catch {
-    return Math.random() < 0.5 ? 'a' : 'b'
-  }
-}
-const variant = pickVariant()
-for (const el of document.querySelectorAll('[data-variant]')) el.hidden = el.dataset.variant !== variant
-
-// GoatCounter loads async, so wait for it (up to 10 s) before counting the variant.
-function countWhenReady(event, tries = 20) {
-  if (window.goatcounter?.count) window.goatcounter.count({ path: event, title: event, event: true })
-  else if (tries > 0) setTimeout(() => countWhenReady(event, tries - 1), 500)
-}
-countWhenReady(`ab/hero-${variant}`)
-
 // ---- Contact form ----
 const contactForm = document.querySelector('#contact-form')
-const contactButton = contactForm.querySelector('button[type="submit"]')
-const contactError = document.querySelector('#contact-error')
-const contactThanks = document.querySelector('#contact-thanks')
+if (contactForm) {
+  const contactButton = contactForm.querySelector('button[type="submit"]')
+  const contactError = document.querySelector('#contact-error')
+  const contactThanks = document.querySelector('#contact-thanks')
 
-contactForm.addEventListener('submit', async (event) => {
-  event.preventDefault()
-  contactError.hidden = true
-  if (!contactForm.reportValidity()) return
+  contactForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    contactError.hidden = true
+    if (!contactForm.reportValidity()) return
 
-  contactButton.disabled = true
-  contactButton.textContent = t.sending
-  try {
-    const res = await fetch(`${API_URL}/api/contact`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.fromEntries(new FormData(contactForm))),
-    })
-    if (res.ok) {
-      contactForm.hidden = true
-      contactThanks.hidden = false
-      contactThanks.focus()
-      window.goatcounter?.count?.({ path: 'contact-message', title: 'Contact message', event: true })
-      return
+    contactButton.disabled = true
+    contactButton.textContent = t.sending
+    try {
+      const res = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(contactForm))),
+      })
+      if (res.ok) {
+        contactForm.hidden = true
+        contactThanks.hidden = false
+        contactThanks.focus()
+        countEvent('contact-message', 'Contact message')
+        return
+      }
+      const body = await res.json().catch(() => ({}))
+      contactError.textContent = res.status === 400 ? serverError(body.error, t.errorGeneric) : t.errorGeneric
+      contactError.hidden = false
+    } catch {
+      contactError.textContent = t.errorOfflineMessage
+      contactError.hidden = false
+    } finally {
+      contactButton.disabled = false
+      contactButton.textContent = t.sendMessage
     }
-    const body = await res.json().catch(() => ({}))
-    contactError.textContent = res.status === 400 ? serverError(body.error, t.errorGeneric) : t.errorGeneric
-    contactError.hidden = false
-  } catch {
-    contactError.textContent = t.errorOfflineMessage
-    contactError.hidden = false
-  } finally {
-    contactButton.disabled = false
-    contactButton.textContent = t.sendMessage
-  }
-})
+  })
+}
 
-// ---- Hero slideshow ----
+// ---- Hero slideshow (student page) ----
 // Advances every 4 s (under the 5 s limit). Dots jump to a slide, the button pauses.
 // It pauses while hovered or focused, and does not auto-play for reduced motion.
 const slideshow = document.querySelector('.slideshow')
@@ -495,27 +499,6 @@ document.addEventListener('keydown', (event) => {
 window.matchMedia('(min-width: 64rem)').addEventListener('change', (event) => {
   if (event.matches) setMenu(false)
 })
-
-// Scrollspy: mark the section in view as the current location in both menus.
-const navLinks = [...document.querySelectorAll('.site-nav a[href^="#"], .mobile-links > a[href^="#"]')]
-const spySections = [...new Set(navLinks.map((a) => a.getAttribute('href')))]
-  .map((hash) => document.querySelector(hash))
-  .filter(Boolean)
-const spy = new IntersectionObserver(
-  (entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue
-      const hash = '#' + entry.target.id
-      for (const link of navLinks) {
-        if (link.getAttribute('href') === hash) link.setAttribute('aria-current', 'location')
-        else link.removeAttribute('aria-current')
-      }
-    }
-  },
-  // A section counts as current while it crosses a band just below the header.
-  { rootMargin: '-30% 0px -60% 0px' },
-)
-spySections.forEach((section) => spy.observe(section))
 
 // ---- Log in: the button goes to the platform app ----
 // The HTML points at the live app; VITE_APP_URL overrides it (e.g. http://localhost:5173 locally).

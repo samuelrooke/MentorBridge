@@ -153,6 +153,10 @@
   .hero-points li { @apply flex items-center gap-2; }
   .hero-points li::before { content: ''; @apply size-1.5 shrink-0 rounded-full bg-rose; }
 
+  /* Single hero photo (front, mentor and organization pages) */
+  .hero-photo { @apply overflow-hidden rounded-[2rem] bg-paper shadow-lift; }
+  .hero-photo img { @apply aspect-4/3 h-auto w-full object-cover; }
+
   /* ---------- Hero slideshow: three photos, cross-fade, 4 s each ---------- */
   .slideshow { @apply relative w-full overflow-hidden rounded-[2rem] bg-black text-white shadow-lift; }
   .slides { @apply grid; }
@@ -284,8 +288,19 @@
   .choices input:checked + span { @apply border-ink bg-ink text-white; }
   .choices input:focus-visible + span { @apply outline-3 outline-offset-2 outline-accent; }
 
+  .optional { @apply font-normal text-muted; }
+  .consent { @apply flex items-start gap-3 text-[15px] leading-snug; }
+  .consent input { @apply mt-0.5 size-5 shrink-0 cursor-pointer accent-cta; }
+  .consent a { @apply font-semibold underline underline-offset-4; }
+
   .form-error { @apply rounded-xl bg-pale px-4 py-3 font-semibold; }
   .honeypot { @apply absolute left-[-9999px] h-px w-px overflow-hidden; }
+
+  /* ---------- Text pages (privacy statement) ---------- */
+  .prose-page { @apply flex max-w-3xl flex-col gap-4; }
+  .prose-page h2 { @apply mt-6 text-2xl font-extrabold tracking-[-0.01em]; }
+  .prose-page ul { @apply flex list-disc flex-col gap-2 pl-6; }
+  .prose-page a { @apply font-semibold text-accent underline underline-offset-4; }
 
   /* ---------- Footer ---------- */
   .site-footer { @apply text-[15px]; }

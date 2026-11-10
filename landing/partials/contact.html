@@ -1,0 +1,38 @@
+<!-- Contact form -->
+      <section id="contact" class="section-sm bg-accent-tint" aria-labelledby="contact-title">
+        <div class="wrap grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          <div class="flex flex-col gap-4">
+            <h2 id="contact-title" class="h2">Questions? Send us a message</h2>
+            <p class="lead">For organizations and HR departments too: ask us about using MentorBridge in your organization. We usually reply within a few days.</p>
+          </div>
+
+          <div class="form-card">
+            <form id="contact-form" class="flex flex-col gap-5" novalidate>
+              <div class="field">
+                <label for="contact-name">Name</label>
+                <input id="contact-name" name="name" type="text" required maxlength="100" autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="contact-email">Email</label>
+                <input id="contact-email" name="email" type="email" required maxlength="254" autocomplete="email" />
+              </div>
+              <div class="field">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" name="message" required maxlength="2000" rows="5"></textarea>
+              </div>
+              <!-- Honeypot: hidden from people, bots fill it in. -->
+              <div class="honeypot" aria-hidden="true">
+                <label for="contact-website">Leave this field empty</label>
+                <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+              <p id="contact-error" class="form-error" role="alert" hidden></p>
+              <button type="submit" class="btn btn-primary btn-lg w-full">Send message</button>
+              <p class="text-sm text-muted">We only use your message to reply to you. See the <a href="/privacy/" class="underline underline-offset-4">privacy statement</a>.</p>
+            </form>
+            <div id="contact-thanks" class="flex flex-col gap-3" tabindex="-1" hidden>
+              <h3 class="h3">Thank you</h3>
+              <p>We've received your message and will reply by email.</p>
+            </div>
+          </div>
+        </div>
+      </section>
