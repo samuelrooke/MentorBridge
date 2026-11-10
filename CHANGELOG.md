@@ -19,6 +19,8 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - The same email can sign up only once per segment (migration 0006 removes earlier duplicates, keeping the oldest).
 - Shared page parts (head, header, footer, form, contact) live in `landing/partials/`.
 - The header button says "Join the waiting list", and "Sign up" on phones so it doesn't cover the logo.
+- Warmer design: cream page and cards instead of white, a burgundy gradient for dark sections, and gold for small labels and numbers on dark. The app preview on the student page keeps the platform's own colours.
+- Field and choice borders are darker, so they reach 3:1 contrast (WCAG 1.4.11).
 
 ## [0.3.4] - 2026-11-06
 
