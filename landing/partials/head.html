@@ -7,12 +7,9 @@
     <link rel="alternate" hreflang="en" href="{{path}}" vite-ignore />
     <link rel="alternate" hreflang="nl" href="/nl{{path}}" vite-ignore />
     <link rel="alternate" hreflang="x-default" href="{{path}}" vite-ignore />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700;800&display=swap"
-    />
+    <!-- Self-hosted fonts (src/style.css). Preload only what shows first: body text and the headline. -->
+    <link rel="preload" href="/fonts/barlow-v13-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/fraunces-v38-latin-opsz-600.woff2" as="font" type="font/woff2" crossorigin />
     <!-- Send visitors who picked Dutch before to the Dutch version of this page. -->
     <script>try{if(document.documentElement.lang==='en'&&localStorage.getItem('mb-lang')==='nl')location.replace('/nl'+location.pathname+location.search+location.hash)}catch(e){}</script>
     <script>document.documentElement.classList.add('js')</script>

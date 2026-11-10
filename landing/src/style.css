@@ -17,6 +17,24 @@
     Field and choice borders ink/50: 3.4 on card, 3.2 against the cream page.
     Surfaces: card on cream 1.07, sunk on cream 1.10, so cards keep a border or shadow.
 */
+
+/* ---------- Fonts ----------
+  Self-hosted (no requests to Google), Latin subset, licences in public/fonts/OFL-*.txt.
+  Barlow for body text and buttons, Fraunces 600 for headings (optical sizing on).
+  The fallback faces stretch Arial and Georgia Bold to the same width and height,
+  measured in Chrome, so text doesn't jump when the real font arrives. */
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/barlow-v13-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/barlow-v13-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/barlow-v13-latin-600.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/barlow-v13-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/barlow-v13-latin-800.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/fraunces-v38-latin-opsz-600.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: 'Barlow Fallback'; font-weight: 400 500; src: local('Arial'), local('ArialMT'); size-adjust: 96.86%; ascent-override: 103.24%; descent-override: 20.65%; line-gap-override: 0%; }
+@font-face { font-family: 'Barlow Fallback'; font-weight: 600 800; src: local('Arial Bold'), local('Arial-BoldMT'); size-adjust: 92.53%; ascent-override: 108.07%; descent-override: 21.61%; line-gap-override: 0%; }
+/* Measured at 40 px: the H1 on phones and the H2 on desktop. */
+@font-face { font-family: 'Fraunces Fallback'; font-weight: 600; src: local('Georgia Bold'), local('Georgia-Bold'); size-adjust: 90.56%; ascent-override: 107.66%; descent-override: 27.60%; line-gap-override: 0%; }
+
 @theme {
   --color-ink: #2E1015;
   --color-accent: #7B1E2B;
@@ -45,7 +63,8 @@
   --shadow-card: 0 1px 2px rgb(46 16 21 / 0.05), 0 6px 20px -8px rgb(46 16 21 / 0.1);
   --shadow-lift: 0 2px 4px rgb(46 16 21 / 0.05), 0 24px 48px -20px rgb(46 16 21 / 0.22);
 
-  --font-sans: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Barlow', 'Barlow Fallback', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Fraunces', 'Fraunces Fallback', Georgia, 'Times New Roman', serif;
 }
 
 /* ---------- Base ---------- */
@@ -61,6 +80,8 @@
 
   body { @apply bg-cream font-sans text-lg leading-relaxed text-ink antialiased; }
   h1, h2, h3 { text-wrap: balance; }
+  /* Headings in Fraunces: only weight 600 is loaded, so never fake a bolder one. */
+  .hero-title, .h2, .h3, .features h3, .prose-page h2 { font-synthesis: none; }
   p { text-wrap: pretty; }
 
   :focus-visible { @apply rounded-sm outline-3 outline-offset-3 outline-ink; }
@@ -87,8 +108,8 @@
   }
 
   /* ---------- Type ---------- */
-  .h2 { @apply text-[clamp(2rem,4vw,3rem)] leading-[1.08] font-extrabold tracking-[-0.025em]; }
-  .h3 { @apply text-xl leading-snug font-bold tracking-[-0.01em]; }
+  .h2 { @apply font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] font-semibold tracking-[-0.015em]; }
+  .h3 { @apply font-serif text-xl leading-snug font-semibold; }
   .lead { @apply max-w-[46ch] text-xl leading-relaxed text-muted; }
   .on-dark .lead { @apply text-pale; }
   .on-dark .h2 { @apply text-on-dark; }
@@ -169,7 +190,7 @@
   .hero-card { @apply grid items-center gap-12 lg:grid-cols-[0.9fr_1.3fr] lg:gap-14; }
   .hero-copy { @apply flex flex-col items-start gap-6; }
   .hero-label { @apply text-[15px] font-bold text-accent; }
-  .hero-title { @apply max-w-[14ch] text-[clamp(2.5rem,5.6vw,4.6rem)] leading-[1.03] font-extrabold tracking-[-0.035em]; }
+  .hero-title { @apply max-w-[14ch] font-serif text-[clamp(2.5rem,5.6vw,4.6rem)] leading-[1.05] font-semibold tracking-[-0.02em]; }
   .underline-bridge { @apply underline decoration-rose decoration-[0.12em] underline-offset-[0.14em]; }
   .hero-lead { @apply max-w-[46ch] text-lg leading-relaxed text-muted sm:text-xl; }
   .hero-points { @apply flex flex-wrap gap-x-5 gap-y-1 text-[15px] font-medium text-muted; }
@@ -223,7 +244,7 @@
   /* ---------- Platform ---------- */
   .features { @apply mt-2 flex flex-col gap-5; }
   .features li { @apply flex gap-4; }
-  .features h3 { @apply font-bold; }
+  .features h3 { @apply font-serif text-xl font-semibold; }
   .features p { @apply text-pale; }
   .feature-icon { @apply grid size-9 shrink-0 place-items-center rounded-full bg-on-dark/10 font-bold text-gold; }
 
@@ -314,7 +335,7 @@
 
   /* ---------- Text pages (privacy statement) ---------- */
   .prose-page { @apply flex max-w-3xl flex-col gap-4; }
-  .prose-page h2 { @apply mt-6 text-2xl font-extrabold tracking-[-0.01em]; }
+  .prose-page h2 { @apply mt-6 font-serif text-2xl font-semibold; }
   .prose-page ul { @apply flex list-disc flex-col gap-2 pl-6; }
   .prose-page a { @apply font-semibold text-accent underline underline-offset-4; }
 
