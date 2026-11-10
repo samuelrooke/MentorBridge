@@ -49,7 +49,7 @@ Statuses: `DONE`, `PARTIAL`, `MISSING`, `CONFLICT`, `NOT CODE`, `BLOCKED` (waiti
 - **Repo:** npm workspaces. `landing/` is plain HTML + JS with Vite 8 and Tailwind 4 (`@apply`). `client/` is React 19. `server/` is Express 5. Migrations in `supabase/migrations/`.
 - **Hosting:** three Vercel projects on the free Hobby plan: `landing` (https://mentorbridge.nl), `client` and `mentor-bridge` (the API). Supabase is the database and auth only. Domain at GoDaddy.
 - **Supabase:** Postgres with RLS on every table, email and password auth for the platform app, no storage buckets, no edge functions.
-- **Analytics:** GoatCounter (cookieless). GA4 and GTM optional, only after consent, IDs empty.
+- **Analytics:** GoatCounter (cookieless). GA4 and Google Tag Manager are configured in production (`VITE_GA_ID` and `VITE_GTM_ID` on Vercel) and load only after Accept in the cookie bar. Which tags the GTM container fires can only be checked in tagmanager.google.com.
 - **Email:** only Supabase Auth emails for the platform app.
 - **Paid services seen:** the GoDaddy domain. The Supabase plan can't be seen from the repo.
 

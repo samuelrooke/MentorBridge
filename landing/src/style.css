@@ -110,6 +110,8 @@
   .header-bar .logo > span { @apply max-[400px]:sr-only; } /* icon only on very small screens */
   .site-header .btn-sm { @apply max-sm:px-3 max-sm:text-sm; }
   .site-header .btn-login { @apply max-sm:hidden; }
+  .label-short { @apply sm:hidden; }
+  .label-long { @apply max-sm:hidden; }
 
   .site-nav { @apply hidden items-center gap-0.5 border-l border-white/15 pl-6 xl:flex; }
   .site-nav a {

@@ -7,7 +7,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 ### Added
 - Waiting list with one page per segment: `/students/`, `/mentors/`, `/companies/`, plus a front page that sends visitors to the right one. All in English and Dutch.
 - Waiting list fields per segment: name and sector for everyone (sector optional for mentors); age range, hours per month and availability for mentors; soft or hard skills and availability for students; role, size and how they'd use it for organizations.
-- Consent checkbox on the form and a privacy statement at `/privacy/`.
+- Consent checkbox on the form and a privacy statement at `/privacy/`, which also explains GoatCounter and the Google Analytics cookies (only after Accept).
 - Every sign-up stores its UTM tags, referring site (host name only) and first page. Guide for tagging links in `docs/utm.md`.
 - GoatCounter events per segment: `form-start-<segment>` and `signup-<segment>`.
 - Mentor page aimed at "what to do after retirement"; organization page about keeping know-how when staff retire, internal use and white label on request.
@@ -18,6 +18,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - Mentors are described as retired or retiring professionals and people 55+ who aren't working, with working professionals still welcome.
 - The same email can sign up only once per segment (migration 0006 removes earlier duplicates, keeping the oldest).
 - Shared page parts (head, header, footer, form, contact) live in `landing/partials/`.
+- The header button says "Join the waiting list", and "Sign up" on phones so it doesn't cover the logo.
 
 ## [0.3.4] - 2026-11-06
 
