@@ -61,10 +61,8 @@
               </div>
             </div>
 
-            <!-- TODO: replace with a licensed photo of an older mentor with a student, and note its source in landing/README.md. -->
-            <figure class="hero-photo">
-              <img src="/slides/match.jpg" alt="A handshake between an experienced professional and a young person." width="1440" height="1080" loading="eager" />
-            </figure>
+            <!-- The team's own photo (real photos win over generated ones). Sources are listed in docs/images.md. -->
+            <picture class="hero-photo"><source type="image/webp" srcset="/slides/match-720.webp 720w, /slides/match-1080.webp 1080w, /slides/match-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/match.jpg" alt="A handshake between an experienced professional and a young person." width="1440" height="1080" loading="eager" fetchpriority="high" decoding="async" /></picture>
           </div>
         </div>
       </section>
@@ -77,7 +75,9 @@
             <p class="lead">Pick your group to read more and join the waiting list.</p>
           </div>
           <div class="mt-12 grid gap-5 md:grid-cols-3">
+            <!-- Image slots: see scripts/slots.mjs and docs/images.md. The icon shows until a slot has a photo. -->
             <article class="audience">
+              <!-- @image students-card -->
               <span class="audience-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 9 9.5-4.5L21.5 9 12 13.5 2.5 9Z" /><path d="M6.5 11v4.5c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3V11" /><path d="M21.5 9v5" /></svg>
               </span>
@@ -86,6 +86,7 @@
               <a href="/students/" class="text-link">For students</a>
             </article>
             <article class="audience">
+              <!-- @image mentors-card -->
               <span class="audience-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
               </span>
@@ -94,6 +95,7 @@
               <a href="/mentors/" class="text-link">For mentors</a>
             </article>
             <article class="audience">
+              <!-- @image organizations-card -->
               <span class="audience-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5V5.5l8-3 8 3v15" /><path d="M2.5 20.5h19" /><path d="M9 20.5v-4h6v4" /><path d="M8.5 8.5h1M14.5 8.5h1M8.5 12.5h1M14.5 12.5h1" /></svg>
               </span>

@@ -197,9 +197,15 @@
   .hero-points li { @apply flex items-center gap-2; }
   .hero-points li::before { content: ''; @apply size-1.5 shrink-0 rounded-full bg-rose; }
 
-  /* Single hero photo (front, mentor and organization pages) */
-  .hero-photo { @apply overflow-hidden rounded-[2rem] bg-sunk shadow-lift; }
+  /* Single hero photo (front, mentor and organization pages). A <picture>, so it needs display: block. */
+  .hero-photo { @apply block overflow-hidden rounded-[2rem] bg-sunk shadow-lift; }
   .hero-photo img { @apply aspect-4/3 h-auto w-full object-cover; }
+  .slide-media picture { @apply block; }
+
+  /* Image slots (scripts/slots.mjs): a photo on top of a card, or a sunk placeholder box until there is one. */
+  .card-media { @apply mb-3 block overflow-hidden rounded-2xl bg-sunk; }
+  .card-media img { @apply aspect-4/3 h-auto w-full object-cover; }
+  picture.card-media + .audience-icon { @apply hidden; }
 
   /* ---------- Hero slideshow: three photos, cross-fade, 4 s each ---------- */
   /* White stays here: it sits on the photos. */

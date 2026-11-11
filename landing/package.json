@@ -9,11 +9,14 @@
     "dev": "vite --port 5174",
     "build": "vite build",
     "preview": "vite preview --port 5174",
-    "prebuild": "node scripts/build-nl.mjs && node scripts/sitemap.mjs"
+    "prebuild": "node scripts/build-nl.mjs && node scripts/sitemap.mjs",
+    "images": "node scripts/images.mjs",
+    "og": "node scripts/og.mjs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",
     "jsdom": "^29.1.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.5",
     "vite": "^8.3.6"
   }

@@ -40,19 +40,19 @@
             </div>
 
             <!-- Hero image: slideshow of the three steps. Cross-fade with a slow zoom, 4 s per slide. -->
-            <!-- TODO: photo sources and licences are not recorded anywhere. Add them to landing/README.md. -->
+            <!-- The team's own photos. WebP versions come from `npm run images -w landing`; sources are listed in docs/images.md. -->
             <div class="slideshow" role="region" aria-roledescription="carousel" aria-label="How MentorBridge works">
               <div class="slides">
                 <figure class="slide is-active" aria-roledescription="slide" aria-label="Step 1 of 3">
-                  <div class="slide-media"><img src="/slides/sign-up.jpg" alt="A student typing on a laptop, with notes next to them." width="1440" height="1080" loading="eager" /></div>
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/sign-up-720.webp 720w, /slides/sign-up-1080.webp 1080w, /slides/sign-up-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/sign-up.jpg" alt="A student typing on a laptop, with notes next to them." width="1440" height="1080" loading="eager" fetchpriority="high" decoding="async" /></picture></div>
                   <figcaption><span class="slide-step">Step 1</span><span class="slide-title">You sign up</span><span class="slide-sub">Tell us your sector and what you want help with.</span></figcaption>
                 </figure>
                 <figure class="slide" aria-roledescription="slide" aria-label="Step 2 of 3" aria-hidden="true">
-                  <div class="slide-media"><img src="/slides/match.jpg" alt="A handshake between a professional and a young person after an interview." width="1440" height="1080" loading="lazy" /></div>
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/match-720.webp 720w, /slides/match-1080.webp 1080w, /slides/match-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/match.jpg" alt="A handshake between a professional and a young person after an interview." width="1440" height="1080" loading="lazy" decoding="async" /></picture></div>
                   <figcaption><span class="slide-step">Step 2</span><span class="slide-title">Your mentor helps you in</span><span class="slide-sub">Your mentor prepares you, from your CV to the interview that gets you the place.</span></figcaption>
                 </figure>
                 <figure class="slide" aria-roledescription="slide" aria-label="Step 3 of 3" aria-hidden="true">
-                  <div class="slide-media"><img src="/slides/start.jpg" alt="People working at laptops in a bright office with large windows." width="1440" height="1080" loading="lazy" /></div>
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/start-720.webp 720w, /slides/start-1080.webp 1080w, /slides/start-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/start.jpg" alt="People working at laptops in a bright office with large windows." width="1440" height="1080" loading="lazy" decoding="async" /></picture></div>
                   <figcaption><span class="slide-step">Step 3</span><span class="slide-title">You start your internship</span><span class="slide-sub">You join the team, ready for your first day.</span></figcaption>
                 </figure>
               </div>

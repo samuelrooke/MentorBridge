@@ -12,6 +12,7 @@
 // Vite does this for the English pages (vite.config.js), build-nl.mjs for the Dutch ones.
 import fs from 'node:fs'
 import path from 'node:path'
+import { PHOTO_WIDTHS, SLOTS } from './slots.mjs'
 
 export const root = path.resolve(import.meta.dirname, '..')
 export const partialsDir = path.join(root, 'partials')
@@ -32,11 +33,36 @@ export function pageFor(url) {
   return PAGES.find((page) => page.path === clean)
 }
 
+// <!-- @image id --> becomes the slot's own image, its fallback team photo, or a placeholder box.
+// See scripts/slots.mjs.
+function image(id) {
+  const slot = SLOTS[id]
+  if (!slot) throw new Error(`Unknown image slot "${id}" (see scripts/slots.mjs)`)
+  const [rw, rh] = slot.ratio
+  const exists = (file) => fs.existsSync(path.join(root, 'public', file))
+  let base, widths, alt, src
+  if (slot.widths.every((w) => exists(`images/${id}-${w}.webp`))) {
+    ;[base, widths, alt] = [`/images/${id}`, slot.widths, slot.alt]
+    src = slot.jpg && exists(`images/${id}.jpg`) ? `${base}.jpg` : `${base}-${widths.at(-1)}.webp`
+  } else if (slot.fallback) {
+    ;[base, widths, alt] = [`/slides/${slot.fallback.photo}`, PHOTO_WIDTHS, slot.fallback.alt]
+    src = `${base}.jpg`
+  } else {
+    return `<div class="${slot.className} img-slot" style="aspect-ratio: ${rw} / ${rh}" data-slot="${id}" aria-hidden="true"></div>`
+  }
+  const width = widths.at(-1)
+  const height = Math.round((width * rh) / rw)
+  const srcset = widths.map((w) => `${base}-${w}.webp ${w}w`).join(', ')
+  const loading = slot.eager ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'
+  return `<picture class="${slot.className}" data-slot="${id}"><source type="image/webp" srcset="${srcset}" sizes="${slot.sizes}" /><img src="${src}" alt="${alt.replaceAll('"', '&quot;')}" width="${width}" height="${height}" ${loading} decoding="async" /></picture>`
+}
+
 export function compose(html, page) {
   const filled = html
     .replace(/<!--\s*@include\s+([\w-]+)\s*-->/g, (_, name) =>
       fs.readFileSync(path.join(partialsDir, `${name}.html`), 'utf8').trim(),
     )
+    .replace(/<!--\s*@image\s+([\w-]+)\s*-->/g, (_, id) => image(id))
     .replaceAll('{{site}}', SITE_URL)
     .replaceAll('{{path}}', page.path)
     .replaceAll('{{segment}}', page.segment)

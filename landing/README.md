@@ -50,8 +50,9 @@ The landing pages deploy to Vercel (project `landing`, Root Directory `landing`)
 
 ## Placeholders to fill in
 
-- **Photos (A2):** the pages reuse the three photos in `public/slides/`. Still needed: a photo of an older mentor with a student (front and mentor pages) and a workplace or HR photo (organization page). Look for `TODO` comments in the pages.
-- **Photo sources:** the sources and licences of `public/slides/*.jpg` aren't recorded yet. Add them here.
+- **Images:** the slots waiting for a photo, and how to add one, are in [`docs/images.md`](../docs/images.md). In short: put the original in `docs/images-src/<slot id>.jpg`, run `npm run images -w landing`, check the alt text in `scripts/slots.mjs` and its Dutch entry. A slot without a photo shows the team photo set as its fallback, or a placeholder box.
+- **Link previews:** `npm run og -w landing` renders `public/og/og-en.jpg` and `og-nl.jpg` from `og-template/og.html` with headless Chrome (set `CHROME_PATH` if it isn't found).
+- **Photo sources:** the sources and licences of `public/slides/*.jpg` aren't recorded yet. Add them to `docs/images.md`.
 - **Privacy statement:** Supabase region, project end date and a contact email address (`TODO` comments in `privacy/index.html`).
 - **Team photos:** replace the initials on the front page with photos (`public/team/<name>.jpg`).
 
