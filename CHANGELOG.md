@@ -21,7 +21,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 
 ### Changed
 - MentorBridge is free for everybody during the first version; the "organizations pay" copy is gone.
-- Mentors are described as retired or retiring professionals and people 55+ who aren't working, with working professionals still welcome.
+- Mentors are described as experienced professionals with some free time next to their job (part-time and freelance too), not retirees. The mentor page targets "become a mentor next to your job".
 - The same email can sign up only once per segment (migration 0006 removes earlier duplicates, keeping the oldest).
 - Shared page parts (head, header, footer, form, contact) live in `landing/partials/`.
 - The header button says "Join the waiting list", and "Sign up" on phones so it doesn't cover the logo.
