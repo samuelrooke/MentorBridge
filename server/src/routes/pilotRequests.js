@@ -6,17 +6,17 @@ const router = Router()
 const ROLES = ['company', 'student', 'mentor']
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// Waiting list options. The same lists are in the form (landing/partials/signup.html) and the database (migration 0006).
+// Waiting list options. The same lists are in the form (landing/partials/signup.html) and the database (migrations 0006 and 0007).
 export const SECTORS = [
   'ict', 'engineering', 'construction', 'logistics', 'healthcare', 'business', 'finance',
   'law', 'education', 'government', 'media', 'hospitality', 'other',
 ]
 const AVAILABILITY = ['weekdays', 'evenings', 'weekends']
-const AGE_RANGES = ['under-55', '55-59', '60-64', '65-69', '70+']
+const AGE_RANGES = ['under-30', '30-39', '40-49', '50-59', '60+']
 const HOURS_PER_MONTH = ['1-2', '3-5', '6-10', '10+']
 const SKILLS_HELP = ['soft', 'hard', 'both']
 const COMPANY_SIZES = ['1-49', '50-249', '250-999', '1000+']
-const INTERESTS = ['internal', 'white_label', 'both']
+const INTERESTS = ['internal', 'external', 'white_label']
 const HOST_PATTERN = /^[a-z0-9.-]+$/i
 
 const HAS_PLACEMENT = ['yes', 'no']

@@ -2,7 +2,7 @@
   The one waiting list form, used on the student, mentor and company pages.
   The page's segment fills in the role. main.js shows only the fields for that role
   (data-for-role) and disables the rest, so hidden fields are neither checked nor sent.
-  The options must match server/src/routes/pilotRequests.js and supabase/migrations/0006.
+  The options must match server/src/routes/pilotRequests.js and supabase/migrations/0006 and 0007.
 -->
 <div class="form-card" id="pilot-panel">
   <form id="pilot-form" class="flex flex-col gap-5" novalidate>
@@ -63,11 +63,11 @@
         <label for="age_range">Age</label>
         <select id="age_range" name="age_range" required>
           <option value="" selected>Choose</option>
-          <option value="under-55">Under 55</option>
-          <option value="55-59">55–59</option>
-          <option value="60-64">60–64</option>
-          <option value="65-69">65–69</option>
-          <option value="70+">70 or older</option>
+          <option value="under-30">Under 30</option>
+          <option value="30-39">30–39</option>
+          <option value="40-49">40–49</option>
+          <option value="50-59">50–59</option>
+          <option value="60+">60 or older</option>
         </select>
       </div>
       <div class="field">
@@ -117,8 +117,8 @@
       <legend>How would you like to use MentorBridge? <span class="font-normal text-muted">Optional.</span></legend>
       <div class="choices">
         <label><input type="radio" name="interest" value="internal" /><span>Inside our own company</span></label>
-        <label><input type="radio" name="interest" value="white_label" /><span>White label, under our own name</span></label>
-        <label><input type="radio" name="interest" value="both" /><span>Both</span></label>
+        <label><input type="radio" name="interest" value="external" /><span>A mentor for our interns</span></label>
+        <label><input type="radio" name="interest" value="white_label" /><span>Under our own name (white label)</span></label>
       </div>
     </fieldset>
 
@@ -144,7 +144,7 @@
     <div class="flex flex-col gap-1">
       <p class="text-sm font-bold text-accent">You're on the waiting list</p>
       <h3 class="h3">Help us match you better</h3>
-      <p class="text-muted">Four quick questions. All of them are optional.</p>
+      <p class="text-muted">Three quick questions. All of them are optional.</p>
     </div>
 
     <fieldset class="question">
@@ -166,17 +166,7 @@
     </fieldset>
 
     <fieldset class="question">
-      <legend>3. What would help you most? <span class="font-normal text-muted">Choose any.</span></legend>
-      <div class="choices">
-        <label><input type="checkbox" name="help_wanted" value="cv" /><span>CV and applications</span></label>
-        <label><input type="checkbox" name="help_wanted" value="interviews" /><span>Interview practice</span></label>
-        <label><input type="checkbox" name="help_wanted" value="insight" /><span>What the work is really like</span></label>
-        <label><input type="checkbox" name="help_wanted" value="introductions" /><span>Introductions to companies</span></label>
-      </div>
-    </fieldset>
-
-    <fieldset class="question">
-      <legend>4. When does your internship start, or when do you need one by?</legend>
+      <legend>3. When does your internship start, or when do you need one by?</legend>
       <div class="choices">
         <label><input type="radio" name="needed_by" value="0-3" /><span>Within 3 months</span></label>
         <label><input type="radio" name="needed_by" value="3-6" /><span>In 3 to 6 months</span></label>

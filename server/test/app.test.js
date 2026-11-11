@@ -12,7 +12,7 @@ const valid = {
   sector: 'construction',
   consent: true,
 }
-const mentor = { role: 'mentor', name: 'Pieter', email: 'p@x.nl', age_range: '60-64', hours_per_month: '3-5', availability: ['evenings'], consent: true }
+const mentor = { role: 'mentor', name: 'Pieter', email: 'p@x.nl', age_range: '40-49', hours_per_month: '3-5', availability: ['evenings'], consent: true }
 const student = { role: 'student', name: 'Lisa', email: 'l@x.nl', sector: 'ict', skills_help: 'both', availability: ['weekdays', 'weekends'], consent: true }
 
 describe('GET /api/health', () => {
@@ -46,7 +46,7 @@ describe('validatePilotRequest', () => {
 
   it('accepts a mentor without a sector and a student with one', () => {
     expect(validatePilotRequest(mentor)).toEqual({
-      role: 'mentor', name: 'Pieter', email: 'p@x.nl', availability: ['evenings'], age_range: '60-64', hours_per_month: '3-5',
+      role: 'mentor', name: 'Pieter', email: 'p@x.nl', availability: ['evenings'], age_range: '40-49', hours_per_month: '3-5',
     })
     expect(validatePilotRequest({ ...mentor, sector: 'logistics' }).sector).toBe('logistics')
     expect(validatePilotRequest({ ...student, availability: ['weekends', 'weekdays', 'weekends'] })).toEqual({
@@ -82,6 +82,8 @@ describe('validatePilotRequest', () => {
     [{ ...valid, sector: 'mining' }, 'sector from the list'],
     [{ ...valid, company_size: '5' }, 'company size'],
     [{ ...valid, interest: 'resell' }, 'how you would like'],
+    [{ ...valid, interest: 'both' }, 'how you would like'],
+    [{ ...mentor, age_range: '55-59' }, 'age range'],
     [{ ...valid, role: 'admin' }, 'student, mentor or company'],
     [{ ...valid, role: undefined }, 'student, mentor or company'],
     [{ ...valid, consent: 'yes' }, 'privacy statement'],
