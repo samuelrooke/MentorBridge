@@ -17,8 +17,8 @@ export const SLIDE_CROPS = {
   'mentor-2': 'contain',
   'mentor-3': 'contain',
   'company-1': 'cover',
-  'company-2': 'contain',
-  'company-3': 'contain',
+  'company-2': 'cover',
+  'company-3': { top: 0.3 },
 }
 
 const CARD_SIZES = '(min-width: 1280px) 340px, (min-width: 768px) 30vw, calc(100vw - 64px)'

@@ -28,9 +28,16 @@ for (const [name, position] of Object.entries(SLIDE_CROPS)) {
     continue
   }
   // Zoomed out: the whole photo fits the 4:3 frame. The empty sides show a blurred, darkened copy of
-  // the same photo, so nothing is cut off. position: 'cover' crops instead (for photos that already fit).
-  if (position === 'cover') {
-    await save(sharp(original).resize(1440, 1080, { fit: 'cover' }).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
+  // the same photo, so nothing is cut off. Any other position ('cover', 'attention', 'north'...) crops instead, for large or landscape photos.
+  // { top: 0.3 }: crop a 4:3 band of the full width, starting at that fraction of the height (for tall photos).
+  if (typeof position === 'object') {
+    const { width, height } = await sharp(original).metadata()
+    const h = Math.round((width * 3) / 4)
+    await save(sharp(original).extract({ left: 0, top: Math.min(Math.round(height * position.top), height - h), width, height: h }).resize(1440, 1080).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
+    continue
+  }
+  if (position !== 'contain') {
+    await save(sharp(original).resize(1440, 1080, { fit: 'cover', position: position === 'cover' ? 'centre' : position }).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
     continue
   }
   const backdrop = await sharp(original).resize(1440, 1080, { fit: 'cover' }).blur(40).modulate({ brightness: 0.7 }).toBuffer()

@@ -33,7 +33,7 @@ The Gemini prompts are in the team's prompt document. **Mentor images:** since 1
 
 ## Slideshows on the mentor and companies pages
 
-Same 3-step slideshow as the student page. Originals in `docs/images-src/slides/<name>.jpg`, cropped to 4:3 by `npm run images -w landing` (crop positions in `SLIDE_CROPS`, `landing/scripts/slots.mjs`). All are Pexels stock photos (Pexels License), not AI-generated. The originals are 500-1125 px wide, so they look a bit soft on large screens.
+Same 3-step slideshow as the student page. Originals in `docs/images-src/slides/<name>.jpg`, cropped to 4:3 by `npm run images -w landing` (crop positions in `SLIDE_CROPS`, `landing/scripts/slots.mjs`). All are Pexels stock photos (Pexels License), not AI-generated. company-2 and company-3 are large originals (Pexels 7793743 and 12903173); the mentor photos are 500 px wide and look a bit soft on large screens.
 
 | file | page, step | alt |
 |---|---|---|
@@ -41,8 +41,8 @@ Same 3-step slideshow as the student page. Originals in `docs/images-src/slides/
 | `slides/mentor-2` | /mentors/, step 2 | An experienced professional with glasses working on a laptop at home. |
 | `slides/mentor-3` | /mentors/, step 3 | An experienced professional in a white blouse in a bright office. |
 | `slides/company-1` | /companies/, step 1 | Two professionals at work at a shared desk, one on the phone and one taking notes. |
-| `slides/company-2` | /companies/, step 2 | A smiling young professional in an office, with colleagues working behind her. |
-| `slides/company-3` | /companies/, step 3 | A smiling professional with crossed arms in an office, with colleagues in a meeting behind him. |
+| `slides/company-2` | /companies/, step 2 | A team at work in a bright office, with colleagues talking in the doorway. |
+| `slides/company-3` | /companies/, step 3 | An experienced colleague shows a young employee something on his screen in an open office. |
 
 ## Team photos and other files
 
