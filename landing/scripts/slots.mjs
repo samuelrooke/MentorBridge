@@ -11,14 +11,14 @@
 export const PHOTO_WIDTHS = [720, 1080, 1440]
 
 // Slideshow photos for the mentor and companies pages. Originals in docs/images-src/slides/<name>.jpg,
-// cropped to 4:3 into public/slides/<name>.jpg by `npm run images`. The value is where to crop from.
+// fitted to 4:3 into public/slides/<name>.jpg by `npm run images`. contain: whole photo on a blurred backdrop; cover: crop.
 export const SLIDE_CROPS = {
-  'mentor-1': 'centre',
-  'mentor-2': 'north',
-  'mentor-3': 'north',
-  'company-1': 'attention',
-  'company-2': 'centre',
-  'company-3': 'north',
+  'mentor-1': 'contain',
+  'mentor-2': 'contain',
+  'mentor-3': 'contain',
+  'company-1': 'cover',
+  'company-2': 'contain',
+  'company-3': 'contain',
 }
 
 const CARD_SIZES = '(min-width: 1280px) 340px, (min-width: 768px) 30vw, calc(100vw - 64px)'

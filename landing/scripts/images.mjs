@@ -27,7 +27,15 @@ for (const [name, position] of Object.entries(SLIDE_CROPS)) {
     report.push(`${name.padEnd(40)} no original in docs/images-src/slides/, skipped`)
     continue
   }
-  await save(sharp(original).resize(1440, 1080, { fit: 'cover', position }).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
+  // Zoomed out: the whole photo fits the 4:3 frame. The empty sides show a blurred, darkened copy of
+  // the same photo, so nothing is cut off. position: 'cover' crops instead (for photos that already fit).
+  if (position === 'cover') {
+    await save(sharp(original).resize(1440, 1080, { fit: 'cover' }).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
+    continue
+  }
+  const backdrop = await sharp(original).resize(1440, 1080, { fit: 'cover' }).blur(40).modulate({ brightness: 0.7 }).toBuffer()
+  const photo = await sharp(original).resize(1440, 1080, { fit: 'inside' }).toBuffer()
+  await save(sharp(backdrop).composite([{ input: photo, gravity: 'centre' }]).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
 }
 
 // 1. Photos in public/slides
