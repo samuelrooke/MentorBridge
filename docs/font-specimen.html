@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MentorBridge font specimen</title>
+  <!--
+    Decision aid only: headings in Barlow (today) or in a serif, on the proposed cream and burgundy.
+    Body text and buttons stay Barlow in every column.
+    This file loads the fonts from Google to compare them. The site itself will self-host the font that is picked.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap"
+  />
+  <style>
+    :root {
+      --cream: #faf2e5;
+      --card: #fefaf1;
+      --sunk: #f4e7d6;
+      --ink: #2e1015;
+      --accent: #7b1e2b;
+      --muted: #5e4b4d;
+      --gold: #e1b385;
+      --on-dark: #fff6ed;
+      --pale: #f3e4e2;
+      --cta: #7b1e2b;
+      --cta-hover: #5e1520;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font: 400 18px/1.6 'Barlow', Arial, sans-serif; }
+    header { max-width: 1280px; margin: 0 auto; padding: 32px 16px 8px; }
+    header h1 { font: 800 28px/1.2 'Barlow', Arial, sans-serif; margin: 0 0 8px; }
+    header p { margin: 0 0 8px; color: var(--muted); max-width: 70ch; }
+    .grid { max-width: 1280px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .name { font-weight: 700; font-size: 15px; color: var(--muted); }
+    .name b { color: var(--ink); }
+    .panel { border-radius: 24px; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+    .light { background: var(--card); border: 1px solid rgb(46 16 21 / 0.1); }
+    .dark { background: linear-gradient(135deg, #691d27, #440c15); color: var(--on-dark); }
+    .dark p { color: var(--pale); }
+    .hero { margin: 0; font-size: clamp(2.2rem, 4.4vw, 3.4rem); line-height: 1.04; letter-spacing: -0.03em; }
+    .h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.1; letter-spacing: -0.02em; }
+    .body { margin: 0; color: var(--muted); max-width: 46ch; }
+    .note { font-style: italic; }
+    .label { margin: 0; font-size: 14px; font-weight: 700; color: var(--gold); }
+    .btn { align-self: flex-start; min-height: 48px; padding: 0 24px; border: 0; border-radius: 12px; font: 700 16px 'Barlow', Arial, sans-serif; cursor: pointer; }
+    .light .btn { background: var(--cta); color: #fff; }
+    .light .btn:hover { background: var(--cta-hover); }
+    .dark .btn { background: var(--card); color: var(--ink); }
+    .underline { text-decoration: underline; text-decoration-color: #e8a9a2; text-decoration-thickness: 0.12em; text-underline-offset: 0.14em; }
+    /* The three candidates. Only headings change. */
+    .barlow .hero, .barlow .h2 { font-family: 'Barlow', Arial, sans-serif; font-weight: 800; }
+    .fraunces .hero, .fraunces .h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-variation-settings: 'opsz' 96; letter-spacing: -0.005em; }
+    .newsreader .hero, .newsreader .h2 { font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-variation-settings: 'opsz' 60; letter-spacing: -0.015em; }
+    .serif-italic { margin: 0; font-size: 22px; }
+    .fraunces .serif-italic { font-family: 'Fraunces', Georgia, serif; font-style: italic; }
+    .newsreader .serif-italic { font-family: 'Newsreader', Georgia, serif; font-style: italic; }
+    .barlow .serif-italic { font-style: italic; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Font specimen: headings in Barlow or a serif</h1>
+    <p>
+      Left is the site today. The other two keep Barlow for body text and buttons and only change the headings.
+      Colours are the proposed cream and burgundy. Text is from the site.
+    </p>
+    <p>The italic line shows each font's real italic. It's here to compare, not to use in headlines.</p>
+  </header>
+
+  <main class="grid">
+    <section class="col barlow" aria-label="Barlow">
+      <p class="name"><b>Barlow</b> · today, sans-serif</p>
+      <div class="panel light">
+        <h2 class="hero">Experience that <span class="underline">carries on.</span></h2>
+        <p class="body">MentorBridge matches students with experienced and retiring professionals from their field.</p>
+        <button class="btn" type="button">Join the waiting list</button>
+      </div>
+      <div class="panel light">
+        <h3 class="h2">From guessing to knowing</h3>
+        <p class="body">A professional passes on what they know about your field, in short, flexible sessions.</p>
+        <p class="serif-italic">Free during our first version.</p>
+      </div>
+      <div class="panel dark">
+        <p class="label">How it works</p>
+        <h3 class="h2">From the waiting list to your first session</h3>
+        <p class="body">We're starting with a waiting list. As soon as we can make good matches, we get in touch.</p>
+        <button class="btn" type="button">Join the waiting list</button>
+      </div>
+    </section>
+
+    <section class="col fraunces" aria-label="Fraunces">
+      <p class="name"><b>Fraunces</b> · serif, warm and soft, variable</p>
+      <div class="panel light">
+        <h2 class="hero">Experience that <span class="underline">carries on.</span></h2>
+        <p class="body">MentorBridge matches students with experienced and retiring professionals from their field.</p>
+        <button class="btn" type="button">Join the waiting list</button>
+      </div>
+      <div class="panel light">
+        <h3 class="h2">From guessing to knowing</h3>
+        <p class="body">A professional passes on what they know about your field, in short, flexible sessions.</p>
+        <p class="serif-italic">Free during our first version.</p>
+      </div>
+      <div class="panel dark">
+        <p class="label">How it works</p>
+        <h3 class="h2">From the waiting list to your first session</h3>
+        <p class="body">We're starting with a waiting list. As soon as we can make good matches, we get in touch.</p>
+        <button class="btn" type="button">Join the waiting list</button>
+      </div>
+    </section>
+
+    <section class="col newsreader" aria-label="Newsreader">
+      <p class="name"><b>Newsreader</b> · serif, calm and editorial, variable</p>
+      <div class="panel light">
+        <h2 class="hero">Experience that <span class="underline">carries on.</span></h2>
+        <p class="body">MentorBridge matches students with experienced and retiring professionals from their field.</p>
+        <button class="btn" type="button">Join the waiting list</button>
+      </div>
+      <div class="panel light">
+        <h3 class="h2">From guessing to knowing</h3>
+        <p class="body">A professional passes on what they know about your field, in short, flexible sessions.</p>
+        <p class="serif-italic">Free during our first version.</p>
+      </div>
+      <div class="panel dark">
+        <p class="label">How it works</p>
+        <h3 class="h2">From the waiting list to your first session</h3>
+        <p class="body">We're starting with a waiting list. As soon as we can make good matches, we get in touch.</p>
+        <button class="btn" type="button">Join the waiting list</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
