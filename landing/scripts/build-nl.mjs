@@ -46,8 +46,10 @@ for (const page of PAGES) {
   walk(doc.head)
   walk(doc.body)
 
-  // Attributes that people or screen readers see
-  for (const el of doc.querySelectorAll('[aria-label], [alt], meta[name="description"], meta[property^="og:"]')) {
+  // Attributes that people or screen readers see. Of the Open Graph tags only the texts are translated;
+  // URLs, locales and the image are set below.
+  const textMeta = 'meta[name="description"], meta[property="og:title"], meta[property="og:description"], meta[property="og:image:alt"]'
+  for (const el of doc.querySelectorAll(`[aria-label], [alt], ${textMeta}`)) {
     for (const attr of ['aria-label', 'alt', 'content']) {
       const value = el.getAttribute(attr)
       if (value) el.setAttribute(attr, translate(value))
@@ -59,7 +61,14 @@ for (const page of PAGES) {
     const href = link.getAttribute('href')
     if (!href.startsWith('//') && !href.startsWith('/nl/')) link.setAttribute('href', `/nl${href}`)
   }
-  doc.querySelector('link[rel="canonical"]')?.setAttribute('href', `${SITE_URL}/nl${page.path}`)
+
+  // Dutch addresses and locale. hreflang stays the same three links as on the English page.
+  const setContent = (selector, value) => doc.querySelector(selector)?.setAttribute(selector.startsWith('link') ? 'href' : 'content', value)
+  setContent('link[rel="canonical"]', `${SITE_URL}/nl${page.path}`)
+  setContent('meta[property="og:url"]', `${SITE_URL}/nl${page.path}`)
+  setContent('meta[property="og:image"]', `${SITE_URL}/og/og-nl.jpg`)
+  setContent('meta[property="og:locale"]', 'nl_NL')
+  setContent('meta[property="og:locale:alternate"]', 'en_US')
 
   // Page language and the language switch
   doc.documentElement.lang = 'nl'

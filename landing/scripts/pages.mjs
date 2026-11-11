@@ -3,9 +3,12 @@
 // Each page is a normal HTML file. Shared parts are pulled in with a comment:
 //   <!-- @include header -->   inserts partials/header.html
 // and these placeholders are filled in per page:
-//   {{path}}     the page's address, e.g. /students/
-//   {{segment}}  student, mentor or company (empty on pages without a sign-up form)
-//   {{cta}}      where the header button goes
+//   {{site}}         the production address, https://mentorbridge.nl (also on preview deployments)
+//   {{path}}         the page's address, e.g. /students/
+//   {{segment}}      student, mentor or company (empty on pages without a sign-up form)
+//   {{cta}}          where the header button goes
+//   {{title}}        the page's <title>, reused for Open Graph
+//   {{description}}  the page's meta description, reused for Open Graph
 // Vite does this for the English pages (vite.config.js), build-nl.mjs for the Dutch ones.
 import fs from 'node:fs'
 import path from 'node:path'
@@ -30,12 +33,18 @@ export function pageFor(url) {
 }
 
 export function compose(html, page) {
-  return html
+  const filled = html
     .replace(/<!--\s*@include\s+([\w-]+)\s*-->/g, (_, name) =>
       fs.readFileSync(path.join(partialsDir, `${name}.html`), 'utf8').trim(),
     )
+    .replaceAll('{{site}}', SITE_URL)
     .replaceAll('{{path}}', page.path)
     .replaceAll('{{segment}}', page.segment)
     .replaceAll('{{cta}}', page.cta)
     .replaceAll(`data-nav="${page.path}"`, `data-nav="${page.path}" aria-current="page"`)
+
+  // Open Graph reuses the page's own title and description, so each text is written (and translated) once.
+  const title = filled.match(/<title>([\s\S]*?)<\/title>/)?.[1].trim() ?? ''
+  const description = filled.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1] ?? ''
+  return filled.replaceAll('{{title}}', title.replaceAll('"', '&quot;')).replaceAll('{{description}}', description)
 }

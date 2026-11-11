@@ -26,6 +26,8 @@ function partials() {
 }
 
 export default defineConfig({
+  // Separate pages, not a single-page app: unknown URLs give a 404 locally too, like on Vercel.
+  appType: 'mpa',
   plugins: [tailwindcss(), partials()],
   build: {
     // Every page in English (/students/) and Dutch (/nl/students/).

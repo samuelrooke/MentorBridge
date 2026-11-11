@@ -3,10 +3,23 @@
     <meta name="theme-color" content="#2E1015" />
     <link rel="icon" href="/icon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href="https://mentorbridge.nl{{path}}" vite-ignore />
-    <link rel="alternate" hreflang="en" href="{{path}}" vite-ignore />
-    <link rel="alternate" hreflang="nl" href="/nl{{path}}" vite-ignore />
-    <link rel="alternate" hreflang="x-default" href="{{path}}" vite-ignore />
+    <!-- Absolute URLs, also on preview deployments. build-nl.mjs points canonical, og:url, og:locale and og:image at the Dutch versions. -->
+    <link rel="canonical" href="{{site}}{{path}}" vite-ignore />
+    <link rel="alternate" hreflang="en" href="{{site}}{{path}}" vite-ignore />
+    <link rel="alternate" hreflang="nl" href="{{site}}/nl{{path}}" vite-ignore />
+    <link rel="alternate" hreflang="x-default" href="{{site}}{{path}}" vite-ignore />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MentorBridge" />
+    <meta property="og:title" content="{{title}}" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:url" content="{{site}}{{path}}" />
+    <meta property="og:image" content="{{site}}/og/og-en.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="627" />
+    <meta property="og:image:alt" content="MentorBridge logo and headline next to a photo of an experienced professional shaking hands with a young person." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="nl_NL" />
+    <meta name="twitter:card" content="summary_large_image" />
     <!-- Self-hosted fonts (src/style.css). Preload only what shows first: body text and the headline. -->
     <link rel="preload" href="/fonts/barlow-v13-latin-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/fraunces-v38-latin-opsz-600.woff2" as="font" type="font/woff2" crossorigin />

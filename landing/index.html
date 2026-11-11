@@ -2,11 +2,39 @@
 <html lang="en">
   <head>
     <!-- @include head -->
-    <title>MentorBridge: experienced professionals get students ready for their internship</title>
+    <title>Experienced mentors for student interns | MentorBridge</title>
     <meta
       name="description"
-      content="MentorBridge matches students with experienced and retiring professionals from their field, so students start their internship ready and know-how doesn't leave when people retire. Free during our first version."
+      content="MentorBridge matches students with experienced and retiring professionals from their field, so they start their internship ready. Free in our first version."
     />
+    <!-- Structured data, the same on the Dutch page, so it stays language-neutral. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://mentorbridge.nl/#organization",
+            "name": "MentorBridge",
+            "url": "https://mentorbridge.nl/",
+            "logo": "https://mentorbridge.nl/icon.png",
+            "sameAs": ["https://www.linkedin.com/company/146928627/", "https://www.instagram.com/mentorbridgenl/"],
+            "areaServed": [
+              { "@type": "Country", "name": "Netherlands" },
+              { "@type": "Country", "name": "Belgium" }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://mentorbridge.nl/#website",
+            "name": "MentorBridge",
+            "url": "https://mentorbridge.nl/",
+            "inLanguage": ["en", "nl"],
+            "publisher": { "@id": "https://mentorbridge.nl/#organization" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <!-- @include header -->
@@ -45,7 +73,7 @@
       <section id="choose" class="section band" aria-labelledby="choose-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="choose-title" class="h2">Who are you?</h2>
+            <h2 id="choose-title" class="h2">For students, mentors and organizations</h2>
             <p class="lead">Pick your group to read more and join the waiting list.</p>
           </div>
           <div class="mt-12 grid gap-5 md:grid-cols-3">
@@ -81,8 +109,7 @@
       <section id="how" class="section on-dark" aria-labelledby="how-title">
         <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
           <div class="flex flex-col gap-6">
-            <p class="label-dark">How it works</p>
-            <h2 id="how-title" class="h2">From the waiting list to your first session</h2>
+            <h2 id="how-title" class="h2">How MentorBridge works</h2>
             <p class="lead">We're starting with a waiting list. As soon as we can make good matches, we get in touch.</p>
           </div>
           <ul class="features">
@@ -114,7 +141,7 @@
       <section id="faq" class="section-sm band" aria-labelledby="faq-title">
         <div class="wrap grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <div class="flex flex-col gap-4">
-            <h2 id="faq-title" class="h2">Good to know</h2>
+            <h2 id="faq-title" class="h2">Questions and answers</h2>
             <p class="lead">Something else you want to ask? <a href="#contact" class="font-semibold text-accent underline underline-offset-4">Send us a message</a>.</p>
           </div>
           <div class="faq">

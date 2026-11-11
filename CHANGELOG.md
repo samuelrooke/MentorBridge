@@ -12,6 +12,8 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - GoatCounter events per segment: `form-start-<segment>` and `signup-<segment>`.
 - Mentor page aimed at "what to do after retirement"; organization page about keeping know-how when staff retire, internal use and white label on request.
 - `npm run pilot-requests` shows the new fields and sign-ups per source.
+- For search engines and link previews: absolute canonical and hreflang links, Open Graph and Twitter tags per page and language, structured data (Organization and WebSite) on the front page, `robots.txt`, and a sitemap generated from the page list.
+- The `.vercel.app` addresses of the landing page redirect to https://mentorbridge.nl (301).
 
 ### Changed
 - MentorBridge is free for everybody during the first version; the "organizations pay" copy is gone.
@@ -21,6 +23,8 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - The header button says "Join the waiting list", and "Sign up" on phones so it doesn't cover the logo.
 - Warmer design: cream page and cards instead of white, a burgundy gradient for dark sections, and gold for small labels and numbers on dark. The app preview on the student page keeps the platform's own colours.
 - Field and choice borders are darker, so they reach 3:1 contrast (WCAG 1.4.11).
+- Page titles of at most 60 characters and descriptions of 140-160, built around what people search for. Section headings say what the section is about, for example "Questions and answers".
+- The platform app asks search engines not to index it.
 - Headings use Fraunces, a serif; body text and buttons stay Barlow. Both fonts are self-hosted, so the pages make no requests to Google. Anton, which wasn't used, is gone.
 
 ## [0.3.4] - 2026-11-06
