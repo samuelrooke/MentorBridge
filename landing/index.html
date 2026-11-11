@@ -5,7 +5,7 @@
     <title>Experienced mentors for student interns | MentorBridge</title>
     <meta
       name="description"
-      content="MentorBridge matches students with experienced professionals from their field, so they start their internship ready. Free during our first version."
+      content="MentorBridge connects students with experienced professionals for short sessions about internship work and skills. Free during our first version."
     />
     <!-- Structured data, the same on the Dutch page, so it stays language-neutral. -->
     <script type="application/ld+json">
@@ -46,16 +46,16 @@
           <div class="hero-card">
             <div class="hero-copy">
               <p class="hero-label">In the Netherlands and Belgium</p>
-              <h1 id="hero-title" class="hero-title">Experienced mentors for <span class="underline-bridge">student interns.</span></h1>
+              <h1 id="hero-title" class="hero-title">Experienced professionals help students <span class="underline-bridge">prepare for internships.</span></h1>
               <p class="hero-lead">
-                MentorBridge matches students with experienced professionals from their field, who mentor them in their
-                free time. Students start their internship ready.
+                MentorBridge connects students with experienced professionals in their field. In a few short sessions,
+                mentors share what the work is like and what skills it takes.
               </p>
               <div class="flex flex-col items-start gap-5">
-                <a href="#choose" class="btn btn-primary btn-xl">Join the waiting list</a>
+                <a href="#choose" class="btn btn-primary btn-xl">Choose your group</a>
                 <ul class="hero-points" aria-label="What you get">
                   <li>Free during our first version</li>
-                  <li>Matched by sector</li>
+                  <li>Shared interests and skills</li>
                   <li>Short, flexible sessions</li>
                 </ul>
               </div>
@@ -72,7 +72,7 @@
         <div class="wrap">
           <div class="section-head">
             <h2 id="choose-title" class="h2">For students, mentors and companies</h2>
-            <p class="lead">Pick your group to read more and join the waiting list.</p>
+            <p class="lead">Choose a group. Join the waiting list or learn how MentorBridge works.</p>
           </div>
           <div class="mt-12 grid gap-5 md:grid-cols-3">
             <!-- Image slots: see scripts/slots.mjs and docs/images.md. The icon shows until a slot has a photo. -->
@@ -82,8 +82,11 @@
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 9 9.5-4.5L21.5 9 12 13.5 2.5 9Z" /><path d="M6.5 11v4.5c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3V11" /><path d="M21.5 9v5" /></svg>
               </span>
               <h3 class="h3">I'm a student</h3>
-              <p>Get ready for your internship with a mentor who has done the work.</p>
-              <a href="/students/" class="text-link">For students</a>
+              <p>Learn what internship work is like with a mentor who knows your field.</p>
+              <div class="audience-actions">
+                <a href="/students/#signup" class="btn btn-primary btn-sm">Join as a student</a>
+                <a href="/students/" class="text-link">Learn about student support</a>
+              </div>
             </article>
             <article class="audience">
               <!-- @image mentors-card -->
@@ -91,8 +94,11 @@
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
               </span>
               <h3 class="h3">I want to mentor</h3>
-              <p>Some free time next to your job? Pass on what you know in a few hours a month.</p>
-              <a href="/mentors/" class="text-link">For mentors</a>
+              <p>Have a few hours to spare alongside work? Share what you know with a student in short, flexible sessions.</p>
+              <div class="audience-actions">
+                <a href="/mentors/#signup" class="btn btn-primary btn-sm">Join as a mentor</a>
+                <a href="/mentors/" class="text-link">Learn about mentoring</a>
+              </div>
             </article>
             <article class="audience">
               <!-- @image organizations-card -->
@@ -100,8 +106,11 @@
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5V5.5l8-3 8 3v15" /><path d="M2.5 20.5h19" /><path d="M9 20.5v-4h6v4" /><path d="M8.5 8.5h1M14.5 8.5h1M8.5 12.5h1M14.5 12.5h1" /></svg>
               </span>
               <h3 class="h3">I represent a company</h3>
-              <p>Let your retiring staff mentor your interns, so their know-how stays in the company.</p>
-              <a href="/companies/" class="text-link">For companies</a>
+              <p>Let experienced staff, including people nearing retirement, mentor your interns. Keep their know-how in your company.</p>
+              <div class="audience-actions">
+                <a href="/companies/#signup" class="btn btn-primary btn-sm">Join as a company</a>
+                <a href="/companies/" class="text-link">Learn how it works for companies</a>
+              </div>
             </article>
           </div>
         </div>
@@ -112,12 +121,12 @@
         <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
           <div class="flex flex-col gap-6">
             <h2 id="how-title" class="h2">How MentorBridge works</h2>
-            <p class="lead">We're starting with a waiting list. As soon as we can make good matches, we get in touch.</p>
+            <p class="lead">We're starting with a waiting list. We look for shared interests between students and mentors.</p>
           </div>
           <ul class="features">
             <li><span class="feature-icon" aria-hidden="true">1</span><div><h3>You join the waiting list</h3><p>As a student, a mentor or a company.</p></div></li>
-            <li><span class="feature-icon" aria-hidden="true">2</span><div><h3>We match you by hand</h3><p>Based on sector and when you're available.</p></div></li>
-            <li><span class="feature-icon" aria-hidden="true">3</span><div><h3>Mentor and student meet</h3><p>In short sessions, online or in person, so the student starts their internship ready.</p></div></li>
+            <li><span class="feature-icon" aria-hidden="true">2</span><div><h3>We look for shared interests</h3><p>We compare what students want to learn with what mentors know.</p></div></li>
+            <li><span class="feature-icon" aria-hidden="true">3</span><div><h3>Mentor and student meet</h3><p>In short sessions, online or in person, to talk about the work and skills the student wants to learn.</p></div></li>
           </ul>
         </div>
       </section>
@@ -126,8 +135,8 @@
       <section id="team" class="section band" aria-labelledby="team-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="team-title" class="h2">Four students building MentorBridge</h2>
-            <p class="lead">We study at The Hague University of Applied Sciences and are building MentorBridge in our minor.</p>
+            <h2 id="team-title" class="h2">About us</h2>
+            <p class="lead">We are four students at The Hague University of Applied Sciences building MentorBridge as part of our minor. We want students to learn from people who know their field first-hand.</p>
           </div>
           <!-- PLACEHOLDER: replace the initials with photos (landing/public/team/<name>.jpg). -->
           <ul class="team mt-12">

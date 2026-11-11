@@ -45,6 +45,10 @@ Create three Vercel projects from this repository, each with its own **Root Dire
 
 Schema changes are migration files in `supabase/migrations`. Migrations 0001 to 0005 are already applied to the shared project. For new ones: `npm run db:new <name>`, then `npm run db:link` (once) and `npm run db:push`. Before the very first push, run `npx supabase migration repair --status applied 0001 0002 0003 0004` once, so the CLI knows those are already in.
 
+Migration `0008_platform_schedule_messages.sql` enables Supabase Realtime for sessions and messages and adds message read markers. Apply it with `npm run db:push` to use the platform's dashboard, schedule, and messages pages.
+
+Migration `0010_student_start_preference.sql` adds the student's preferred start season or a specific date to their profile.
+
 Admins are set by hand in the Supabase SQL editor:
 
 ```sql
