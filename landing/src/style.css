@@ -3,17 +3,17 @@
 /*
   MentorBridge landing pages.
 
-  Warm cream surfaces, deep wine for text, burgundy for buttons, links and dark sections,
-  gold only for small numbers and labels on dark.
+  Beige first: cream page, header and footer, cream cards. Red for boxes (rounded panels on the beige
+  page), buttons, links and accents. Gold only for small numbers and labels inside red boxes.
   Contrast (WCAG AA: 4.5:1 for normal text, 3:1 for large text and UI boundaries), measured with a script:
     ink #2E1015       on cream 15.7 · card 16.8 · sunk 14.4
-    accent #7B1E2B    on cream 9.2 · card 9.8 · sunk 8.4
+    accent #7B1E2B    on cream 9.2 · card 9.8 · sunk 8.4 (the red box itself is 9.2 against the page)
     muted #5E4B4D     on cream 7.3 · card 7.8 · sunk 6.7
-    on-dark #FFF6ED   on the dark gradient 10.9-15.0 · cta 9.5 · head 15.7 · band 16.4
-    pale #F3E4E2      on the dark gradient 9.4-13.0 · head 13.6 · band 14.2
-    gold #E1B385      on the dark gradient 6.1-8.4 · head 8.8 · band 9.2 · ink on gold 9.2
+    on-dark #FFF6ED   on the red boxes 9.5-12.3 · on the red buttons 9.5
+    pale #F3E4E2      on the red boxes 8.2-10.6
+    gold #E1B385      on the red boxes 5.3-6.9 · ink on gold 9.2
                       Never on light surfaces: 1.6-1.8.
-    rose #E8A9A2      on head 8.5 · band 8.9 (logo accent, underline)
+    rose #E8A9A2      decorative only (headline underline, dots)
     Field and choice borders ink/50: 3.4 on card, 3.2 against the cream page.
     Surfaces: card on cream 1.07, sunk on cream 1.10, so cards keep a border or shadow.
 */
@@ -50,9 +50,9 @@
   --color-cream: #FAF2E5;
   --color-card: #FEFAF1;
   --color-sunk: #F4E7D6;
-  /* Dark sections: gradient from dark-from to dark-to */
-  --color-dark-from: #691D27;
-  --color-dark-to: #440C15;
+  /* Red boxes: gradient from dark-from to dark-to (the brand red) */
+  --color-dark-from: #7B1E2B;
+  --color-dark-to: #5E1520;
   --color-on-dark: #FFF6ED;
   --color-gold: #E1B385;
 
@@ -72,7 +72,7 @@
   html {
     --header-h: 5.5rem;
     scroll-padding-top: calc(var(--header-h) + 1.5rem);
-    background-color: var(--color-band); /* overscroll below the footer */
+    background-color: var(--color-sunk); /* overscroll below the footer */
   }
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
@@ -85,8 +85,7 @@
   p { text-wrap: pretty; }
 
   :focus-visible { @apply rounded-sm outline-3 outline-offset-3 outline-ink; }
-  .on-dark :focus-visible,
-  .site-header :focus-visible { @apply outline-on-dark; }
+  .on-dark :focus-visible { @apply outline-on-dark; }
   .slideshow :focus-visible { @apply outline-white; }
   .on-dark .form-card :focus-visible { @apply outline-ink; }
 }
@@ -100,6 +99,14 @@
   .band { @apply border-y border-ink/[0.06] bg-cream; }
   .on-dark {
     @apply bg-dark-to text-on-dark;
+    background-image: linear-gradient(135deg, var(--color-dark-from), var(--color-dark-to));
+  }
+  /* A dark section is a red box on the beige page, not a full-width band:
+     the section stays beige and its content (.wrap) becomes the box. */
+  .section.on-dark { @apply bg-transparent bg-none py-10 lg:py-14; }
+  .section.on-dark > .wrap {
+    @apply mx-auto w-[calc(100%-2rem)] max-w-[76rem] rounded-[2rem] px-6 py-14 shadow-lift sm:w-[calc(100%-4rem)] sm:px-10 lg:px-14 lg:py-20;
+    background-color: var(--color-dark-to);
     background-image: linear-gradient(135deg, var(--color-dark-from), var(--color-dark-to));
   }
 
@@ -123,8 +130,8 @@
   .btn-primary { @apply bg-cta text-on-dark shadow-sm hover:bg-cta-hover disabled:cursor-progress disabled:opacity-70; }
   .btn-light { @apply bg-card text-ink hover:bg-sunk; }
   .btn-ghost { @apply border border-ink/30 bg-card text-ink hover:border-ink/60 hover:bg-sunk; }
-  .btn-header { @apply bg-card text-accent shadow-sm hover:bg-sunk; }
-  .btn-login { @apply border border-on-dark/50 text-on-dark hover:border-on-dark hover:bg-on-dark/10; }
+  .btn-header { @apply bg-cta text-on-dark shadow-sm hover:bg-cta-hover; }
+  .btn-login { @apply border border-ink/30 text-ink hover:border-ink hover:bg-sunk; }
   .btn-sm { @apply min-h-11 px-4 text-[15px]; }
   .btn-lg { @apply min-h-14 px-8 text-lg; }
   .btn-xl { @apply min-h-15 px-9 text-lg; }
@@ -134,18 +141,18 @@
   }
 
   /* ---------- Logo ---------- */
-  .logo { @apply flex items-center gap-3.5 text-2xl font-extrabold tracking-[-0.01em] text-on-dark no-underline sm:text-[1.7rem]; }
-  .logo img { @apply size-12 rounded-2xl ring-1 ring-on-dark/15 sm:size-14; }
-  .logo-accent { @apply text-rose; }
-  .logo-light { @apply flex items-center gap-3 text-2xl font-extrabold tracking-[-0.01em] text-on-dark no-underline; }
+  .logo { @apply flex items-center gap-3.5 text-2xl font-extrabold tracking-[-0.01em] text-ink no-underline sm:text-[1.7rem]; }
+  .logo img { @apply size-12 rounded-2xl sm:size-14; }
+  .logo-accent { @apply text-accent; }
+  .logo-light { @apply flex items-center gap-3 text-2xl font-extrabold tracking-[-0.01em] text-ink no-underline; }
   .logo-light img { @apply size-12 rounded-xl; }
 
   /* ---------- Header ---------- */
   /* Fixed height in every state, so scrolling never shifts the page. */
   .site-header {
-    @apply sticky top-0 z-40 bg-head text-on-dark transition-shadow duration-300 motion-reduce:transition-none;
+    @apply sticky top-0 z-40 border-b border-ink/10 bg-cream text-ink transition-shadow duration-300 motion-reduce:transition-none;
   }
-  .site-header.is-scrolled { @apply shadow-[0_8px_28px_-10px_rgb(46_16_21/0.55)]; }
+  .site-header.is-scrolled { @apply shadow-[0_8px_24px_-12px_rgb(46_16_21/0.25)]; }
   .header-bar { @apply flex h-(--header-h) items-center justify-between gap-4; }
   .header-left { @apply flex min-w-0 items-center gap-6; }
   .header-right { @apply flex shrink-0 items-center gap-2 sm:gap-3; }
@@ -155,33 +162,33 @@
   .label-short { @apply sm:hidden; }
   .label-long { @apply max-sm:hidden; }
 
-  .site-nav { @apply hidden items-center gap-0.5 border-l border-on-dark/15 pl-6 xl:flex; }
+  .site-nav { @apply hidden items-center gap-0.5 border-l border-ink/10 pl-6 xl:flex; }
   .site-nav a {
-    @apply relative rounded-lg px-3 py-2 text-[15px] font-semibold whitespace-nowrap text-pale no-underline transition-colors hover:text-on-dark;
+    @apply relative rounded-lg px-3 py-2 text-[15px] font-semibold whitespace-nowrap text-muted no-underline transition-colors hover:text-ink;
   }
   .site-nav a::after {
     content: '';
-    @apply absolute right-3 bottom-1 left-3 h-0.5 origin-left scale-x-0 rounded-full bg-rose transition-transform duration-200 motion-reduce:transition-none;
+    @apply absolute right-3 bottom-1 left-3 h-0.5 origin-left scale-x-0 rounded-full bg-accent transition-transform duration-200 motion-reduce:transition-none;
   }
   .site-nav a:hover::after,
   .site-nav a[aria-current]::after { @apply scale-x-100; }
-  .site-nav a[aria-current] { @apply text-on-dark; }
+  .site-nav a[aria-current] { @apply text-ink; }
 
-  .lang-switch { @apply hidden items-center gap-0.5 rounded-xl bg-on-dark/10 p-1 sm:flex; }
+  .lang-switch { @apply hidden items-center gap-0.5 rounded-xl bg-sunk p-1 sm:flex; }
   .lang-switch a {
-    @apply grid min-h-8 min-w-9 place-items-center rounded-lg px-2 text-[13px] font-bold text-pale no-underline transition-colors hover:text-on-dark;
+    @apply grid min-h-8 min-w-9 place-items-center rounded-lg px-2 text-[13px] font-bold text-muted no-underline transition-colors hover:text-ink;
   }
-  .lang-switch a[aria-current='page'] { @apply bg-card text-ink; }
+  .lang-switch a[aria-current='page'] { @apply bg-cta text-on-dark; }
 
-  .menu-button { @apply grid size-11 cursor-pointer place-items-center rounded-xl text-on-dark hover:bg-on-dark/10 lg:hidden; }
+  .menu-button { @apply grid size-11 cursor-pointer place-items-center rounded-xl text-ink hover:bg-sunk lg:hidden; }
   .menu-button .icon-close,
   .menu-button[aria-expanded='true'] .icon-open { @apply hidden; }
   .menu-button[aria-expanded='true'] .icon-close { @apply block; }
 
-  .mobile-menu { @apply border-t border-on-dark/10 bg-head lg:hidden; }
+  .mobile-menu { @apply border-t border-ink/10 bg-cream lg:hidden; }
   .mobile-links { @apply flex flex-col py-3; }
-  .mobile-links > a { @apply flex min-h-12 items-center border-b border-on-dark/10 text-lg font-semibold text-on-dark no-underline; }
-  .mobile-links > a[aria-current] { @apply text-rose; }
+  .mobile-links > a { @apply flex min-h-12 items-center border-b border-ink/10 text-lg font-semibold text-ink no-underline; }
+  .mobile-links > a[aria-current] { @apply text-accent; }
   .lang-switch-menu { @apply mt-4 flex self-start; }
 
   /* ---------- Hero ---------- */
@@ -346,15 +353,14 @@
   .prose-page a { @apply font-semibold text-accent underline underline-offset-4; }
 
   /* ---------- Footer ---------- */
-  /* Solid, not the gradient, so the page ends on a calm, dark base. */
-  .site-footer { @apply bg-band bg-none text-[15px]; }
+  .site-footer { @apply border-t border-ink/10 bg-sunk text-[15px] text-ink; }
   .footer-col { @apply flex flex-col items-start gap-3; }
-  .footer-col h2 { @apply mb-1 text-sm font-bold tracking-[0.12em] text-on-dark uppercase; }
+  .footer-col h2 { @apply mb-1 text-sm font-bold tracking-[0.12em] text-ink uppercase; }
   .footer-col a,
-  .footer-col p { @apply text-pale; }
-  .footer-col a { @apply no-underline hover:text-on-dark hover:underline hover:underline-offset-4; }
+  .footer-col p { @apply text-muted; }
+  .footer-col a { @apply no-underline hover:text-accent hover:underline hover:underline-offset-4; }
   .socials { @apply flex gap-2; }
-  .socials a { @apply grid size-11 place-items-center rounded-full bg-on-dark/10 text-on-dark transition-colors hover:bg-on-dark hover:text-ink; }
+  .socials a { @apply grid size-11 place-items-center rounded-full bg-card text-ink transition-colors hover:bg-cta hover:text-on-dark; }
 
   /* ---------- Cookie consent ---------- */
   .cookie-bar {
@@ -362,7 +368,7 @@
     @apply sm:inset-x-auto sm:right-6 sm:bottom-6 sm:max-w-lg sm:flex-row sm:items-center;
   }
   .cookie-bar[hidden] { display: none; }
-  .cookie-settings { @apply ml-1 cursor-pointer text-pale underline underline-offset-4 hover:text-on-dark; }
+  .cookie-settings { @apply ml-1 cursor-pointer text-muted underline underline-offset-4 hover:text-accent; }
 }
 
 /* ---------- Motion: only the slideshow moves, and not for reduced motion ---------- */
