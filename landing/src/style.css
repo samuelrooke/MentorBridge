@@ -109,6 +109,11 @@
     background-color: var(--color-dark-to);
     background-image: linear-gradient(135deg, var(--color-dark-from), var(--color-dark-to));
   }
+  /* The waiting list box is a darker red: on-dark text 12.3-15.7, gold 6.9-8.8. */
+  #signup.section.on-dark > .wrap {
+    background-color: var(--color-head);
+    background-image: linear-gradient(135deg, var(--color-cta-hover), var(--color-head));
+  }
 
   .skip-link {
     @apply absolute top-4 left-4 z-50 -translate-y-24 rounded-lg bg-ink px-5 py-3 font-semibold text-on-dark focus:translate-y-0;
