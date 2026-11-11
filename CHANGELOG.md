@@ -24,6 +24,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - Mentors are described as experienced professionals with some free time next to their job (part-time and freelance too), not retirees. The mentor page targets "become a mentor next to your job".
 - The same email can sign up only once per segment (migration 0006 removes earlier duplicates, keeping the oldest).
 - Shared page parts (head, header, footer, form, contact) live in `landing/partials/`.
+- The third group is called "companies" instead of "organizations" ("bedrijven" in Dutch): menu, cards, the companies page, the form and the API messages.
 - The header button says "Join the waiting list", and "Sign up" on phones so it doesn't cover the logo.
 - Beige design: cream page, header, footer and cards instead of white and dark bands. Dark sections are now red boxes on the beige page (the waiting list box in a darker red), with red buttons and accents, and gold for small labels and numbers inside the boxes. The app preview on the student page keeps the platform's own colours.
 - Field and choice borders are darker, so they reach 3:1 contrast (WCAG 1.4.11).

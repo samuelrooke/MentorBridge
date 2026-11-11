@@ -50,7 +50,7 @@ export function validatePilotRequest(body) {
   const name = text(body?.name)
   const fields = { role, email, name }
 
-  if (!ROLES.includes(role)) return { error: 'Please choose student, mentor or organization.' }
+  if (!ROLES.includes(role)) return { error: 'Please choose student, mentor or company.' }
   if (!name) return { error: role === 'company' ? 'Please enter your contact name.' : 'Please enter your name.' }
   if (name.length > 100) return { error: 'Name must be 100 characters or fewer.' }
   if (!email) return { error: 'Please enter your email.' }
@@ -65,8 +65,8 @@ export function validatePilotRequest(body) {
   if (role === 'company') {
     const company = text(body?.company)
     const jobTitle = text(body?.job_title)
-    if (!company) return { error: 'Please enter your organization name.' }
-    if (company.length > 200) return { error: 'Organization name must be 200 characters or fewer.' }
+    if (!company) return { error: 'Please enter your company name.' }
+    if (company.length > 200) return { error: 'Company name must be 200 characters or fewer.' }
     if (!jobTitle) return { error: 'Please enter your role.' }
     if (jobTitle.length > 100) return { error: 'Role must be 100 characters or fewer.' }
     Object.assign(fields, { company, job_title: jobTitle })

@@ -39,7 +39,7 @@ const t = UI[LANG]
 
 // The API answers in English; on the Dutch pages its validation messages are translated here.
 const SERVER_NL = {
-  'Please choose student, mentor or organization.': 'Kies student, mentor of organisatie.',
+  'Please choose student, mentor or company.': 'Kies student, mentor of bedrijf.',
   'Please enter your name.': 'Vul je naam in.',
   'Please enter your contact name.': 'Vul de naam van de contactpersoon in.',
   'Name must be 100 characters or fewer.': 'Je naam mag maximaal 100 tekens zijn.',
@@ -47,8 +47,8 @@ const SERVER_NL = {
   'Please enter a valid email address.': 'Vul een geldig e-mailadres in.',
   'Please choose a sector.': 'Kies een sector.',
   'Please choose a sector from the list.': 'Kies een sector uit de lijst.',
-  'Please enter your organization name.': 'Vul de naam van je organisatie in.',
-  'Organization name must be 200 characters or fewer.': 'De naam van je organisatie mag maximaal 200 tekens zijn.',
+  'Please enter your company name.': 'Vul de naam van je bedrijf in.',
+  'Company name must be 200 characters or fewer.': 'De naam van je bedrijf mag maximaal 200 tekens zijn.',
   'Please enter your role.': 'Vul je functie in.',
   'Role must be 100 characters or fewer.': 'Je functie mag maximaal 100 tekens zijn.',
   'Please choose a company size from the list.': 'Kies een aantal medewerkers uit de lijst.',
@@ -163,8 +163,8 @@ if (form) {
   let signupId = null
 
   const BUTTON = {
-    en: { student: 'Join the waiting list', mentor: 'Join as a mentor', company: 'Join as an organization' },
-    nl: { student: 'Meld je aan voor de wachtlijst', mentor: 'Meld je aan als mentor', company: 'Meld je aan als organisatie' },
+    en: { student: 'Join the waiting list', mentor: 'Join as a mentor', company: 'Join as a company' },
+    nl: { student: 'Meld je aan voor de wachtlijst', mentor: 'Meld je aan als mentor', company: 'Meld je aan als bedrijf' },
   }
 
   // Show the fields for this segment. Hidden fields are disabled, so they are neither checked nor sent.

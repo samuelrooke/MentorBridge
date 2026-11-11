@@ -1,5 +1,5 @@
 <!--
-  The one waiting list form, used on the student, mentor and organization pages.
+  The one waiting list form, used on the student, mentor and company pages.
   The page's segment fills in the role. main.js shows only the fields for that role
   (data-for-role) and disables the rest, so hidden fields are neither checked nor sent.
   The options must match server/src/routes/pilotRequests.js and supabase/migrations/0006.
@@ -22,10 +22,10 @@
       <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" />
     </div>
 
-    <!-- Organizations -->
+    <!-- Companies -->
     <div class="flex flex-col gap-5" data-for-role="company">
       <div class="field">
-        <label for="company">Organization name</label>
+        <label for="company">Company name</label>
         <input id="company" name="company" type="text" required maxlength="200" autocomplete="organization" />
       </div>
       <div class="field">
@@ -102,7 +102,7 @@
       </div>
     </fieldset>
 
-    <!-- Organizations, optional -->
+    <!-- Companies, optional -->
     <div class="field" data-for-role="company">
       <label for="company_size">Number of employees <span class="optional">(optional)</span></label>
       <select id="company_size" name="company_size">
@@ -116,7 +116,7 @@
     <fieldset class="question" data-for-role="company">
       <legend>How would you like to use MentorBridge? <span class="font-normal text-muted">Optional.</span></legend>
       <div class="choices">
-        <label><input type="radio" name="interest" value="internal" /><span>Inside our own organization</span></label>
+        <label><input type="radio" name="interest" value="internal" /><span>Inside our own company</span></label>
         <label><input type="radio" name="interest" value="white_label" /><span>White label, under our own name</span></label>
         <label><input type="radio" name="interest" value="both" /><span>Both</span></label>
       </div>
