@@ -3,5 +3,25 @@
   "framework": "vite",
   "installCommand": "cd .. && npm ci --workspaces --include-workspace-root=false",
   "buildCommand": "cd .. && npm run build -w landing",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "landing-drab-iota-50.vercel.app" }],
+      "destination": "https://mentorbridge.nl/:path*",
+      "statusCode": 301
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "landing-mentor-bridge2.vercel.app" }],
+      "destination": "https://mentorbridge.nl/:path*",
+      "statusCode": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/fonts/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
 }

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @include head -->
+    <title>Find your internship with a mentor | MentorBridge</title>
+    <meta
+      name="description"
+      content="Get matched with an experienced professional from your field who helps you find your internship and prepare for it. Join the waiting list. Free for students."
+    />
+  </head>
+  <body data-segment="student">
+    <!-- @include header -->
+
+    <main id="main">
+      <!-- Hero -->
+      <section id="top" class="hero" aria-labelledby="hero-title">
+        <div class="hero-wrap">
+          <div class="hero-card">
+            <div class="hero-copy">
+              <p class="hero-label">For students in the Netherlands and Belgium</p>
+
+              <!-- A/B test: main.js shows variant A ("Find your match.") or variant B. -->
+              <h1 id="hero-title" class="hero-title">
+                <span data-variant="a">Find your <span class="underline-bridge">match.</span></span>
+                <span data-variant="b" hidden>Find your internship with <span class="underline-bridge">a mentor.</span></span>
+              </h1>
+
+              <p class="hero-lead">
+                A mentor from your field helps you land your internship and get ready for it.
+              </p>
+
+              <div class="flex flex-col items-start gap-5">
+                <a href="#signup" class="btn btn-primary btn-xl">Join the waiting list</a>
+                <ul class="hero-points" aria-label="What you get">
+                  <li>Free for students</li>
+                  <li>A mentor from your field</li>
+                  <li>Short, flexible sessions</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Hero image: slideshow of the three steps. Cross-fade with a slow zoom, 4 s per slide. -->
+            <!-- The team's own photos. WebP versions come from `npm run images -w landing`; sources are listed in docs/images.md. -->
+            <div class="slideshow" role="region" aria-roledescription="carousel" aria-label="How MentorBridge works">
+              <div class="slides">
+                <figure class="slide is-active" aria-roledescription="slide" aria-label="Step 1 of 3">
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/student-1-720.webp 720w, /slides/student-1-1080.webp 1080w, /slides/student-1-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/student-1.jpg" alt="A smiling student holding a laptop in a university hallway." width="1440" height="1080" loading="eager" fetchpriority="high" decoding="async" /></picture></div>
+                  <figcaption><span class="slide-step">Step 1</span><span class="slide-title">You sign up</span><span class="slide-sub">Tell us your sector and what you want help with.</span></figcaption>
+                </figure>
+                <figure class="slide" aria-roledescription="slide" aria-label="Step 2 of 3" aria-hidden="true">
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/match-720.webp 720w, /slides/match-1080.webp 1080w, /slides/match-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/match.jpg" alt="A handshake between a professional and a young person after an interview." width="1440" height="1080" loading="lazy" decoding="async" /></picture></div>
+                  <figcaption><span class="slide-step">Step 2</span><span class="slide-title">Your mentor helps you in</span><span class="slide-sub">Your mentor prepares you, from your CV to the interview that gets you the place.</span></figcaption>
+                </figure>
+                <figure class="slide" aria-roledescription="slide" aria-label="Step 3 of 3" aria-hidden="true">
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/start-720.webp 720w, /slides/start-1080.webp 1080w, /slides/start-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/start.jpg" alt="People working at laptops in a bright office with large windows." width="1440" height="1080" loading="lazy" decoding="async" /></picture></div>
+                  <figcaption><span class="slide-step">Step 3</span><span class="slide-title">You start your internship</span><span class="slide-sub">You join the team, ready for your first day.</span></figcaption>
+                </figure>
+              </div>
+              <div class="slide-controls">
+                <div class="flex gap-2">
+                  <button type="button" class="slide-dot" data-slide="0" aria-label="Show step 1" aria-current="true"></button>
+                  <button type="button" class="slide-dot" data-slide="1" aria-label="Show step 2"></button>
+                  <button type="button" class="slide-dot" data-slide="2" aria-label="Show step 3"></button>
+                </div>
+                <button type="button" class="slide-pause" data-slide-pause aria-label="Pause slideshow">
+                  <svg class="icon-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor" /></svg>
+                  <svg class="icon-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pain and strength: grey for the problem, brand colour for what MentorBridge changes -->
+      <section id="help" class="section band" aria-labelledby="change-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="change-title" class="h2">How a mentor helps with your internship</h2>
+          </div>
+          <div class="mt-12 grid gap-5 md:grid-cols-2">
+            <div class="contrast contrast-pain">
+              <p class="contrast-label">Without a mentor</p>
+              <ul>
+                <li><span class="mark" aria-hidden="true">✕</span>20 to 30 applications, few answers</li>
+                <li><span class="mark" aria-hidden="true">✕</span>Rejections that don't say what to improve</li>
+                <li><span class="mark" aria-hidden="true">✕</span>Doubting your own skills</li>
+              </ul>
+              <p class="contrast-source">What most students we spoke to told us.</p>
+            </div>
+            <div class="contrast contrast-gain">
+              <p class="contrast-label">With MentorBridge</p>
+              <ul>
+                <li><span class="mark" aria-hidden="true">✓</span>A professional passes on what they know about your field</li>
+                <li><span class="mark" aria-hidden="true">✓</span>Help with soft skills and the basics of the job</li>
+                <li><span class="mark" aria-hidden="true">✓</span>A better chance of landing your internship</li>
+              </ul>
+              <p class="contrast-result">You start knowing what works, not guessing.</p>
+              <a href="#signup" class="btn btn-light mt-auto self-start">Join the waiting list</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The platform: mockup + what it does -->
+      <section id="platform" class="section on-dark overflow-hidden" aria-labelledby="platform-title">
+        <div class="wrap grid items-center gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <div class="flex flex-col gap-6">
+            <p class="label-dark">The platform</p>
+            <h2 id="platform-title" class="h2">From your first application to your first day</h2>
+            <p class="lead text-pale">Your plan, your sessions and your mentor in one place.</p>
+            <ul class="features">
+              <li><span class="feature-icon" aria-hidden="true">1</span><div><h3>A plan for your search</h3><p>CV, applications and interviews, step by step.</p></div></li>
+              <li><span class="feature-icon" aria-hidden="true">2</span><div><h3>Sessions and messages</h3><p>With a reminder before each session.</p></div></li>
+              <li><span class="feature-icon" aria-hidden="true">3</span><div><h3>Ready for day one</h3><p>Help with your first weeks once you have a place.</p></div></li>
+            </ul>
+          </div>
+
+          <!-- Mockup of the student dashboard, built in HTML so it stays sharp -->
+          <figure>
+            <div
+              class="mockup"
+              role="img"
+              aria-label="Preview of the MentorBridge dashboard: a student's plan for finding a software internship with 2 of 4 steps done, the next session with their mentor, and a message from the mentor."
+            >
+              <div class="mockup-bar" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <div class="mockup-url">MentorBridge · Dashboard</div>
+              </div>
+              <div class="mockup-body" aria-hidden="true">
+                <nav class="mockup-nav">
+                  <div class="mockup-logo"><i></i><i></i></div>
+                  <span class="active">Plan</span>
+                  <span>Sessions</span>
+                  <span>Messages</span>
+                  <span>Profile</span>
+                </nav>
+                <div class="mockup-main">
+                  <div class="mockup-panel">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <p class="mockup-label">Your plan</p>
+                        <p class="mockup-title">Find a software internship</p>
+                      </div>
+                      <span class="mockup-pill">In progress</span>
+                    </div>
+                    <div class="mockup-progress"><span style="width: 50%"></span></div>
+                    <p class="mockup-small">2 of 4 steps done</p>
+                    <ul class="mockup-list">
+                      <li class="done"><b></b>Update your CV with feedback</li>
+                      <li class="done"><b></b>Pick companies to apply to</li>
+                      <li><b></b>Practise a technical interview</li>
+                      <li><b></b>Send your applications</li>
+                    </ul>
+                  </div>
+                  <div class="mockup-side">
+                    <div class="mockup-panel">
+                      <p class="mockup-label">Next session</p>
+                      <p class="mockup-title">Interview practice</p>
+                      <p class="mockup-small">Thursday with your mentor</p>
+                    </div>
+                    <div class="mockup-panel">
+                      <p class="mockup-label">Message from your mentor</p>
+                      <p class="mockup-message">Your CV is much clearer now. On Thursday we'll practise the questions they usually ask.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption class="mt-4 text-sm text-pale">Preview of the student dashboard.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- FAQ: honest answers to the usual doubts -->
+      <section id="faq" class="section-sm band" aria-labelledby="faq-title">
+        <div class="wrap grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+          <div class="flex flex-col gap-4">
+            <h2 id="faq-title" class="h2">Questions and answers</h2>
+            <p class="lead">Something else you want to ask? <a href="/#contact" class="font-semibold text-accent underline underline-offset-4">Send us a message</a>.</p>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>Is it really free?</summary>
+              <p>Yes. MentorBridge is free for everybody during our first version. We'll decide on a payment model later, and we'll tell you before anything changes.</p>
+            </details>
+            <details>
+              <summary>Who are the mentors?</summary>
+              <p>Experienced professionals from your field who have some free time next to their work and want to pass on what they know. We match you by hand, based on your sector and when you're available.</p>
+            </details>
+            <details>
+              <summary>How much time does it take?</summary>
+              <p>A few short sessions with your mentor, online or in person, planned around your schedule.</p>
+            </details>
+            <details>
+              <summary>Can you guarantee me an internship?</summary>
+              <p>No. Nobody can promise that. Your mentor helps you understand what to improve and prepare well, which gives you a better chance.</p>
+            </details>
+            <details>
+              <summary>What happens with my details?</summary>
+              <p>We only use them to contact you about MentorBridge, and we delete them when the project ends. Read the <a href="/privacy/" class="underline underline-offset-4">privacy statement</a>.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Waiting list -->
+      <section id="signup" class="section on-dark" aria-labelledby="signup-title">
+        <div class="wrap grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          <div class="flex flex-col gap-5 lg:pt-6">
+            <h2 id="signup-title" class="h2">Join the waiting list</h2>
+            <p class="lead">Leave your details and we'll get in touch when we can match you with a mentor from your field. Free.</p>
+            <div class="next-steps">
+              <p class="font-bold">What happens next</p>
+              <ol>
+                <li><span>1</span>You tell us your sector, what you want help with and when you're available.</li>
+                <li><span>2</span>We look for a mentor who fits.</li>
+                <li><span>3</span>We get in touch by email.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- @include signup -->
+        </div>
+      </section>
+    </main>
+
+    <!-- @include footer -->
+  </body>
+</html>

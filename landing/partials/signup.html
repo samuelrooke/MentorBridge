@@ -1,0 +1,190 @@
+<!--
+  The one waiting list form, used on the student, mentor and company pages.
+  The page's segment fills in the role. main.js shows only the fields for that role
+  (data-for-role) and disables the rest, so hidden fields are neither checked nor sent.
+  The options must match server/src/routes/pilotRequests.js and supabase/migrations/0006 and 0007.
+-->
+<div class="form-card" id="pilot-panel">
+  <form id="pilot-form" class="flex flex-col gap-5" novalidate>
+    <input type="hidden" name="role" value="{{segment}}" />
+
+    <div class="field">
+      <label for="name">
+        <span data-for-role="company">Contact name</span><span data-for-role="student mentor">Your name</span>
+      </label>
+      <input id="name" name="name" type="text" required maxlength="100" autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="email">
+        <span data-for-role="company">Work email</span><span data-for-role="student mentor">Email</span>
+      </label>
+      <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" />
+    </div>
+
+    <!-- Companies -->
+    <div class="flex flex-col gap-5" data-for-role="company">
+      <div class="field">
+        <label for="company">Company name</label>
+        <input id="company" name="company" type="text" required maxlength="200" autocomplete="organization" />
+      </div>
+      <div class="field">
+        <label for="job_title">Your role</label>
+        <input id="job_title" name="job_title" type="text" required maxlength="100" autocomplete="organization-title" />
+      </div>
+    </div>
+
+    <!-- One sector list for everyone. Optional for mentors. -->
+    <div class="field">
+      <label for="sector">
+        <span data-for-role="student">Your sector or field of study</span><span data-for-role="mentor">Your sector or background <span class="optional">(optional)</span></span><span data-for-role="company">Sector</span>
+      </label>
+      <select id="sector" name="sector" required>
+        <option value="" selected>Choose a sector</option>
+        <option value="ict">ICT and software</option>
+        <option value="engineering">Engineering and technology</option>
+        <option value="construction">Construction</option>
+        <option value="logistics">Logistics and transport</option>
+        <option value="healthcare">Healthcare</option>
+        <option value="business">Business and management</option>
+        <option value="finance">Finance and accounting</option>
+        <option value="law">Law</option>
+        <option value="education">Education</option>
+        <option value="government">Government and public sector</option>
+        <option value="media">Media and creative</option>
+        <option value="hospitality">Hospitality and retail</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <!-- Mentors -->
+    <div class="grid gap-5 sm:grid-cols-2" data-for-role="mentor">
+      <div class="field">
+        <label for="age_range">Age</label>
+        <select id="age_range" name="age_range" required>
+          <option value="" selected>Choose</option>
+          <option value="under-30">Under 30</option>
+          <option value="30-39">30–39</option>
+          <option value="40-49">40–49</option>
+          <option value="50-59">50–59</option>
+          <option value="60+">60 or older</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="hours_per_month">Time you can give</label>
+        <select id="hours_per_month" name="hours_per_month" required>
+          <option value="" selected>Choose</option>
+          <option value="1-2">1–2 hours a month</option>
+          <option value="3-5">3–5 hours a month</option>
+          <option value="6-10">6–10 hours a month</option>
+          <option value="10+">More than 10 hours a month</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Students -->
+    <fieldset class="question" data-for-role="student">
+      <legend>What do you want help with?</legend>
+      <div class="choices">
+        <label><input type="radio" name="skills_help" value="soft" required /><span>Soft skills, like communication and teamwork</span></label>
+        <label><input type="radio" name="skills_help" value="hard" /><span>Hard skills, like tools and the basics of the job</span></label>
+        <label><input type="radio" name="skills_help" value="both" /><span>Both</span></label>
+      </div>
+    </fieldset>
+
+    <!-- Same options for students and mentors, so they can be matched later. -->
+    <fieldset class="question" data-for-role="student mentor" data-availability>
+      <legend>When are you available? <span class="font-normal text-muted">Choose any.</span></legend>
+      <div class="choices">
+        <label><input type="checkbox" name="availability" value="weekdays" /><span>Weekdays</span></label>
+        <label><input type="checkbox" name="availability" value="evenings" /><span>Evenings</span></label>
+        <label><input type="checkbox" name="availability" value="weekends" /><span>Weekends</span></label>
+      </div>
+    </fieldset>
+
+    <!-- Companies, optional -->
+    <div class="field" data-for-role="company">
+      <label for="company_size">Number of employees <span class="optional">(optional)</span></label>
+      <select id="company_size" name="company_size">
+        <option value="" selected>Choose</option>
+        <option value="1-49">1–49</option>
+        <option value="50-249">50–249</option>
+        <option value="250-999">250–999</option>
+        <option value="1000+">1,000 or more</option>
+      </select>
+    </div>
+    <fieldset class="question" data-for-role="company">
+      <legend>How would you like to use MentorBridge? <span class="font-normal text-muted">Optional.</span></legend>
+      <div class="choices">
+        <label><input type="radio" name="interest" value="internal" /><span>Inside our own company</span></label>
+        <label><input type="radio" name="interest" value="external" /><span>A mentor for our interns</span></label>
+        <label><input type="radio" name="interest" value="white_label" /><span>Under our own name (white label)</span></label>
+      </div>
+    </fieldset>
+
+    <label class="consent">
+      <input type="checkbox" name="consent" required />
+      <span>I agree that MentorBridge stores these details to contact me about the waiting list. Read the <a href="/privacy/">privacy statement</a>.</span>
+    </label>
+
+    <!-- Honeypot: hidden from people, bots fill it in. -->
+    <div class="honeypot" aria-hidden="true">
+      <label for="website">Leave this field empty</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <p id="form-error" class="form-error" role="alert" hidden></p>
+
+    <button type="submit" class="btn btn-primary btn-lg w-full" data-copy="button">Join the waiting list</button>
+    <p class="text-sm text-muted">Free. We delete your details when the project ends.</p>
+  </form>
+
+  <!-- Step 2 for students: four optional questions -->
+  <form id="answers-form" class="flex flex-col gap-6" tabindex="-1" novalidate hidden>
+    <div class="flex flex-col gap-1">
+      <p class="text-sm font-bold text-accent">You're on the waiting list</p>
+      <h3 class="h3">Help us match you better</h3>
+      <p class="text-muted">Three quick questions. All of them are optional.</p>
+    </div>
+
+    <fieldset class="question">
+      <legend>1. Do you already have an internship place?</legend>
+      <div class="choices">
+        <label><input type="radio" name="has_placement" value="yes" /><span>Yes</span></label>
+        <label><input type="radio" name="has_placement" value="no" /><span>No, still looking</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="question">
+      <legend>2. How many applications have you sent so far?</legend>
+      <div class="choices">
+        <label><input type="radio" name="applications_sent" value="0" /><span>None yet</span></label>
+        <label><input type="radio" name="applications_sent" value="1-10" /><span>1–10</span></label>
+        <label><input type="radio" name="applications_sent" value="11-30" /><span>11–30</span></label>
+        <label><input type="radio" name="applications_sent" value="30+" /><span>More than 30</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="question">
+      <legend>3. When does your internship start, or when do you need one by?</legend>
+      <div class="choices">
+        <label><input type="radio" name="needed_by" value="0-3" /><span>Within 3 months</span></label>
+        <label><input type="radio" name="needed_by" value="3-6" /><span>In 3 to 6 months</span></label>
+        <label><input type="radio" name="needed_by" value="later" /><span>Later</span></label>
+      </div>
+    </fieldset>
+
+    <p id="answers-error" class="form-error" role="alert" hidden></p>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <button type="submit" class="btn btn-primary">Send answers</button>
+      <button type="button" id="answers-skip" class="btn text-muted hover:text-ink">Skip</button>
+    </div>
+  </form>
+
+  <div id="pilot-thanks" class="flex flex-col gap-3" tabindex="-1" hidden>
+    <h3 class="h3">You're on the waiting list</h3>
+    <p data-thanks="new">Thank you. We'll get in touch by email as soon as we can match you.</p>
+    <p data-thanks="duplicate" hidden>This email is already on the waiting list, so you don't need to do anything. We'll get in touch by email.</p>
+  </div>
+</div>

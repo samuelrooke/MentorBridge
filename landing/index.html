@@ -1,76 +1,43 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MentorBridge: find your internship with a mentor from your field</title>
+    <!-- @include head -->
+    <title>Experienced mentors for student interns | MentorBridge</title>
     <meta
       name="description"
-      content="MentorBridge matches students with an experienced professional from their field, who helps with your CV, your applications and your interviews. Free for students."
+      content="MentorBridge matches students with experienced professionals from their field, so they start their internship ready. Free during our first version."
     />
-    <meta name="theme-color" content="#2E1015" />
-    <link rel="icon" href="/icon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700;800&display=swap"
-    />
-    <link rel="alternate" hreflang="en" href="/" vite-ignore />
-    <link rel="alternate" hreflang="nl" href="/nl/" vite-ignore />
-    <link rel="alternate" hreflang="x-default" href="/" vite-ignore />
-    <!-- Send visitors who picked a language before to that version (only from the English start page). -->
-    <script>try{if(document.documentElement.lang==='en'&&localStorage.getItem('mb-lang')==='nl')location.replace('/nl/'+location.search+location.hash)}catch(e){}</script>
-    <script>document.documentElement.classList.add('js')</script>
-    <link rel="stylesheet" href="/src/style.css" />
-    <script type="module" src="/src/main.js"></script>
-    <!-- GoatCounter: cookieless visitor counting, dashboard at https://mentorbridge.goatcounter.com -->
-    <script data-goatcounter="https://mentorbridge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <!-- Structured data, the same on the Dutch page, so it stays language-neutral. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://mentorbridge.nl/#organization",
+            "name": "MentorBridge",
+            "url": "https://mentorbridge.nl/",
+            "logo": "https://mentorbridge.nl/icon.png",
+            "sameAs": ["https://www.linkedin.com/company/146928627/", "https://www.instagram.com/mentorbridgenl/"],
+            "areaServed": [
+              { "@type": "Country", "name": "Netherlands" },
+              { "@type": "Country", "name": "Belgium" }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://mentorbridge.nl/#website",
+            "name": "MentorBridge",
+            "url": "https://mentorbridge.nl/",
+            "inLanguage": ["en", "nl"],
+            "publisher": { "@id": "https://mentorbridge.nl/#organization" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <a href="#main" class="skip-link">Skip to content</a>
-
-    <header class="site-header" data-header>
-      <div class="wrap header-bar">
-        <div class="header-left">
-          <a href="#top" class="logo" aria-label="MentorBridge, back to top">
-            <img src="/icon.png" alt="" width="512" height="512" />
-            <span>Mentor<span class="logo-accent">Bridge</span></span>
-          </a>
-          <nav class="site-nav" aria-label="Main">
-            <a href="#help">What changes</a>
-            <a href="#platform">The platform</a>
-            <a href="#team">Who we are</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contact">Contact</a>
-          </nav>
-        </div>
-
-        <div class="header-right">
-          <a href="https://client-seven-blush-72.vercel.app/login" class="btn btn-login btn-sm" data-app-login>Log in</a>
-          <a href="#signup" class="btn btn-header btn-sm" data-role="student">Sign up free</a>
-          <nav class="lang-switch" aria-label="Language"><a href="/" hreflang="en" lang="en" data-lang="en" aria-current="page">EN</a><a href="/nl/" hreflang="nl" lang="nl" data-lang="nl">NL</a></nav>
-          <button type="button" class="menu-button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">
-            <svg class="icon-open" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
-            <svg class="icon-close" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Menu for small screens -->
-      <div class="mobile-menu" id="mobile-menu" hidden>
-        <nav class="wrap mobile-links" aria-label="Menu">
-          <a href="#help">What changes</a>
-          <a href="#platform">The platform</a>
-          <a href="#team">Who we are</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact">Contact</a>
-          <a href="https://client-seven-blush-72.vercel.app/login" data-app-login>Log in</a>
-          <div class="lang-switch lang-switch-menu" role="group" aria-label="Language"><a href="/" hreflang="en" lang="en" data-lang="en" aria-current="page">EN</a><a href="/nl/" hreflang="nl" lang="nl" data-lang="nl">NL</a></div>
-        </nav>
-      </div>
-    </header>
+    <!-- @include header -->
 
     <main id="main">
       <!-- Hero -->
@@ -78,157 +45,80 @@
         <div class="hero-wrap">
           <div class="hero-card">
             <div class="hero-copy">
-              <p class="hero-label">For students in the Netherlands</p>
-
-              <!-- A/B test: main.js shows variant A ("Find your match.") or variant B. -->
-              <h1 id="hero-title" class="hero-title">
-                <span data-variant="a">Find your <span class="underline-bridge">match.</span></span>
-                <span data-variant="b" hidden>Find your internship with <span class="underline-bridge">a mentor.</span></span>
-              </h1>
-
+              <p class="hero-label">In the Netherlands and Belgium</p>
+              <h1 id="hero-title" class="hero-title">Experienced mentors for <span class="underline-bridge">student interns.</span></h1>
               <p class="hero-lead">
-                A professional from your field helps you land your internship.
+                MentorBridge matches students with experienced professionals from their field, who mentor them in their
+                free time. Students start their internship ready.
               </p>
-
               <div class="flex flex-col items-start gap-5">
-                <a href="#signup" class="btn btn-primary btn-xl" data-role="student">Find your match</a>
+                <a href="#choose" class="btn btn-primary btn-xl">Join the waiting list</a>
                 <ul class="hero-points" aria-label="What you get">
-                  <li>Free for students</li>
-                  <li>A mentor from your field</li>
+                  <li>Free during our first version</li>
+                  <li>Matched by sector</li>
                   <li>Short, flexible sessions</li>
                 </ul>
               </div>
             </div>
 
-            <!-- Hero image: slideshow of the three steps. Cross-fade with a slow zoom, 4 s per slide. -->
-            <div class="slideshow" role="region" aria-roledescription="carousel" aria-label="How MentorBridge works">
-              <div class="slides">
-                <figure class="slide is-active" aria-roledescription="slide" aria-label="Step 1 of 3">
-                  <div class="slide-media"><img src="/slides/sign-up.jpg" alt="A student typing on a laptop, with notes next to them." width="1440" height="1080" loading="eager" /></div>
-                  <figcaption><span class="slide-step">Step 1</span><span class="slide-title">You sign up</span><span class="slide-sub">Tell us your field and what you want help with.</span></figcaption>
-                </figure>
-                <figure class="slide" aria-roledescription="slide" aria-label="Step 2 of 3" aria-hidden="true">
-                  <div class="slide-media"><img src="/slides/match.jpg" alt="A handshake between a professional and a young person after an interview." width="1440" height="1080" loading="lazy" /></div>
-                  <figcaption><span class="slide-step">Step 2</span><span class="slide-title">Your mentor helps you in</span><span class="slide-sub">Your mentor prepares you, from your CV to the interview that gets you the place.</span></figcaption>
-                </figure>
-                <figure class="slide" aria-roledescription="slide" aria-label="Step 3 of 3" aria-hidden="true">
-                  <div class="slide-media"><img src="/slides/start.jpg" alt="People working at laptops in a bright office with large windows." width="1440" height="1080" loading="lazy" /></div>
-                  <figcaption><span class="slide-step">Step 3</span><span class="slide-title">You start your internship</span><span class="slide-sub">You join the team, ready for your first day.</span></figcaption>
-                </figure>
-              </div>
-              <div class="slide-controls">
-                <div class="flex gap-2">
-                  <button type="button" class="slide-dot" data-slide="0" aria-label="Show step 1" aria-current="true"></button>
-                  <button type="button" class="slide-dot" data-slide="1" aria-label="Show step 2"></button>
-                  <button type="button" class="slide-dot" data-slide="2" aria-label="Show step 3"></button>
-                </div>
-                <button type="button" class="slide-pause" data-slide-pause aria-label="Pause slideshow">
-                  <svg class="icon-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor" /></svg>
-                  <svg class="icon-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
-                </button>
-              </div>
-            </div>
+            <!-- The team's own photo (real photos win over generated ones). Sources are listed in docs/images.md. -->
+            <picture class="hero-photo"><source type="image/webp" srcset="/slides/match-720.webp 720w, /slides/match-1080.webp 1080w, /slides/match-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/match.jpg" alt="A handshake between an experienced professional and a young person." width="1440" height="1080" loading="eager" fetchpriority="high" decoding="async" /></picture>
           </div>
         </div>
       </section>
 
-      <!-- Pain and strength: grey for the problem, brand colour for what MentorBridge changes -->
-      <section id="help" class="section band" aria-labelledby="change-title">
+      <!-- Pick your page -->
+      <section id="choose" class="section band" aria-labelledby="choose-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="change-title" class="h2">From guessing to knowing</h2>
+            <h2 id="choose-title" class="h2">For students, mentors and companies</h2>
+            <p class="lead">Pick your group to read more and join the waiting list.</p>
           </div>
-          <div class="mt-12 grid gap-5 md:grid-cols-2">
-            <div class="contrast contrast-pain">
-              <p class="contrast-label">Without a mentor</p>
-              <ul>
-                <li><span class="mark" aria-hidden="true">✕</span>20 to 30 applications, few answers</li>
-                <li><span class="mark" aria-hidden="true">✕</span>Rejections that don't say what to improve</li>
-                <li><span class="mark" aria-hidden="true">✕</span>Doubting your own skills</li>
-              </ul>
-              <p class="contrast-source">What most students we spoke to told us.</p>
-            </div>
-            <div class="contrast contrast-gain">
-              <p class="contrast-label">With MentorBridge</p>
-              <ul>
-                <li><span class="mark" aria-hidden="true">✓</span>A professional passes on what they know about your field</li>
-                <li><span class="mark" aria-hidden="true">✓</span>Your CV and interviews show what companies look for</li>
-                <li><span class="mark" aria-hidden="true">✓</span>A better chance of landing your internship</li>
-              </ul>
-              <p class="contrast-result">You apply knowing what works, not guessing.</p>
-              <a href="#signup" class="btn btn-light mt-auto self-start" data-role="student">Find your match</a>
-            </div>
+          <div class="mt-12 grid gap-5 md:grid-cols-3">
+            <!-- Image slots: see scripts/slots.mjs and docs/images.md. The icon shows until a slot has a photo. -->
+            <article class="audience">
+              <!-- @image students-card -->
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 9 9.5-4.5L21.5 9 12 13.5 2.5 9Z" /><path d="M6.5 11v4.5c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3V11" /><path d="M21.5 9v5" /></svg>
+              </span>
+              <h3 class="h3">I'm a student</h3>
+              <p>Get ready for your internship with a mentor who has done the work.</p>
+              <a href="/students/" class="text-link">For students</a>
+            </article>
+            <article class="audience">
+              <!-- @image mentors-card -->
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
+              </span>
+              <h3 class="h3">I want to mentor</h3>
+              <p>Some free time next to your job? Pass on what you know in a few hours a month.</p>
+              <a href="/mentors/" class="text-link">For mentors</a>
+            </article>
+            <article class="audience">
+              <!-- @image organizations-card -->
+              <span class="audience-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5V5.5l8-3 8 3v15" /><path d="M2.5 20.5h19" /><path d="M9 20.5v-4h6v4" /><path d="M8.5 8.5h1M14.5 8.5h1M8.5 12.5h1M14.5 12.5h1" /></svg>
+              </span>
+              <h3 class="h3">I represent a company</h3>
+              <p>Let your retiring staff mentor your interns, so their know-how stays in the company.</p>
+              <a href="/companies/" class="text-link">For companies</a>
+            </article>
           </div>
         </div>
       </section>
 
-      <!-- The platform: mockup + what it does -->
-      <section id="platform" class="section on-dark overflow-hidden" aria-labelledby="platform-title">
-        <div class="wrap grid items-center gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+      <!-- How it works -->
+      <section id="how" class="section on-dark" aria-labelledby="how-title">
+        <div class="wrap grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
           <div class="flex flex-col gap-6">
-            <p class="label-dark">The platform</p>
-            <h2 id="platform-title" class="h2">From your first application to your first day</h2>
-            <p class="lead text-pale">Your plan, your sessions and your mentor in one place.</p>
-            <ul class="features">
-              <li><span class="feature-icon" aria-hidden="true">1</span><div><h3>A plan for your search</h3><p>CV, applications and interviews, step by step.</p></div></li>
-              <li><span class="feature-icon" aria-hidden="true">2</span><div><h3>Sessions and messages</h3><p>With a reminder before each session.</p></div></li>
-              <li><span class="feature-icon" aria-hidden="true">3</span><div><h3>Ready for day one</h3><p>Help with your first weeks once you have a place.</p></div></li>
-            </ul>
+            <h2 id="how-title" class="h2">How MentorBridge works</h2>
+            <p class="lead">We're starting with a waiting list. As soon as we can make good matches, we get in touch.</p>
           </div>
-
-          <!-- Mockup of the student dashboard, built in HTML so it stays sharp -->
-          <figure>
-            <div
-              class="mockup"
-              role="img"
-              aria-label="Preview of the MentorBridge dashboard: a student's plan for finding a software internship with 2 of 4 steps done, the next session with their mentor, and a message from the mentor."
-            >
-              <div class="mockup-bar" aria-hidden="true">
-                <span></span><span></span><span></span>
-                <div class="mockup-url">MentorBridge · Dashboard</div>
-              </div>
-              <div class="mockup-body" aria-hidden="true">
-                <nav class="mockup-nav">
-                  <div class="mockup-logo"><i></i><i></i></div>
-                  <span class="active">Plan</span>
-                  <span>Sessions</span>
-                  <span>Messages</span>
-                  <span>Profile</span>
-                </nav>
-                <div class="mockup-main">
-                  <div class="mockup-panel">
-                    <div class="flex items-start justify-between gap-3">
-                      <div>
-                        <p class="mockup-label">Your plan</p>
-                        <p class="mockup-title">Find a software internship</p>
-                      </div>
-                      <span class="mockup-pill">In progress</span>
-                    </div>
-                    <div class="mockup-progress"><span style="width: 50%"></span></div>
-                    <p class="mockup-small">2 of 4 steps done</p>
-                    <ul class="mockup-list">
-                      <li class="done"><b></b>Update your CV with feedback</li>
-                      <li class="done"><b></b>Pick companies to apply to</li>
-                      <li><b></b>Practise a technical interview</li>
-                      <li><b></b>Send your applications</li>
-                    </ul>
-                  </div>
-                  <div class="mockup-side">
-                    <div class="mockup-panel">
-                      <p class="mockup-label">Next session</p>
-                      <p class="mockup-title">Interview practice</p>
-                      <p class="mockup-small">Thursday with your mentor</p>
-                    </div>
-                    <div class="mockup-panel">
-                      <p class="mockup-label">Message from your mentor</p>
-                      <p class="mockup-message">Your CV is much clearer now. On Thursday we'll practise the questions they usually ask.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <figcaption class="mt-4 text-sm text-pale">Preview of the student dashboard.</figcaption>
-          </figure>
+          <ul class="features">
+            <li><span class="feature-icon" aria-hidden="true">1</span><div><h3>You join the waiting list</h3><p>As a student, a mentor or a company.</p></div></li>
+            <li><span class="feature-icon" aria-hidden="true">2</span><div><h3>We match you by hand</h3><p>Based on sector and when you're available.</p></div></li>
+            <li><span class="feature-icon" aria-hidden="true">3</span><div><h3>Mentor and student meet</h3><p>In short sessions, online or in person, so the student starts their internship ready.</p></div></li>
+          </ul>
         </div>
       </section>
 
@@ -249,309 +139,37 @@
         </div>
       </section>
 
-      <!-- Mentors and host organizations -->
-      <section id="others" class="section band" aria-labelledby="others-title">
-        <div class="wrap">
-          <div class="flex flex-col gap-4">
-            <h2 id="others-title" class="h2">Not a student?</h2>
-          </div>
-          <div class="mt-10 grid gap-5 md:grid-cols-2">
-            <article id="mentors" class="audience">
-              <span class="audience-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5" /><path d="M15.5 4.5h5v4h-3l-2 2v-6Z" /></svg>
-              </span>
-              <h3 class="h3">For mentors</h3>
-              <p>
-                Working in your field with a few hours a month to spare? Help a student find their internship and get
-                ready for it, in short, flexible sessions.
-              </p>
-              <a href="#signup" class="text-link" data-role="mentor">Sign up as a mentor</a>
-            </article>
-            <article id="organizations" class="audience">
-              <span class="audience-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5V5.5l8-3 8 3v15" /><path d="M2.5 20.5h19" /><path d="M9 20.5v-4h6v4" /><path d="M8.5 8.5h1M14.5 8.5h1M8.5 12.5h1M14.5 12.5h1" /></svg>
-              </span>
-              <h3 class="h3">For organizations</h3>
-              <p>
-                Taking on interns? A mentor from your field prepares your intern before day one, so your team keeps its
-                focus.
-              </p>
-              <a href="#signup" class="text-link" data-role="company">Request a free pilot</a>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- FAQ: honest answers to the usual doubts -->
+      <!-- FAQ -->
       <section id="faq" class="section-sm band" aria-labelledby="faq-title">
         <div class="wrap grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <div class="flex flex-col gap-4">
-            <h2 id="faq-title" class="h2">Good to know</h2>
+            <h2 id="faq-title" class="h2">Questions and answers</h2>
             <p class="lead">Something else you want to ask? <a href="#contact" class="font-semibold text-accent underline underline-offset-4">Send us a message</a>.</p>
           </div>
           <div class="faq">
             <details>
-              <summary>Is it really free for students?</summary>
-              <p>Yes. Students never pay. The plan is that organizations that take on interns pay for MentorBridge.</p>
+              <summary>What does it cost?</summary>
+              <p>Nothing. MentorBridge is free for students, mentors and companies during our first version. We'll decide on a payment model later, and we'll tell you before anything changes.</p>
             </details>
             <details>
               <summary>Who are the mentors?</summary>
-              <p>Experienced professionals from your field who have some free time next to their job. We match you by hand, based on your field and what you want help with.</p>
+              <p>Experienced professionals who have some free time next to their work and want to pass on what they know.</p>
             </details>
             <details>
-              <summary>How much time does it take?</summary>
-              <p>A few short sessions with your mentor, online or in person, planned around your schedule.</p>
-            </details>
-            <details>
-              <summary>Can you guarantee me an internship?</summary>
-              <p>No. Nobody can promise that. Your mentor helps you understand what to improve, apply with more confidence and prepare well, which gives you a better chance.</p>
+              <summary>Where does MentorBridge work?</summary>
+              <p>We start in the Netherlands and Belgium.</p>
             </details>
             <details>
               <summary>What happens with my details?</summary>
-              <p>We only use them to contact you about MentorBridge, and we delete them when the project ends. MentorBridge is a student project at The Hague University of Applied Sciences.</p>
+              <p>We only use them to contact you about MentorBridge, and we delete them when the project ends. Read the <a href="/privacy/" class="underline underline-offset-4">privacy statement</a>.</p>
             </details>
           </div>
         </div>
       </section>
 
-      <!-- Sign-up: students first; mentors and organizations can switch role -->
-      <section id="signup" class="section on-dark" aria-labelledby="pilot-title">
-        <div class="wrap grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-          <div class="flex flex-col gap-5 lg:pt-6">
-            <h2 id="pilot-title" class="h2" data-copy="heading">Find your match</h2>
-            <p class="lead" data-copy="text">
-              Leave your details and we'll get in touch when we can match you with a mentor from your field. Free for
-              students.
-            </p>
-            <div class="next-steps">
-              <p class="font-bold">What happens next</p>
-              <ol>
-                <li><span>1</span>You leave your email and your field.</li>
-                <li><span>2</span>We look for a good match in your field.</li>
-                <li><span>3</span>We get in touch by email.</li>
-              </ol>
-            </div>
-          </div>
-
-          <div class="form-card" id="pilot-panel">
-            <form id="pilot-form" class="flex flex-col gap-5" novalidate>
-              <fieldset class="role-picker">
-                <legend>I'm signing up as</legend>
-                <div class="role-options">
-                  <label><input type="radio" name="role" value="student" checked /><span>Student</span></label>
-                  <label><input type="radio" name="role" value="mentor" /><span>Mentor</span></label>
-                  <label><input type="radio" name="role" value="company" /><span>Organization</span></label>
-                </div>
-              </fieldset>
-
-              <div class="field">
-                <label for="email" data-copy="emailLabel">Email</label>
-                <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" />
-              </div>
-
-              <div class="field" data-for-role="student mentor">
-                <label for="field" data-copy="fieldLabel">Field of study</label>
-                <input id="field" name="field" type="text" required maxlength="200" />
-              </div>
-
-              <div class="flex flex-col gap-5" data-for-role="company" hidden>
-                <div class="field">
-                  <label for="company">Organization name</label>
-                  <input id="company" name="company" type="text" required maxlength="200" autocomplete="organization" disabled />
-                </div>
-                <div class="field">
-                  <label for="interns_per_year">Interns per year</label>
-                  <select id="interns_per_year" name="interns_per_year" required disabled>
-                    <option value="" disabled selected>Choose an option</option>
-                    <option value="1-2">1–2</option>
-                    <option value="3-5">3–5</option>
-                    <option value="6-10">6–10</option>
-                    <option value="10+">More than 10</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Honeypot: hidden from people, bots fill it in. -->
-              <div class="honeypot" aria-hidden="true">
-                <label for="website">Leave this field empty</label>
-                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-              </div>
-
-              <p id="form-error" class="form-error" role="alert" hidden></p>
-
-              <button type="submit" class="btn btn-primary btn-lg w-full" data-copy="button">Sign up as a student</button>
-              <p class="text-sm text-muted">
-                We only use your details to contact you about MentorBridge, and delete them when the project ends.
-              </p>
-            </form>
-
-            <!-- Step 2 for students: four optional questions -->
-            <form id="answers-form" class="flex flex-col gap-6" tabindex="-1" novalidate hidden>
-              <div class="flex flex-col gap-1">
-                <p class="text-sm font-bold text-accent">You're signed up</p>
-                <h3 class="h3">Help us match you better</h3>
-                <p class="text-muted">Four quick questions. All of them are optional.</p>
-              </div>
-
-              <fieldset class="question">
-                <legend>1. Do you already have an internship place?</legend>
-                <div class="choices">
-                  <label><input type="radio" name="has_placement" value="yes" /><span>Yes</span></label>
-                  <label><input type="radio" name="has_placement" value="no" /><span>No, still looking</span></label>
-                </div>
-              </fieldset>
-
-              <fieldset class="question">
-                <legend>2. How many applications have you sent so far?</legend>
-                <div class="choices">
-                  <label><input type="radio" name="applications_sent" value="0" /><span>None yet</span></label>
-                  <label><input type="radio" name="applications_sent" value="1-10" /><span>1–10</span></label>
-                  <label><input type="radio" name="applications_sent" value="11-30" /><span>11–30</span></label>
-                  <label><input type="radio" name="applications_sent" value="30+" /><span>More than 30</span></label>
-                </div>
-              </fieldset>
-
-              <fieldset class="question">
-                <legend>3. What would help you most? <span class="font-normal text-muted">Choose any.</span></legend>
-                <div class="choices">
-                  <label><input type="checkbox" name="help_wanted" value="cv" /><span>CV and applications</span></label>
-                  <label><input type="checkbox" name="help_wanted" value="interviews" /><span>Interview practice</span></label>
-                  <label><input type="checkbox" name="help_wanted" value="insight" /><span>What the work is really like</span></label>
-                  <label><input type="checkbox" name="help_wanted" value="introductions" /><span>Introductions to companies</span></label>
-                </div>
-              </fieldset>
-
-              <fieldset class="question">
-                <legend>4. When does your internship start, or when do you need one by?</legend>
-                <div class="choices">
-                  <label><input type="radio" name="needed_by" value="0-3" /><span>Within 3 months</span></label>
-                  <label><input type="radio" name="needed_by" value="3-6" /><span>In 3 to 6 months</span></label>
-                  <label><input type="radio" name="needed_by" value="later" /><span>Later</span></label>
-                </div>
-              </fieldset>
-
-              <p id="answers-error" class="form-error" role="alert" hidden></p>
-
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <button type="submit" class="btn btn-primary">Send answers</button>
-                <button type="button" id="answers-skip" class="btn text-muted hover:text-ink">Skip</button>
-              </div>
-            </form>
-
-            <div id="pilot-thanks" class="flex flex-col gap-3" tabindex="-1" hidden>
-              <h3 class="h3">Thank you</h3>
-              <p>We've received your details and will get in touch.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Contact form -->
-      <section id="contact" class="section-sm bg-accent-tint" aria-labelledby="contact-title">
-        <div class="wrap grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-          <div class="flex flex-col gap-4">
-            <h2 id="contact-title" class="h2">Questions? Send us a message</h2>
-            <p class="lead">We usually reply within a few days.</p>
-          </div>
-
-          <div class="form-card">
-            <form id="contact-form" class="flex flex-col gap-5" novalidate>
-              <div class="field">
-                <label for="contact-name">Name</label>
-                <input id="contact-name" name="name" type="text" required maxlength="100" autocomplete="name" />
-              </div>
-              <div class="field">
-                <label for="contact-email">Email</label>
-                <input id="contact-email" name="email" type="email" required maxlength="254" autocomplete="email" />
-              </div>
-              <div class="field">
-                <label for="contact-message">Message</label>
-                <textarea id="contact-message" name="message" required maxlength="2000" rows="5"></textarea>
-              </div>
-              <!-- Honeypot: hidden from people, bots fill it in. -->
-              <div class="honeypot" aria-hidden="true">
-                <label for="contact-website">Leave this field empty</label>
-                <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
-              </div>
-              <p id="contact-error" class="form-error" role="alert" hidden></p>
-              <button type="submit" class="btn btn-primary btn-lg w-full">Send message</button>
-            </form>
-            <div id="contact-thanks" class="flex flex-col gap-3" tabindex="-1" hidden>
-              <h3 class="h3">Thank you</h3>
-              <p>We've received your message and will reply by email.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- @include contact -->
     </main>
 
-    <footer class="site-footer on-dark">
-      <div class="wrap">
-        <div class="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:gap-8">
-          <div class="flex flex-col items-start gap-5">
-            <a href="#top" class="logo-light" aria-label="MentorBridge, back to top">
-              <img src="/icon.png" alt="" width="512" height="512" />
-              <span>Mentor<span class="text-[#E8A9A2]">Bridge</span></span>
-            </a>
-            <p class="max-w-[30ch] text-pale">Find your internship with a mentor from your field.</p>
-            <ul class="socials" aria-label="MentorBridge on social media">
-              <li>
-                <a href="https://www.linkedin.com/company/146928627/" target="_blank" rel="noopener" aria-label="MentorBridge on LinkedIn">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" /></svg>
-                </a>
-              </li>
-              <li>
-                <a href="https://www.instagram.com/mentorbridgenl/" target="_blank" rel="noopener" aria-label="MentorBridge on Instagram">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" /></svg>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <nav aria-label="MentorBridge" class="footer-col">
-            <h2>MentorBridge</h2>
-            <a href="#help">What changes</a>
-            <a href="#team">Who we are</a>
-            <a href="#platform">The platform</a>
-            <a href="#faq">FAQ</a>
-          </nav>
-
-          <nav aria-label="Get involved" class="footer-col">
-            <h2>Get involved</h2>
-            <a href="#signup" data-role="student">Sign up as a student</a>
-            <a href="#signup" data-role="mentor">Become a mentor</a>
-            <a href="#signup" data-role="company">Request a free pilot</a>
-          </nav>
-
-          <div class="footer-col">
-            <h2>Contact</h2>
-            <a href="#contact">Send us a message</a>
-            <p>The Hague University of Applied Sciences</p>
-          </div>
-        </div>
-
-        <div class="flex flex-col gap-2 border-t border-white/10 py-6 text-sm text-pale sm:flex-row sm:justify-between">
-          <p>© 2026 MentorBridge. A student startup project at The Hague University of Applied Sciences.</p>
-          <p>
-            We only use your details to contact you, and delete them when the project ends.
-            <button type="button" class="cookie-settings" data-cookie-settings hidden>Cookie settings</button>
-          </p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Cookie consent for Google Tag Manager. Only shown when VITE_GTM_ID is set. -->
-    <div class="cookie-bar" id="cookie-bar" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text" hidden>
-      <div class="flex flex-col gap-1">
-        <p id="cookie-title" class="font-bold">Analytics cookies</p>
-        <p id="cookie-text" class="text-sm text-muted">
-          May we use Google Analytics cookies to see how visitors use this page? We don't use advertising cookies.
-          Without them, we only count visits anonymously.
-        </p>
-      </div>
-      <div class="flex shrink-0 gap-2">
-        <button type="button" class="btn btn-ghost btn-sm" data-consent="denied">Decline</button>
-        <button type="button" class="btn btn-primary btn-sm" data-consent="granted">Accept</button>
-      </div>
-    </div>
+    <!-- @include footer -->
   </body>
 </html>

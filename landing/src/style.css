@@ -1,33 +1,70 @@
 @import 'tailwindcss';
 
 /*
-  MentorBridge landing page.
+  MentorBridge landing pages.
 
-  Colours match the logo: deep wine for text and dark sections, wine red for
-  buttons and links, pale rose surfaces.
-  Contrast (WCAG AA needs 4.5:1 for normal text, 3:1 for large text), checked with a script:
-    ink #2E1015 on white 17.5 · on paper 16.3 · on accent-tint 15.1
-    white on ink / band 17.5 · pale on band 14.2 · pale on head 12.7
-    accent #7B1E2B on white 10.2 · white on cta 10.2 · on cta-hover 13.1
-    muted #5E4B4D on white 8.1 · on paper 7.6 · on accent-tint 7.0
+  Beige first: cream page, header and footer, cream cards. Red for boxes (rounded panels on the beige
+  page), buttons, links and accents. Gold only for small numbers and labels inside red boxes.
+  Contrast (WCAG AA: 4.5:1 for normal text, 3:1 for large text and UI boundaries), measured with a script:
+    ink #2E1015       on cream 15.7 · card 16.8 · sunk 14.4
+    accent #7B1E2B    on cream 9.2 · card 9.8 · sunk 8.4 (the red box itself is 9.2 against the page)
+    muted #5E4B4D     on cream 7.3 · card 7.8 · sunk 6.7
+    on-dark #FFF6ED   on the red boxes 9.5-12.3 · on the red buttons 9.5
+    pale #F3E4E2      on the red boxes 8.2-10.6
+    gold #E1B385      on the red boxes 5.3-6.9 · ink on gold 9.2
+                      Never on light surfaces: 1.6-1.8.
+    rose #E8A9A2      decorative only (headline underline, dots)
+    Field and choice borders ink/50: 3.4 on card, 3.2 against the cream page.
+    Surfaces: card on cream 1.07, sunk on cream 1.10, so cards keep a border or shadow.
 */
+
+/* ---------- Fonts ----------
+  Self-hosted (no requests to Google), Latin subset, licences in public/fonts/OFL-*.txt.
+  Barlow for body text and buttons, Fraunces 600 for headings (optical sizing on).
+  The fallback faces stretch Arial and Georgia Bold to the same width and height,
+  measured in Chrome, so text doesn't jump when the real font arrives. */
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/barlow-v13-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/barlow-v13-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/barlow-v13-latin-600.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/barlow-v13-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Barlow'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/barlow-v13-latin-800.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/fraunces-v38-latin-opsz-600.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: 'Barlow Fallback'; font-weight: 400 500; src: local('Arial'), local('ArialMT'); size-adjust: 96.86%; ascent-override: 103.24%; descent-override: 20.65%; line-gap-override: 0%; }
+@font-face { font-family: 'Barlow Fallback'; font-weight: 600 800; src: local('Arial Bold'), local('Arial-BoldMT'); size-adjust: 92.53%; ascent-override: 108.07%; descent-override: 21.61%; line-gap-override: 0%; }
+/* Measured at 40 px: the H1 on phones and the H2 on desktop. */
+@font-face { font-family: 'Fraunces Fallback'; font-weight: 600; src: local('Georgia Bold'), local('Georgia-Bold'); size-adjust: 90.56%; ascent-override: 107.66%; descent-override: 27.60%; line-gap-override: 0%; }
+
 @theme {
   --color-ink: #2E1015;
   --color-accent: #7B1E2B;
   --color-muted: #5E4B4D;
   --color-pale: #F3E4E2;
-  --color-paper: #FAF6F5;
-  --color-accent-tint: #F7ECEA;
   --color-band: #2E1015;
   --color-head: #3D0A14;
   --color-cta: #7B1E2B;
   --color-cta-hover: #5E1520;
   --color-rose: #E8A9A2;
 
+  /* Surfaces */
+  --color-cream: #FAF2E5;
+  --color-card: #FEFAF1;
+  --color-sunk: #F4E7D6;
+  /* Red boxes: gradient from dark-from to dark-to (the brand red) */
+  --color-dark-from: #7B1E2B;
+  --color-dark-to: #5E1520;
+  --color-on-dark: #FFF6ED;
+  --color-gold: #E1B385;
+
+  /* Only used inside the app preview on the student page, which shows the platform as it looks today */
+  --color-paper: #FAF6F5;
+  --color-accent-tint: #F7ECEA;
+
   --shadow-card: 0 1px 2px rgb(46 16 21 / 0.05), 0 6px 20px -8px rgb(46 16 21 / 0.1);
   --shadow-lift: 0 2px 4px rgb(46 16 21 / 0.05), 0 24px 48px -20px rgb(46 16 21 / 0.22);
 
-  --font-sans: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Barlow', 'Barlow Fallback', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Fraunces', 'Fraunces Fallback', Georgia, 'Times New Roman', serif;
 }
 
 /* ---------- Base ---------- */
@@ -35,19 +72,20 @@
   html {
     --header-h: 5.5rem;
     scroll-padding-top: calc(var(--header-h) + 1.5rem);
-    background-color: var(--color-band); /* overscroll below the footer */
+    background-color: var(--color-sunk); /* overscroll below the footer */
   }
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
   }
 
-  body { @apply bg-white font-sans text-lg leading-relaxed text-ink antialiased; }
+  body { @apply bg-cream font-sans text-lg leading-relaxed text-ink antialiased; }
   h1, h2, h3 { text-wrap: balance; }
+  /* Headings in Fraunces: only weight 600 is loaded, so never fake a bolder one. */
+  .hero-title, .h2, .h3, .features h3, .prose-page h2, .logo, .logo-light { font-synthesis: none; }
   p { text-wrap: pretty; }
 
   :focus-visible { @apply rounded-sm outline-3 outline-offset-3 outline-ink; }
-  .on-dark :focus-visible,
-  .site-header :focus-visible,
+  .on-dark :focus-visible { @apply outline-on-dark; }
   .slideshow :focus-visible { @apply outline-white; }
   .on-dark .form-card :focus-visible { @apply outline-ink; }
 }
@@ -58,31 +96,47 @@
   .section { @apply py-20 lg:py-28; }
   .section-sm { @apply py-16 lg:py-20; }
   .section-head { @apply mx-auto flex max-w-2xl flex-col items-center gap-4 text-center; }
-  .band { @apply border-y border-ink/[0.06] bg-paper; }
-  .on-dark { @apply bg-band text-white; }
+  .band { @apply border-y border-ink/[0.06] bg-cream; }
+  .on-dark {
+    @apply bg-dark-to text-on-dark;
+    background-image: linear-gradient(135deg, var(--color-dark-from), var(--color-dark-to));
+  }
+  /* A dark section is a red box on the beige page, not a full-width band:
+     the section stays beige and its content (.wrap) becomes the box. */
+  .section.on-dark { @apply bg-transparent bg-none py-10 lg:py-14; }
+  .section.on-dark > .wrap {
+    @apply mx-auto w-[calc(100%-2rem)] max-w-[76rem] rounded-[2rem] px-6 py-14 shadow-lift sm:w-[calc(100%-4rem)] sm:px-10 lg:px-14 lg:py-20;
+    background-color: var(--color-dark-to);
+    background-image: linear-gradient(135deg, var(--color-dark-from), var(--color-dark-to));
+  }
+  /* The waiting list box is a darker red: on-dark text 12.3-15.7, gold 6.9-8.8. */
+  #signup.section.on-dark > .wrap {
+    background-color: var(--color-head);
+    background-image: linear-gradient(135deg, var(--color-cta-hover), var(--color-head));
+  }
 
   .skip-link {
-    @apply absolute top-4 left-4 z-50 -translate-y-24 rounded-lg bg-ink px-5 py-3 font-semibold text-white focus:translate-y-0;
+    @apply absolute top-4 left-4 z-50 -translate-y-24 rounded-lg bg-ink px-5 py-3 font-semibold text-on-dark focus:translate-y-0;
   }
 
   /* ---------- Type ---------- */
-  .h2 { @apply text-[clamp(2rem,4vw,3rem)] leading-[1.08] font-extrabold tracking-[-0.025em]; }
-  .h3 { @apply text-xl leading-snug font-bold tracking-[-0.01em]; }
+  .h2 { @apply font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] font-semibold tracking-[-0.015em]; }
+  .h3 { @apply font-serif text-xl leading-snug font-semibold; }
   .lead { @apply max-w-[46ch] text-xl leading-relaxed text-muted; }
   .on-dark .lead { @apply text-pale; }
-  .on-dark .h2 { @apply text-white; }
-  .label-dark { @apply text-sm font-bold tracking-[0.12em] text-rose uppercase; }
+  .on-dark .h2 { @apply text-on-dark; }
+  .label-dark { @apply text-sm font-bold tracking-[0.12em] text-gold uppercase; }
 
   /* ---------- Buttons and links ---------- */
   .btn {
     @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-6 text-base font-bold whitespace-nowrap no-underline;
     @apply transition-colors duration-200 motion-reduce:transition-none;
   }
-  .btn-primary { @apply bg-cta text-white shadow-sm hover:bg-cta-hover disabled:cursor-progress disabled:opacity-70; }
-  .btn-light { @apply bg-white text-ink hover:bg-pale; }
-  .btn-ghost { @apply border border-ink/15 bg-white text-ink hover:border-ink/40 hover:bg-accent-tint; }
-  .btn-header { @apply bg-white text-accent shadow-sm hover:bg-pale; }
-  .btn-login { @apply border border-white/50 text-white hover:border-white hover:bg-white/10; }
+  .btn-primary { @apply bg-cta text-on-dark shadow-sm hover:bg-cta-hover disabled:cursor-progress disabled:opacity-70; }
+  .btn-light { @apply bg-card text-ink hover:bg-sunk; }
+  .btn-ghost { @apply border border-ink/30 bg-card text-ink hover:border-ink/60 hover:bg-sunk; }
+  .btn-header { @apply bg-cta text-on-dark shadow-sm hover:bg-cta-hover; }
+  .btn-login { @apply border border-ink/30 text-ink hover:border-ink hover:bg-sunk; }
   .btn-sm { @apply min-h-11 px-4 text-[15px]; }
   .btn-lg { @apply min-h-14 px-8 text-lg; }
   .btn-xl { @apply min-h-15 px-9 text-lg; }
@@ -92,68 +146,82 @@
   }
 
   /* ---------- Logo ---------- */
-  .logo { @apply flex items-center gap-3.5 text-2xl font-extrabold tracking-[-0.01em] text-white no-underline sm:text-[1.7rem]; }
-  .logo img { @apply size-12 rounded-2xl ring-1 ring-white/15 sm:size-14; }
-  .logo-accent { @apply text-rose; }
-  .logo-light { @apply flex items-center gap-3 text-2xl font-extrabold tracking-[-0.01em] text-white no-underline; }
+  /* The wordmark uses the heading font (Fraunces 600), like the page headings. */
+  .logo { @apply flex items-center gap-3.5 font-serif text-[1.375rem] font-semibold tracking-[-0.01em] text-ink no-underline sm:text-[1.7rem]; }
+  .logo img { @apply size-12 rounded-2xl sm:size-14; }
+  .logo-accent { @apply text-accent; }
+  .logo-light { @apply flex items-center gap-3 font-serif text-2xl font-semibold tracking-[-0.01em] text-ink no-underline; }
   .logo-light img { @apply size-12 rounded-xl; }
 
   /* ---------- Header ---------- */
   /* Fixed height in every state, so scrolling never shifts the page. */
   .site-header {
-    @apply sticky top-0 z-40 bg-head text-white transition-shadow duration-300 motion-reduce:transition-none;
+    @apply sticky top-0 z-40 border-b border-ink/10 bg-cream text-ink transition-shadow duration-300 motion-reduce:transition-none;
   }
-  .site-header.is-scrolled { @apply shadow-[0_8px_28px_-10px_rgb(46_16_21/0.55)]; }
+  .site-header.is-scrolled { @apply shadow-[0_8px_24px_-12px_rgb(46_16_21/0.25)]; }
   .header-bar { @apply flex h-(--header-h) items-center justify-between gap-4; }
   .header-left { @apply flex min-w-0 items-center gap-6; }
   .header-right { @apply flex shrink-0 items-center gap-2 sm:gap-3; }
   .header-bar .logo > span { @apply max-[400px]:sr-only; } /* icon only on very small screens */
   .site-header .btn-sm { @apply max-sm:px-3 max-sm:text-sm; }
   .site-header .btn-login { @apply max-sm:hidden; }
+  .label-short { @apply sm:hidden; }
+  .label-long { @apply max-sm:hidden; }
 
-  .site-nav { @apply hidden items-center gap-0.5 border-l border-white/15 pl-6 xl:flex; }
+  .site-nav { @apply hidden items-center gap-0.5 border-l border-ink/10 pl-6 xl:flex; }
   .site-nav a {
-    @apply relative rounded-lg px-3 py-2 text-[15px] font-semibold whitespace-nowrap text-pale no-underline transition-colors hover:text-white;
+    @apply relative rounded-lg px-3 py-2 text-[15px] font-semibold whitespace-nowrap text-muted no-underline transition-colors hover:text-ink;
   }
   .site-nav a::after {
     content: '';
-    @apply absolute right-3 bottom-1 left-3 h-0.5 origin-left scale-x-0 rounded-full bg-rose transition-transform duration-200 motion-reduce:transition-none;
+    @apply absolute right-3 bottom-1 left-3 h-0.5 origin-left scale-x-0 rounded-full bg-accent transition-transform duration-200 motion-reduce:transition-none;
   }
   .site-nav a:hover::after,
   .site-nav a[aria-current]::after { @apply scale-x-100; }
-  .site-nav a[aria-current] { @apply text-white; }
+  .site-nav a[aria-current] { @apply text-ink; }
 
-  .lang-switch { @apply hidden items-center gap-0.5 rounded-xl bg-white/10 p-1 sm:flex; }
+  .lang-switch { @apply hidden items-center gap-0.5 rounded-xl bg-sunk p-1 sm:flex; }
   .lang-switch a {
-    @apply grid min-h-8 min-w-9 place-items-center rounded-lg px-2 text-[13px] font-bold text-pale no-underline transition-colors hover:text-white;
+    @apply grid min-h-8 min-w-9 place-items-center rounded-lg px-2 text-[13px] font-bold text-muted no-underline transition-colors hover:text-ink;
   }
-  .lang-switch a[aria-current='page'] { @apply bg-white text-ink; }
+  .lang-switch a[aria-current='page'] { @apply bg-cta text-on-dark; }
 
-  .menu-button { @apply grid size-11 cursor-pointer place-items-center rounded-xl text-white hover:bg-white/10 lg:hidden; }
+  .menu-button { @apply grid size-11 cursor-pointer place-items-center rounded-xl text-ink hover:bg-sunk lg:hidden; }
   .menu-button .icon-close,
   .menu-button[aria-expanded='true'] .icon-open { @apply hidden; }
   .menu-button[aria-expanded='true'] .icon-close { @apply block; }
 
-  .mobile-menu { @apply border-t border-white/10 bg-head lg:hidden; }
+  .mobile-menu { @apply border-t border-ink/10 bg-cream lg:hidden; }
   .mobile-links { @apply flex flex-col py-3; }
-  .mobile-links > a { @apply flex min-h-12 items-center border-b border-white/10 text-lg font-semibold text-white no-underline; }
-  .mobile-links > a[aria-current] { @apply text-rose; }
+  .mobile-links > a { @apply flex min-h-12 items-center border-b border-ink/10 text-lg font-semibold text-ink no-underline; }
+  .mobile-links > a[aria-current] { @apply text-accent; }
   .lang-switch-menu { @apply mt-4 flex self-start; }
 
   /* ---------- Hero ---------- */
-  .hero { @apply bg-white; }
+  .hero { @apply bg-cream; }
   .hero-wrap { @apply mx-auto w-full max-w-7xl px-4 pt-10 pb-16 sm:px-8 sm:pt-14 lg:pt-20 lg:pb-24; }
   .hero-card { @apply grid items-center gap-12 lg:grid-cols-[0.9fr_1.3fr] lg:gap-14; }
   .hero-copy { @apply flex flex-col items-start gap-6; }
   .hero-label { @apply text-[15px] font-bold text-accent; }
-  .hero-title { @apply max-w-[14ch] text-[clamp(2.5rem,5.6vw,4.6rem)] leading-[1.03] font-extrabold tracking-[-0.035em]; }
+  .hero-title { @apply max-w-[14ch] font-serif text-[clamp(2.5rem,5.6vw,4.6rem)] leading-[1.05] font-semibold tracking-[-0.02em]; }
   .underline-bridge { @apply underline decoration-rose decoration-[0.12em] underline-offset-[0.14em]; }
   .hero-lead { @apply max-w-[46ch] text-lg leading-relaxed text-muted sm:text-xl; }
   .hero-points { @apply flex flex-wrap gap-x-5 gap-y-1 text-[15px] font-medium text-muted; }
   .hero-points li { @apply flex items-center gap-2; }
   .hero-points li::before { content: ''; @apply size-1.5 shrink-0 rounded-full bg-rose; }
 
+  /* Single hero photo (front, mentor and organization pages). A <picture>, so it needs display: block. */
+  .hero-photo { @apply block overflow-hidden rounded-[2rem] bg-sunk shadow-lift; }
+  .hero-photo img { @apply aspect-4/3 h-auto w-full object-cover; }
+  .slide-media picture { @apply block; }
+
+  /* Image slots (scripts/slots.mjs): a photo on top of a card, or a sunk placeholder box until there is one. */
+  .card-media { @apply mb-3 block overflow-hidden rounded-2xl bg-sunk; }
+  .card-media img { @apply aspect-4/3 h-auto w-full object-cover; }
+  picture.card-media + .audience-icon { @apply hidden; }
+
   /* ---------- Hero slideshow: three photos, cross-fade, 4 s each ---------- */
+  /* White stays here: it sits on the photos. */
   .slideshow { @apply relative w-full overflow-hidden rounded-[2rem] bg-black text-white shadow-lift; }
   .slides { @apply grid; }
   .slide { @apply invisible relative col-start-1 row-start-1 opacity-0 transition-[opacity,visibility] duration-700 ease-out; }
@@ -184,22 +252,22 @@
   .contrast li { @apply flex items-start gap-3; }
   .contrast .mark { @apply mt-0.5 grid size-7 shrink-0 place-items-center rounded-full text-sm font-bold; }
   .contrast-label { @apply text-sm font-bold tracking-[0.12em] uppercase; }
-  .contrast-pain { @apply border border-ink/10 bg-white text-muted; }
+  .contrast-pain { @apply border border-ink/10 bg-card text-muted; }
   .contrast-pain .mark { @apply bg-ink/[0.07]; }
   .contrast-source { @apply mt-auto text-sm; }
-  .contrast-gain { @apply bg-cta text-white shadow-lift; }
+  .contrast-gain { @apply bg-cta text-on-dark shadow-lift; }
   .contrast-gain .contrast-label { @apply text-pale; }
-  .contrast-gain .mark { @apply bg-white text-cta; }
+  .contrast-gain .mark { @apply bg-on-dark text-cta; }
   .contrast-result { @apply text-lg font-bold; }
 
   /* ---------- Platform ---------- */
   .features { @apply mt-2 flex flex-col gap-5; }
   .features li { @apply flex gap-4; }
-  .features h3 { @apply font-bold; }
+  .features h3 { @apply font-serif text-xl font-semibold; }
   .features p { @apply text-pale; }
-  .feature-icon { @apply grid size-9 shrink-0 place-items-center rounded-full bg-white/10 font-bold text-white; }
+  .feature-icon { @apply grid size-9 shrink-0 place-items-center rounded-full bg-on-dark/10 font-bold text-gold; }
 
-  /* Dashboard preview, built in HTML so it stays sharp */
+  /* Dashboard preview, built in HTML so it stays sharp. Keeps the platform's own colours. */
   .mockup { @apply overflow-hidden rounded-2xl bg-white text-ink shadow-2xl shadow-black/40 ring-1 ring-white/10; }
   .mockup-bar { @apply flex items-center gap-1.5 bg-pale px-4 py-3; }
   .mockup-bar > span { @apply size-3 rounded-full bg-ink/25; }
@@ -230,12 +298,12 @@
   /* ---------- Team ---------- */
   .team { @apply grid grid-cols-2 gap-6 text-center sm:grid-cols-4; }
   .team li { @apply flex flex-col items-center gap-3; }
-  .avatar { @apply grid size-24 place-items-center rounded-full bg-cta text-2xl font-extrabold tracking-wide text-white ring-4 ring-white; }
+  .avatar { @apply grid size-24 place-items-center rounded-full bg-cta text-2xl font-extrabold tracking-wide text-on-dark ring-4 ring-cream; }
 
-  /* ---------- Mentors and organizations ---------- */
-  .audience { @apply flex min-h-64 flex-col gap-3 rounded-3xl border border-ink/[0.08] bg-white p-8 shadow-card sm:p-10; }
+  /* ---------- Audience cards ---------- */
+  .audience { @apply flex min-h-64 flex-col gap-3 rounded-3xl border border-ink/[0.08] bg-card p-8 shadow-card sm:p-10; }
   .audience p { @apply max-w-[48ch] text-muted; }
-  .audience-icon { @apply mb-3 grid size-12 place-items-center rounded-2xl bg-accent-tint text-accent; }
+  .audience-icon { @apply mb-3 grid size-12 place-items-center rounded-2xl bg-sunk text-accent; }
 
   /* ---------- FAQ ---------- */
   .faq { @apply divide-y divide-ink/10 border-y border-ink/10; }
@@ -249,61 +317,64 @@
   .faq summary:hover { @apply text-accent; }
   .faq details p { @apply max-w-[60ch] pb-6 text-muted; }
 
-  /* ---------- Sign-up (dark band) ---------- */
-  .next-steps { @apply mt-4 flex flex-col gap-4 rounded-2xl border border-white/15 bg-white/5 p-6; }
+  /* ---------- Sign-up (dark section) ---------- */
+  .next-steps { @apply mt-4 flex flex-col gap-4 rounded-2xl border border-on-dark/15 bg-on-dark/5 p-6; }
   .next-steps ol { @apply flex flex-col gap-3; }
   .next-steps li { @apply flex items-center gap-3 text-pale; }
-  .next-steps span { @apply grid size-7 shrink-0 place-items-center rounded-full bg-white text-sm font-bold text-ink; }
+  .next-steps span { @apply grid size-7 shrink-0 place-items-center rounded-full bg-gold text-sm font-bold text-ink; }
 
   /* ---------- Forms ---------- */
-  .form-card { @apply rounded-3xl border border-ink/[0.06] bg-white p-7 text-ink shadow-lift sm:p-9; }
+  .form-card { @apply rounded-3xl border border-ink/[0.06] bg-card p-7 text-ink shadow-lift sm:p-9; }
   .field { @apply flex flex-col gap-2; }
   .field label { @apply font-semibold; }
   .field input,
   .field select,
   .field textarea {
-    @apply min-h-12 w-full rounded-xl border border-ink/30 bg-white px-4 text-lg text-ink;
+    @apply min-h-12 w-full rounded-xl border border-ink/50 bg-card px-4 text-lg text-ink;
     @apply transition-colors focus:border-accent focus:ring-4 focus:ring-accent/15 focus:outline-none;
   }
   .field textarea { @apply min-h-32 py-3 leading-relaxed; }
-
-  .role-picker legend { @apply mb-2 font-semibold; }
-  .role-options { @apply grid grid-cols-3 gap-1 rounded-xl bg-paper p-1; }
-  .role-options label { @apply relative; }
-  .role-options input { @apply absolute inset-0 cursor-pointer opacity-0; }
-  .role-options span { @apply flex min-h-11 items-center justify-center rounded-lg px-2 text-[15px] font-semibold text-muted transition-colors; }
-  .role-options input:checked + span { @apply bg-white text-ink shadow-sm; }
-  .role-options input:focus-visible + span { @apply outline-3 outline-offset-2 outline-ink; }
 
   .question legend { @apply mb-3 font-semibold; }
   .choices { @apply flex flex-wrap gap-2; }
   .choices label { @apply relative; }
   .choices input { @apply absolute inset-0 cursor-pointer opacity-0; }
-  .choices span { @apply flex min-h-11 items-center rounded-xl border border-ink/30 bg-white px-4 text-[15px] font-semibold text-ink transition-colors; }
-  .choices input:hover + span { @apply border-ink/60; }
-  .choices input:checked + span { @apply border-ink bg-ink text-white; }
+  .choices span { @apply flex min-h-11 items-center rounded-xl border border-ink/50 bg-card px-4 text-[15px] font-semibold text-ink transition-colors; }
+  .choices input:hover + span { @apply border-ink/80; }
+  .choices input:checked + span { @apply border-ink bg-ink text-on-dark; }
   .choices input:focus-visible + span { @apply outline-3 outline-offset-2 outline-accent; }
+
+  .optional { @apply font-normal text-muted; }
+  .consent { @apply flex items-start gap-3 text-[15px] leading-snug; }
+  .consent input { @apply mt-0.5 size-5 shrink-0 cursor-pointer accent-cta; }
+  .consent a { @apply font-semibold underline underline-offset-4; }
 
   .form-error { @apply rounded-xl bg-pale px-4 py-3 font-semibold; }
   .honeypot { @apply absolute left-[-9999px] h-px w-px overflow-hidden; }
 
+  /* ---------- Text pages (privacy statement) ---------- */
+  .prose-page { @apply flex max-w-3xl flex-col gap-4; }
+  .prose-page h2 { @apply mt-6 font-serif text-2xl font-semibold; }
+  .prose-page ul { @apply flex list-disc flex-col gap-2 pl-6; }
+  .prose-page a { @apply font-semibold text-accent underline underline-offset-4; }
+
   /* ---------- Footer ---------- */
-  .site-footer { @apply text-[15px]; }
+  .site-footer { @apply border-t border-ink/10 bg-sunk text-[15px] text-ink; }
   .footer-col { @apply flex flex-col items-start gap-3; }
-  .footer-col h2 { @apply mb-1 text-sm font-bold tracking-[0.12em] text-white uppercase; }
+  .footer-col h2 { @apply mb-1 text-sm font-bold tracking-[0.12em] text-ink uppercase; }
   .footer-col a,
-  .footer-col p { @apply text-pale; }
-  .footer-col a { @apply no-underline hover:text-white hover:underline hover:underline-offset-4; }
+  .footer-col p { @apply text-muted; }
+  .footer-col a { @apply no-underline hover:text-accent hover:underline hover:underline-offset-4; }
   .socials { @apply flex gap-2; }
-  .socials a { @apply grid size-11 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white hover:text-ink; }
+  .socials a { @apply grid size-11 place-items-center rounded-full bg-card text-ink transition-colors hover:bg-cta hover:text-on-dark; }
 
   /* ---------- Cookie consent ---------- */
   .cookie-bar {
-    @apply fixed inset-x-3 bottom-3 z-50 flex flex-col gap-4 rounded-2xl border border-ink/10 bg-white p-5 shadow-lift;
+    @apply fixed inset-x-3 bottom-3 z-50 flex flex-col gap-4 rounded-2xl border border-ink/10 bg-card p-5 shadow-lift;
     @apply sm:inset-x-auto sm:right-6 sm:bottom-6 sm:max-w-lg sm:flex-row sm:items-center;
   }
   .cookie-bar[hidden] { display: none; }
-  .cookie-settings { @apply ml-1 cursor-pointer text-pale underline underline-offset-4 hover:text-white; }
+  .cookie-settings { @apply ml-1 cursor-pointer text-muted underline underline-offset-4 hover:text-accent; }
 }
 
 /* ---------- Motion: only the slideshow moves, and not for reduced motion ---------- */

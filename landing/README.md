@@ -1,20 +1,36 @@
-# MentorBridge landing page
+# MentorBridge landing pages
 
-A one-page validation test aimed at students looking for an internship. Its main goal is student sign-ups. Mentors and host organizations can sign up through the same form (the organization option is the free pilot request). It's built with Vite, plain HTML/JS and Tailwind CSS. The form posts to the Node API in `../server`, which stores requests in Supabase.
+The waiting list test on https://mentorbridge.nl. A front page sends visitors to one page per segment, each with its own hero, copy and the waiting list form. It's built with Vite, plain HTML/JS and Tailwind CSS. The form posts to the Node API in `../server`, which stores sign-ups in Supabase.
+
+| Page | English | Dutch |
+|---|---|---|
+| Front page | `/` (`index.html`) | `/nl/` |
+| Students | `/students/` (`students/index.html`) | `/nl/students/` |
+| Mentors | `/mentors/` (`mentors/index.html`) | `/nl/mentors/` |
+| Organizations | `/companies/` (`companies/index.html`) | `/nl/companies/` |
+| Privacy statement | `/privacy/` (`privacy/index.html`) | `/nl/privacy/` |
+
+## How the pages are built
+
+Shared parts live once in `partials/`: `head`, `header`, `footer` (with the cookie bar), `signup` (the one waiting list form) and `contact`. A page pulls one in with `<!-- @include header -->`. `scripts/pages.mjs` lists the pages and fills in `{{path}}`, `{{segment}}` and `{{cta}}` per page. Vite does this for the English pages (`vite.config.js`), `scripts/build-nl.mjs` for the Dutch ones.
+
+**Adding a page:** create `<name>/index.html`, add it to `PAGES` in `scripts/pages.mjs`, and add its Dutch text to `i18n/nl.json`.
+
+**The form:** each segment page sets `<body data-segment="student|mentor|company">`. `src/main.js` shows only the fields for that segment (`data-for-role` in `partials/signup.html`). The options (sectors, age ranges, hours, availability) must match `server/src/routes/pilotRequests.js` and `supabase/migrations/0006_waitlist_fields.sql`. The same email can sign up once per segment; a second try shows "already on the waiting list".
 
 ## Run locally
 
-1. **Database (once).** Apply the migrations in [`supabase/migrations`](../supabase/migrations) (see the main README). The landing page uses the `pilot_requests` and `contact_messages` tables.
-2. **API settings.** `server/.env` must include `SUPABASE_SERVICE_ROLE_KEY`, because the API needs it to store requests.
+1. **Database (once).** Apply the migrations in [`supabase/migrations`](../supabase/migrations) (see the main README). The landing pages use the `pilot_requests` and `contact_messages` tables.
+2. **API settings.** `server/.env` must include `SUPABASE_SERVICE_ROLE_KEY`, because the API needs it to store sign-ups.
 3. **Landing page settings.** Copy `landing/.env.example` to `landing/.env`. The default `VITE_API_URL=http://localhost:4000` points at the local API.
 4. **Start both.** From the repo root:
    ```sh
    npm install
    npm run dev:landing
    ```
-   The landing page runs at http://localhost:5174 and the API at http://localhost:4000.
+   The landing pages run at http://localhost:5174 and the API at http://localhost:4000. Changes to a partial reload the browser. The Dutch pages are generated when dev starts; after changing text, run `npm run i18n -w landing`.
 
-## See the requests
+## See the sign-ups
 
 From the repo root:
 
@@ -22,31 +38,37 @@ From the repo root:
 npm run pilot-requests
 ```
 
-This prints every sign-up (date, role, email, company, interns per year, field) and the totals for companies, students and mentors. It also counts the answers students gave to the four follow-up questions (internship place, applications sent, help wanted, when they need one). You can also see them in the Supabase Table Editor under `pilot_requests`.
+This prints every sign-up (role, name, email, sector, the fields per segment, availability, source), totals per segment and per source, and the student follow-up answers. You can also see them in the Supabase Table Editor under `pilot_requests`.
 
 ## Deploy
 
-The landing page deploys to Vercel (Root Directory `landing`) and talks to the API, which deploys separately. The steps for both are in the main [README](../README.md#deploy). In short:
+The landing pages deploy to Vercel (project `landing`, Root Directory `landing`) and talk to the API (project `mentor-bridge`), which deploys separately. The steps for both are in the main [README](../README.md#deploy). In short:
 
-- Deploy the API first and note its URL.
-- On the landing page's Vercel project, set `VITE_API_URL` to that URL. Vite builds it into the page, so redeploy after changing it.
-- On the API, set `LANDING_ORIGIN` to the landing page's Vercel URLs, separated by commas if it has more than one. In production, CORS only allows those and `CLIENT_ORIGIN`.
+- Apply new migrations first, then deploy the API, then the landing pages.
+- On the landing project, `VITE_API_URL` is the API's URL. Vite builds it into the page, so redeploy after changing it.
+- On the API, `LANDING_ORIGIN` lists the landing page's URLs, separated by commas. In production, CORS only allows those and `CLIENT_ORIGIN`.
 
 ## Placeholders to fill in
 
-- The hero image is an HTML illustration in `index.html` (`.bridge-vis`), so there is no image file to replace.
+- **Images:** the slots waiting for a photo, and how to add one, are in [`docs/images.md`](../docs/images.md). In short: put the original in `docs/images-src/<slot id>.jpg`, run `npm run images -w landing`, check the alt text in `scripts/slots.mjs` and its Dutch entry. A slot without a photo shows the team photo set as its fallback, or a placeholder box.
+- **Link previews:** `npm run og -w landing` renders `public/og/og-en.jpg` and `og-nl.jpg` from `og-template/og.html` with headless Chrome (set `CHROME_PATH` if it isn't found).
+- **Photo sources:** the sources and licences of `public/slides/*.jpg` aren't recorded yet. Add them to `docs/images.md`.
+- **Privacy statement:** Supabase region, project end date and a contact email address (`TODO` comments in `privacy/index.html`).
+- **Team photos:** replace the initials on the front page with photos (`public/team/<name>.jpg`).
 
 ## Measuring
 
-- **Visitors:** GoatCounter, cookieless, counts everyone.
-- **Conversions:** rows in `pilot_requests`, by `role`. GoatCounter also counts the events `pilot-request`, `signup-student` and `signup-mentor`. The main conversion rate is student sign-ups ÷ visitors.
+- **Visitors:** GoatCounter, cookieless, counts page views per page.
+- **Conversion per segment:** GoatCounter events `form-start-<segment>` and `signup-<segment>` (`student`, `mentor`, `company`). Conversion = `signup-<segment>` ÷ views of that segment's English and Dutch page. Target 1-3%. See [`docs/utm.md`](../docs/utm.md).
+- **Source:** every sign-up stores `utm_source`, `utm_medium`, `utm_campaign`, the referring site (host name only) and the first page of the visit, kept for the browser session. Tag links as described in [`docs/utm.md`](../docs/utm.md).
 - **Google Analytics 4 and Tag Manager (optional):** set `VITE_GA_ID` and `VITE_GTM_ID` in `landing/.env` and on Vercel. Visitors then see a cookie bar, and Google only loads after they click Accept (Consent Mode v2, analytics only, no advertising). Sign-ups are sent as `sign_up` events with a `role` and the A/B `variant`.
-- **A/B test:** the hero headline has two versions. GoatCounter counts `ab/hero-a` and `ab/hero-b` visits and every sign-up stores its variant, so `npm run pilot-requests` shows conversion per variant. Force one with `?variant=a` or `?variant=b`.
+- **A/B test (student page):** the hero headline has two versions. GoatCounter counts `ab/hero-a` and `ab/hero-b` visits and every student sign-up stores its variant. Force one with `?variant=a` or `?variant=b`.
 
 ## Languages
 
-The page exists in English (`/`) and Dutch (`/nl/`), with an EN | NL switch in the header that remembers the visitor's choice.
+Every page exists in English and Dutch, with an EN | NL switch in the header that remembers the visitor's choice.
 
-- `nl/index.html` is **generated**: edit `index.html` and add the Dutch text to `i18n/nl.json`, never edit `nl/index.html` itself. It is rebuilt automatically on `npm run dev` and `npm run build`, or with `npm run i18n -w landing`.
-- The generator warns about any English text without a Dutch translation.
-- Texts set from JavaScript (form headings per role, errors, "Sending…") are in the `UI` and `COPY` objects at the top of `src/main.js`.
+- The files in `nl/` are **generated** (and not in git): edit the English pages, the partials and `i18n/nl.json`, never `nl/`. They are rebuilt on `npm run dev` and `npm run build`, or with `npm run i18n -w landing`.
+- Links in the Dutch pages are rewritten to stay in Dutch (`/students/` becomes `/nl/students/`).
+- The generator warns about English text without a Dutch translation, and about translations no page uses anymore.
+- Texts set from JavaScript (button labels, errors, "Sending…") are in `UI`, `SERVER_NL` and `BUTTON` in `src/main.js`.

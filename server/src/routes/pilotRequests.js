@@ -4,8 +4,20 @@ import { supabaseAdmin } from '../supabase.js'
 const router = Router()
 
 const ROLES = ['company', 'student', 'mentor']
-const INTERNS_PER_YEAR = ['1-2', '3-5', '6-10', '10+']
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Waiting list options. The same lists are in the form (landing/partials/signup.html) and the database (migrations 0006 and 0007).
+export const SECTORS = [
+  'ict', 'engineering', 'construction', 'logistics', 'healthcare', 'business', 'finance',
+  'law', 'education', 'government', 'media', 'hospitality', 'other',
+]
+const AVAILABILITY = ['weekdays', 'evenings', 'weekends']
+const AGE_RANGES = ['under-30', '30-39', '40-49', '50-59', '60+']
+const HOURS_PER_MONTH = ['1-2', '3-5', '6-10', '10+']
+const SKILLS_HELP = ['soft', 'hard', 'both']
+const COMPANY_SIZES = ['1-49', '50-249', '250-999', '1000+']
+const INTERESTS = ['internal', 'external', 'white_label']
+const HOST_PATTERN = /^[a-z0-9.-]+$/i
 
 const HAS_PLACEMENT = ['yes', 'no']
 const APPLICATIONS_SENT = ['0', '1-10', '11-30', '30+']
@@ -15,31 +27,76 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 
 const text = (value) => (typeof value === 'string' ? value.trim() : '')
 
+// Where the visitor came from: UTM tags, the referring site (host name only) and the first page they saw.
+// Optional and never a reason to reject a sign-up: anything that doesn't fit is dropped.
+export function cleanTracking(body) {
+  const tracking = {}
+  for (const key of ['utm_source', 'utm_medium', 'utm_campaign']) {
+    const value = text(body?.[key]).toLowerCase().slice(0, 100)
+    if (value) tracking[key] = value
+  }
+  const referrer = text(body?.referrer).toLowerCase()
+  if (referrer && referrer.length <= 200 && HOST_PATTERN.test(referrer)) tracking.referrer = referrer
+  const path = text(body?.landing_path)
+  if (path.startsWith('/') && path.length <= 200) tracking.landing_path = path
+  return tracking
+}
+
 // Returns the cleaned fields, or { error } with a reason the form can show.
 export function validatePilotRequest(body) {
   const variant = ['a', 'b'].includes(body?.variant) ? body.variant : undefined
-  const withVariant = (fields) => (variant ? { ...fields, variant } : fields)
-  const role = body?.role ?? 'company'
+  const role = body?.role
   const email = text(body?.email).toLowerCase()
+  const name = text(body?.name)
+  const fields = { role, email, name }
 
-  if (!ROLES.includes(role)) return { error: 'Please choose student, mentor or organization.' }
+  if (!ROLES.includes(role)) return { error: 'Please choose student, mentor or company.' }
+  if (!name) return { error: role === 'company' ? 'Please enter your contact name.' : 'Please enter your name.' }
+  if (name.length > 100) return { error: 'Name must be 100 characters or fewer.' }
   if (!email) return { error: 'Please enter your email.' }
   if (email.length > 254 || !EMAIL_PATTERN.test(email)) return { error: 'Please enter a valid email address.' }
 
+  // Optional for mentors, required for students and companies.
+  const sector = body?.sector || undefined
+  if (sector !== undefined && !SECTORS.includes(sector)) return { error: 'Please choose a sector from the list.' }
+  if (!sector && role !== 'mentor') return { error: 'Please choose a sector.' }
+  if (sector) fields.sector = sector
+
   if (role === 'company') {
     const company = text(body?.company)
-    if (!company) return { error: 'Please enter your organization name.' }
-    if (company.length > 200) return { error: 'Organization name must be 200 characters or fewer.' }
-    if (!INTERNS_PER_YEAR.includes(body?.interns_per_year)) {
-      return { error: 'Please choose how many interns you take per year.' }
+    const jobTitle = text(body?.job_title)
+    if (!company) return { error: 'Please enter your company name.' }
+    if (company.length > 200) return { error: 'Company name must be 200 characters or fewer.' }
+    if (!jobTitle) return { error: 'Please enter your role.' }
+    if (jobTitle.length > 100) return { error: 'Role must be 100 characters or fewer.' }
+    Object.assign(fields, { company, job_title: jobTitle })
+    if (body?.company_size) {
+      if (!COMPANY_SIZES.includes(body.company_size)) return { error: 'Please choose a company size from the list.' }
+      fields.company_size = body.company_size
     }
-    return withVariant({ role, email, company, interns_per_year: body.interns_per_year })
+    if (body?.interest) {
+      if (!INTERESTS.includes(body.interest)) return { error: 'Please choose how you would like to use MentorBridge.' }
+      fields.interest = body.interest
+    }
+  } else {
+    const list = [].concat(body?.availability ?? [])
+    if (!list.length) return { error: 'Please choose when you are available.' }
+    if (!list.every((item) => AVAILABILITY.includes(item))) return { error: 'Please choose from the listed times.' }
+    fields.availability = AVAILABILITY.filter((item) => list.includes(item))
+
+    if (role === 'mentor') {
+      if (!AGE_RANGES.includes(body?.age_range)) return { error: 'Please choose your age range.' }
+      if (!HOURS_PER_MONTH.includes(body?.hours_per_month)) return { error: 'Please choose how many hours a month you have.' }
+      Object.assign(fields, { age_range: body.age_range, hours_per_month: body.hours_per_month })
+    } else {
+      if (!SKILLS_HELP.includes(body?.skills_help)) return { error: 'Please choose what you want help with.' }
+      fields.skills_help = body.skills_help
+    }
   }
 
-  const field = text(body?.field)
-  if (!field) return { error: role === 'student' ? 'Please enter your field of study.' : 'Please enter your field of work.' }
-  if (field.length > 200) return { error: 'Field must be 200 characters or fewer.' }
-  return withVariant({ role, email, field })
+  if (body?.consent !== true) return { error: 'Please agree to the privacy statement.' }
+
+  return { ...fields, ...(variant ? { variant } : {}), ...cleanTracking(body) }
 }
 
 // Validates the optional follow-up answers. Every question may be skipped,
@@ -82,8 +139,17 @@ router.post('/', async (req, res) => {
 
   if (!supabaseAdmin) return res.status(503).json({ error: 'The server is not configured to store requests.' })
 
-  // Only these fields are stored: no IP address or other tracking data.
-  const { data, error } = await supabaseAdmin.from('pilot_requests').insert(result).select('id').single()
+  // Only these fields are stored: no IP address. The source (UTM tags, referring site) is
+  // described on the privacy page.
+  const { data, error } = await supabaseAdmin
+    .from('pilot_requests')
+    .insert({ ...result, consent_at: new Date().toISOString() })
+    .select('id')
+    .single()
+  // Unique index on (role, email): this email is already on the list for this segment.
+  if (error?.code === '23505') {
+    return res.status(409).json({ error: 'This email is already on the waiting list.', duplicate: true })
+  }
   if (error) {
     console.error('Could not store pilot request:', error.message)
     return res.status(500).json({ error: 'Could not save your details. Please try again.' })

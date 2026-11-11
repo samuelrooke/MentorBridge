@@ -1,0 +1,54 @@
+<!doctype html>
+<!--
+  Template for the link preview images (1200 x 627), rendered by scripts/og.mjs:
+    npm run og -w landing
+  ?lang=en or ?lang=nl picks the text, ?photo= the background photo.
+  The text is real text in the site's fonts, so it stays sharp; the photo never contains text.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MentorBridge link preview</title>
+    <style>
+      @font-face { font-family: 'Barlow'; font-weight: 500; src: url('/fonts/barlow-v13-latin-500.woff2') format('woff2'); }
+      @font-face { font-family: 'Barlow'; font-weight: 800; src: url('/fonts/barlow-v13-latin-800.woff2') format('woff2'); }
+      @font-face { font-family: 'Fraunces'; font-weight: 600; src: url('/fonts/fraunces-v38-latin-opsz-600.woff2') format('woff2'); }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 1200px; height: 627px; overflow: hidden; }
+      body { display: grid; grid-template-columns: 600px 600px; background: #faf2e5; color: #2e1015; font-family: 'Barlow', Arial, sans-serif; }
+      .band { display: flex; flex-direction: column; justify-content: space-between; padding: 56px 56px 52px; }
+      .logo { display: flex; align-items: center; gap: 18px; font-family: 'Fraunces', Georgia, serif; font-size: 38px; font-weight: 600; letter-spacing: -0.01em; }
+      .logo img { width: 68px; height: 68px; }
+      .logo .accent { color: #7b1e2b; }
+      .text { display: flex; flex-direction: column; gap: 22px; }
+      h1 { margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 78px; font-weight: 600; line-height: 1.03; letter-spacing: -0.02em; }
+      .underline { text-decoration: underline; text-decoration-color: #e8a9a2; text-decoration-thickness: 0.12em; text-underline-offset: 0.14em; }
+      p { margin: 0; font-size: 26px; font-weight: 500; color: #5e4b4d; }
+      .url { font-size: 24px; font-weight: 800; color: #7b1e2b; }
+      .photo { background: #f4e7d6 center / cover no-repeat; }
+    </style>
+  </head>
+  <body>
+    <div class="band">
+      <div class="logo"><img src="/icon.png" alt="" /><span>Mentor<span class="accent">Bridge</span></span></div>
+      <div class="text">
+        <h1 id="headline"></h1>
+        <p id="sub"></p>
+      </div>
+      <div class="url">mentorbridge.nl</div>
+    </div>
+    <div class="photo" id="photo"></div>
+    <script>
+      const TEXT = {
+        en: { headline: 'Experienced mentors for <span class="underline">student interns.</span>', sub: 'Free during our first version' },
+        nl: { headline: 'Ervaren mentoren voor <span class="underline">stagiairs.</span>', sub: 'Gratis in onze eerste versie' },
+      }
+      const params = new URLSearchParams(location.search)
+      const lang = params.get('lang') === 'nl' ? 'nl' : 'en'
+      document.documentElement.lang = lang
+      document.querySelector('#headline').innerHTML = TEXT[lang].headline
+      document.querySelector('#sub').textContent = TEXT[lang].sub
+      document.querySelector('#photo').style.backgroundImage = `url('${params.get('photo') ?? '/slides/match-1440.webp'}')`
+    </script>
+  </body>
+</html>
