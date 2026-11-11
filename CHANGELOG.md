@@ -29,7 +29,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - Field and choice borders are darker, so they reach 3:1 contrast (WCAG 1.4.11).
 - Page titles of at most 60 characters and descriptions of 140-160, built around what people search for. Section headings say what the section is about, for example "Questions and answers".
 - The platform app asks search engines not to index it.
-- Headings use Fraunces, a serif; body text and buttons stay Barlow. Both fonts are self-hosted, so the pages make no requests to Google. Anton, which wasn't used, is gone.
+- Headings and the MentorBridge wordmark (header, footer, link previews) use Fraunces, a serif; body text and buttons stay Barlow. Both fonts are self-hosted, so the pages make no requests to Google. Anton, which wasn't used, is gone.
 
 ## [0.3.4] - 2026-11-06
 

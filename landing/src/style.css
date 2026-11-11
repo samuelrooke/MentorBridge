@@ -81,7 +81,7 @@
   body { @apply bg-cream font-sans text-lg leading-relaxed text-ink antialiased; }
   h1, h2, h3 { text-wrap: balance; }
   /* Headings in Fraunces: only weight 600 is loaded, so never fake a bolder one. */
-  .hero-title, .h2, .h3, .features h3, .prose-page h2 { font-synthesis: none; }
+  .hero-title, .h2, .h3, .features h3, .prose-page h2, .logo, .logo-light { font-synthesis: none; }
   p { text-wrap: pretty; }
 
   :focus-visible { @apply rounded-sm outline-3 outline-offset-3 outline-ink; }
@@ -141,10 +141,11 @@
   }
 
   /* ---------- Logo ---------- */
-  .logo { @apply flex items-center gap-3.5 text-2xl font-extrabold tracking-[-0.01em] text-ink no-underline sm:text-[1.7rem]; }
+  /* The wordmark uses the heading font (Fraunces 600), like the page headings. */
+  .logo { @apply flex items-center gap-3.5 font-serif text-[1.375rem] font-semibold tracking-[-0.01em] text-ink no-underline sm:text-[1.7rem]; }
   .logo img { @apply size-12 rounded-2xl sm:size-14; }
   .logo-accent { @apply text-accent; }
-  .logo-light { @apply flex items-center gap-3 text-2xl font-extrabold tracking-[-0.01em] text-ink no-underline; }
+  .logo-light { @apply flex items-center gap-3 font-serif text-2xl font-semibold tracking-[-0.01em] text-ink no-underline; }
   .logo-light img { @apply size-12 rounded-xl; }
 
   /* ---------- Header ---------- */

@@ -17,20 +17,20 @@
       html, body { margin: 0; width: 1200px; height: 627px; overflow: hidden; }
       body { display: grid; grid-template-columns: 600px 600px; background: #faf2e5; color: #2e1015; font-family: 'Barlow', Arial, sans-serif; }
       .band { display: flex; flex-direction: column; justify-content: space-between; padding: 56px 56px 52px; }
-      .logo { display: flex; align-items: center; gap: 18px; font-size: 36px; font-weight: 800; letter-spacing: -0.01em; }
+      .logo { display: flex; align-items: center; gap: 18px; font-family: 'Fraunces', Georgia, serif; font-size: 38px; font-weight: 600; letter-spacing: -0.01em; }
       .logo img { width: 68px; height: 68px; }
-      .logo span { color: #7b1e2b; }
+      .logo .accent { color: #7b1e2b; }
       .text { display: flex; flex-direction: column; gap: 22px; }
       h1 { margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 78px; font-weight: 600; line-height: 1.03; letter-spacing: -0.02em; }
       .underline { text-decoration: underline; text-decoration-color: #e8a9a2; text-decoration-thickness: 0.12em; text-underline-offset: 0.14em; }
-      p { margin: 0; font-size: 30px; font-weight: 500; color: #5e4b4d; }
+      p { margin: 0; font-size: 26px; font-weight: 500; color: #5e4b4d; }
       .url { font-size: 24px; font-weight: 800; color: #7b1e2b; }
       .photo { background: #f4e7d6 center / cover no-repeat; }
     </style>
   </head>
   <body>
     <div class="band">
-      <div class="logo"><img src="/icon.png" alt="" />Mentor<span>Bridge</span></div>
+      <div class="logo"><img src="/icon.png" alt="" /><span>Mentor<span class="accent">Bridge</span></span></div>
       <div class="text">
         <h1 id="headline"></h1>
         <p id="sub"></p>
