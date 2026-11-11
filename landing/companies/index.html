@@ -33,8 +33,34 @@
               </div>
             </div>
 
-            <!-- Image slot: the team photo until docs/images-src/organizations-hero.* exists. See docs/images.md. -->
-            <!-- @image organizations-hero -->
+            <!-- Slideshow of the three steps, like the student page. Photos: Pexels, see docs/images.md. -->
+            <div class="slideshow" role="region" aria-roledescription="carousel" aria-label="How MentorBridge works">
+              <div class="slides">
+                <figure class="slide is-active" aria-roledescription="slide" aria-label="Step 1 of 3">
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/company-1-720.webp 720w, /slides/company-1-1080.webp 1080w, /slides/company-1-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/company-1.jpg" alt="Two professionals at work at a shared desk, one on the phone and one taking notes." width="1440" height="1080" loading="eager" fetchpriority="high" decoding="async" /></picture></div>
+                  <figcaption><span class="slide-step">Step 1</span><span class="slide-title">You sign up</span><span class="slide-sub">Tell us your sector and how you want to take part.</span></figcaption>
+                </figure>
+                <figure class="slide" aria-roledescription="slide" aria-label="Step 2 of 3" aria-hidden="true">
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/company-2-720.webp 720w, /slides/company-2-1080.webp 1080w, /slides/company-2-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/company-2.jpg" alt="A smiling young professional in an office, with colleagues working behind her." width="1440" height="1080" loading="lazy" decoding="async" /></picture></div>
+                  <figcaption><span class="slide-step">Step 2</span><span class="slide-title">We pick the mentors</span><span class="slide-sub">Your own staff, or experienced mentors from your sector.</span></figcaption>
+                </figure>
+                <figure class="slide" aria-roledescription="slide" aria-label="Step 3 of 3" aria-hidden="true">
+                  <div class="slide-media"><picture><source type="image/webp" srcset="/slides/company-3-720.webp 720w, /slides/company-3-1080.webp 1080w, /slides/company-3-1440.webp 1440w" sizes="(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)" /><img src="/slides/company-3.jpg" alt="A smiling professional with crossed arms in an office, with colleagues in a meeting behind him." width="1440" height="1080" loading="lazy" decoding="async" /></picture></div>
+                  <figcaption><span class="slide-step">Step 3</span><span class="slide-title">Your interns start ready</span><span class="slide-sub">And the know-how stays in your company.</span></figcaption>
+                </figure>
+              </div>
+              <div class="slide-controls">
+                <div class="flex gap-2">
+                  <button type="button" class="slide-dot" data-slide="0" aria-label="Show step 1" aria-current="true"></button>
+                  <button type="button" class="slide-dot" data-slide="1" aria-label="Show step 2"></button>
+                  <button type="button" class="slide-dot" data-slide="2" aria-label="Show step 3"></button>
+                </div>
+                <button type="button" class="slide-pause" data-slide-pause aria-label="Pause slideshow">
+                  <svg class="icon-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor" /></svg>
+                  <svg class="icon-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

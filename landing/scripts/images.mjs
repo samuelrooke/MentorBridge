@@ -10,7 +10,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
 import { root } from './pages.mjs'
-import { PHOTO_WIDTHS, SLOTS } from './slots.mjs'
+import { PHOTO_WIDTHS, SLIDE_CROPS, SLOTS } from './slots.mjs'
 
 const pub = (...parts) => path.join(root, 'public', ...parts)
 const srcDir = path.resolve(root, '..', 'docs', 'images-src')
@@ -20,7 +20,17 @@ const save = async (pipeline, file) => {
   report.push(`${path.relative(root, file).replaceAll('\\', '/').padEnd(40)} ${Math.round(fs.statSync(file).size / 1024)} KB`)
 }
 
-// 1. Team photos
+// 0. Slideshow photos: crop the originals to 4:3 JPGs in public/slides/ (step 1 then makes the WebP versions).
+for (const [name, position] of Object.entries(SLIDE_CROPS)) {
+  const original = path.join(srcDir, 'slides', `${name}.jpg`)
+  if (!fs.existsSync(original)) {
+    report.push(`${name.padEnd(40)} no original in docs/images-src/slides/, skipped`)
+    continue
+  }
+  await save(sharp(original).resize(1440, 1080, { fit: 'cover', position }).jpeg({ quality: 82, mozjpeg: true }), pub('slides', `${name}.jpg`))
+}
+
+// 1. Photos in public/slides
 for (const file of fs.readdirSync(pub('slides')).filter((f) => /^[a-z0-9-]+\.jpg$/.test(f))) {
   const name = file.replace(/\.jpg$/, '')
   for (const width of PHOTO_WIDTHS) {

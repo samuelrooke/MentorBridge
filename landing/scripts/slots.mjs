@@ -10,6 +10,17 @@
 // Widths of the WebP versions made from the team photos in public/slides/.
 export const PHOTO_WIDTHS = [720, 1080, 1440]
 
+// Slideshow photos for the mentor and companies pages. Originals in docs/images-src/slides/<name>.jpg,
+// cropped to 4:3 into public/slides/<name>.jpg by `npm run images`. The value is where to crop from.
+export const SLIDE_CROPS = {
+  'mentor-1': 'centre',
+  'mentor-2': 'north',
+  'mentor-3': 'north',
+  'company-1': 'attention',
+  'company-2': 'centre',
+  'company-3': 'north',
+}
+
 const CARD_SIZES = '(min-width: 1280px) 340px, (min-width: 768px) 30vw, calc(100vw - 64px)'
 const HERO_SIZES = '(min-width: 1280px) 690px, (min-width: 1024px) 55vw, calc(100vw - 32px)'
 
@@ -43,29 +54,6 @@ export const SLOTS = {
     alt: 'A smiling young professional in an office, with colleagues working behind her.',
     // Portrait original: crop from the centre so her face and the team stay in. Check when replacing it.
     position: 'centre',
-    fallback: { photo: 'start', alt: 'People working at laptops in a bright office with large windows.' },
-  },
-  'mentors-hero': {
-    where: '/mentors/ hero',
-    ratio: [4, 3],
-    widths: [720, 1080, 1440],
-    jpg: true,
-    sizes: HERO_SIZES,
-    className: 'hero-photo',
-    eager: true,
-    alt: 'An experienced mentor with a white beard helps a young woman with her work at a desk.',
-    position: 'centre',
-    fallback: { photo: 'match', alt: 'A handshake between an experienced professional and a young person.' },
-  },
-  'organizations-hero': {
-    where: '/companies/ hero',
-    ratio: [4, 3],
-    widths: [720, 1080, 1440],
-    jpg: true,
-    sizes: HERO_SIZES,
-    className: 'hero-photo',
-    eager: true,
-    alt: 'Two professionals at work at a shared desk, one on the phone and one taking notes.',
     fallback: { photo: 'start', alt: 'People working at laptops in a bright office with large windows.' },
   },
 }
