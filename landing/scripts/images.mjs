@@ -37,7 +37,12 @@ for (const [id, slot] of Object.entries(SLOTS)) {
     continue
   }
   const [rw, rh] = slot.ratio
-  const crop = (width) => sharp(original).resize(width, Math.round((width * rh) / rw), { fit: 'cover', position: 'attention' })
+  // Warn when the original is too small for the largest export: it gets enlarged and looks soft.
+  const meta = await sharp(original).metadata()
+  const usable = Math.min(meta.width, Math.round((meta.height * rw) / rh))
+  if (usable < slot.widths.at(-1)) report.push(`${id.padEnd(40)} WARNING: original gives ${usable} px at ${rw}:${rh}, smaller than ${slot.widths.at(-1)} px. Use a larger original if you can.`)
+  // position: where to crop from. 'attention' looks for the most interesting part; a slot can set 'north' etc.
+  const crop = (width) => sharp(original).resize(width, Math.round((width * rh) / rw), { fit: 'cover', position: slot.position ?? 'attention' })
   for (const width of slot.widths) await save(crop(width).webp({ quality: 78 }), pub('images', `${id}-${width}.webp`))
   if (slot.jpg) await save(crop(slot.widths.at(-1)).jpeg({ quality: 80, mozjpeg: true }), pub('images', `${id}.jpg`))
 }

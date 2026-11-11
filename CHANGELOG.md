@@ -15,6 +15,7 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - For search engines and link previews: absolute canonical and hreflang links, Open Graph and Twitter tags per page and language, structured data (Organization and WebSite) on the front page, `robots.txt`, and a sitemap generated from the page list.
 - The `.vercel.app` addresses of the landing page redirect to https://mentorbridge.nl (301).
 - Image slots for the front page cards and the mentor and organization heroes, filled from `docs/images-src/` with `npm run images -w landing` (uses sharp). Until a slot has its own image it shows a team photo or a placeholder. See `docs/images.md`.
+- Photos on the three front page cards: a student, a mentor and a company (stock photos, sources in `docs/images.md`).
 - Link preview images in English and Dutch (`npm run og -w landing`), rendered from an HTML template.
 - Photos load as WebP in three sizes, with the first photo on each page loaded first.
 - The header and footer logo is a 112 px version (8 KB instead of 293 KB), with proper 32 px and 180 px favicons.

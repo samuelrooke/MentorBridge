@@ -20,7 +20,7 @@ export const SLOTS = {
     widths: [800, 1200],
     sizes: CARD_SIZES,
     className: 'card-media',
-    alt: 'A student at a kitchen table on a video call with her mentor, taking notes.',
+    alt: 'A smiling student holding a laptop in a university hallway.',
     fallback: { photo: 'sign-up', alt: 'A student typing on a laptop, with notes next to them.' },
   },
   'mentors-card': {
@@ -29,7 +29,9 @@ export const SLOTS = {
     widths: [800, 1200],
     sizes: CARD_SIZES,
     className: 'card-media',
-    alt: 'A mentor explains something to a student at a library table.',
+    alt: 'An experienced professional in a white blouse in a bright office.',
+    // The current original is a portrait photo: crop from the top so the face stays in. Check when replacing it.
+    position: 'north',
     fallback: null,
   },
   'organizations-card': {
@@ -38,7 +40,9 @@ export const SLOTS = {
     widths: [800, 1200],
     sizes: CARD_SIZES,
     className: 'card-media',
-    alt: 'A site manager in his sixties shows a young intern a drawing on a tablet at a building site.',
+    alt: 'A smiling professional with crossed arms in an office, with colleagues in a meeting behind him.',
+    // The current original is a portrait photo: crop from the top so the face stays in. Check when replacing it.
+    position: 'north',
     fallback: { photo: 'start', alt: 'People working at laptops in a bright office with large windows.' },
   },
   'mentors-hero': {
