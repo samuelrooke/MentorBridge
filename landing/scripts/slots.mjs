@@ -29,7 +29,7 @@ export const SLOTS = {
     widths: [800, 1200],
     sizes: CARD_SIZES,
     className: 'card-media',
-    alt: 'An experienced professional in a white blouse in a bright office.',
+    alt: 'An experienced professional with glasses working on a laptop at home.',
     // The current original is a portrait photo: crop from the top so the face stays in. Check when replacing it.
     position: 'north',
     fallback: null,
@@ -40,9 +40,9 @@ export const SLOTS = {
     widths: [800, 1200],
     sizes: CARD_SIZES,
     className: 'card-media',
-    alt: 'A smiling professional with crossed arms in an office, with colleagues in a meeting behind him.',
-    // The current original is a portrait photo: crop from the top so the face stays in. Check when replacing it.
-    position: 'north',
+    alt: 'A smiling young professional in an office, with colleagues working behind her.',
+    // Portrait original: crop from the centre so her face and the team stay in. Check when replacing it.
+    position: 'centre',
     fallback: { photo: 'start', alt: 'People working at laptops in a bright office with large windows.' },
   },
   'mentors-hero': {
@@ -53,7 +53,8 @@ export const SLOTS = {
     sizes: HERO_SIZES,
     className: 'hero-photo',
     eager: true,
-    alt: 'A mentor at home, explaining something to a student on a video call.',
+    alt: 'An experienced mentor with a white beard helps a young woman with her work at a desk.',
+    position: 'centre',
     fallback: { photo: 'match', alt: 'A handshake between an experienced professional and a young person.' },
   },
   'organizations-hero': {
@@ -64,7 +65,7 @@ export const SLOTS = {
     sizes: HERO_SIZES,
     className: 'hero-photo',
     eager: true,
-    alt: 'A team lead in his late fifties walks a young intern through a delivery route in a warehouse.',
+    alt: 'Two professionals at work at a shared desk, one on the phone and one taking notes.',
     fallback: { photo: 'start', alt: 'People working at laptops in a bright office with large windows.' },
   },
 }
