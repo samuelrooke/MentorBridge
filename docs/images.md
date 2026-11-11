@@ -23,7 +23,7 @@ Link previews: put a background photo in `docs/images-src/og-background.jpg` and
 
 | id | where | ratio | export | path | EN alt (for the slot's own image) | NL alt | now showing | source | status |
 |---|---|---|---|---|---|---|---|---|---|
-| students-card | Front page, "I'm a student" card | 4:3 | 1200x900 + 800x600 WebP | `/images/students-card-{800,1200}.webp` | A student at a kitchen table on a video call with her mentor, taking notes. | Een student aan de keukentafel in een videogesprek met haar mentor, terwijl ze aantekeningen maakt. | Team photo `sign-up.jpg` | Optional: Gemini prompt 4 (cropped to 4:3) | Team photo in use |
+| students-card | Front page, "I'm a student" card | 4:3 | 1200x900 + 800x600 WebP | `/images/students-card-{800,1200}.webp` | A smiling student holding notebooks in a school hallway, with classmates behind her. | Een lachende student met schriften in een schoolgang, met klasgenoten achter haar. | Own image (crop from the top) | Pexels photo 8199171, Pexels License. Not AI-generated. | In use |
 | mentors-card | Front page, "I want to mentor" card | 4:3 | 1200x900 + 800x600 WebP | `/images/mentors-card-{800,1200}.webp` | A mentor explains something to a student at a library table. | Een mentor legt een student iets uit aan een tafel in een bibliotheek. | Placeholder (sunk box) | Gemini prompt 1, AI-generated | **Waiting for an image** |
 | organizations-card | Front page, "I represent a company" card | 4:3 | 1200x900 + 800x600 WebP | `/images/organizations-card-{800,1200}.webp` | A smiling professional with crossed arms in an office, with colleagues in a meeting behind him. | Een lachende professional met de armen over elkaar in een kantoor, met collega's in een vergadering achter hem. | Own image (cropped from the top, `position: 'north'`) | **TODO:** source and licence of `companies.jpeg` unknown. Stock or AI-generated? Record it here. | In use, but only 500x750: soft at full size. Replace with a larger original. |
 | organizations-hero | `/companies/` hero | 4:3 | same as mentors-hero | `/images/organizations-hero-…` | A team lead in his late fifties walks a young intern through a delivery route in a warehouse. | Een teamleider van eind vijftig loopt met een jonge stagiair een bezorgroute door in een magazijn. | Team photo `start.jpg` | Gemini prompt 3, AI-generated | Team photo in use |
@@ -37,6 +37,7 @@ Same 3-step slideshow as the student page. Originals in `docs/images-src/slides/
 
 | file | page, step | alt |
 |---|---|---|
+| `slides/student-1` | /students/, step 1 | A smiling student holding a laptop in a university hallway. (Pexels 3762362) |
 | `slides/mentor-1` | /mentors/, step 1 | An experienced mentor with a white beard helps a young woman with her work at a desk. |
 | `slides/mentor-2` | /mentors/, step 2 | An experienced professional with glasses working on a laptop at home. |
 | `slides/mentor-3` | /mentors/, step 3 | An experienced professional in a white blouse in a bright office. |

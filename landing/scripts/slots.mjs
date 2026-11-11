@@ -13,6 +13,7 @@ export const PHOTO_WIDTHS = [720, 1080, 1440]
 // Slideshow photos for the mentor and companies pages. Originals in docs/images-src/slides/<name>.jpg,
 // fitted to 4:3 into public/slides/<name>.jpg by `npm run images`. contain: whole photo on a blurred backdrop; cover: crop.
 export const SLIDE_CROPS = {
+  'student-1': 'cover',
   'mentor-1': 'contain',
   'mentor-2': 'contain',
   'mentor-3': 'contain',
@@ -31,7 +32,8 @@ export const SLOTS = {
     widths: [800, 1200],
     sizes: CARD_SIZES,
     className: 'card-media',
-    alt: 'A smiling student holding a laptop in a university hallway.',
+    alt: 'A smiling student holding notebooks in a school hallway, with classmates behind her.',
+    position: 'north',
     fallback: { photo: 'sign-up', alt: 'A student typing on a laptop, with notes next to them.' },
   },
   'mentors-card': {
