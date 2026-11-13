@@ -1,173 +1,186 @@
-import { friendlyError } from '../lib/errors'
-import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useOutletContext, useSearchParams } from 'react-router-dom'
+import { Avatar } from '../components/chat/ChatBits'
+import Conversation, { type Person } from '../components/chat/Conversation'
 import { useViewer } from '../context/viewer'
-import { groupMessagesByDay, isTeamMessage, matchLabel, type PlatformMessage } from '../lib/platform'
+import { MESSAGE_COLUMNS, previewText, senderInfo, shortTime, type ChatMessage } from '../lib/messaging'
+import { matchLabel } from '../lib/platform'
 import { supabase } from '../lib/supabase'
 import { useMatches } from '../lib/useMatches'
+import { usePresence } from '../lib/usePresence'
+import { useSignedUrls } from '../lib/useSignedUrls'
 
-type MessageRow = PlatformMessage & { match_id: string }
+type Permission = NotificationPermission | 'unsupported'
 
 export default function Messages() {
-  // The conversation is shown from the viewer's side (the person an admin views as, or the
-  // admin). Sending and read markers always use the logged-in account (actorId), so an admin
-  // posts as "MentorBridge team" and never changes someone else's unread state.
-  const { viewer: profile, actorId, isAdmin } = useViewer()
-  const { matches, loading: matchesLoading } = useMatches(profile?.role, profile?.id)
+  // Shown from the viewer's side (the person an admin views as, or the user). Every write
+  // uses the logged-in account (actorId), so an admin always posts as "MentorBridge team".
+  const { viewer, actorId, isAdmin } = useViewer()
+  const { matches, loading } = useMatches(viewer?.role, viewer?.id)
   const { unreadCounts } = useOutletContext<{ unreadCounts: Record<string, number> }>()
   const [searchParams] = useSearchParams()
-  // ?match=<id> opens that conversation straight away (used by the admin dashboard).
-  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(() => searchParams.get('match'))
-  const [messages, setMessages] = useState<MessageRow[]>([])
-  const [previews, setPreviews] = useState<Record<string, MessageRow>>({})
-  const [body, setBody] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [loadingOlder, setLoadingOlder] = useState(false)
-  const [hasOlder, setHasOlder] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [sending, setSending] = useState(false)
-  const endRef = useRef<HTMLDivElement>(null)
-  const userId = profile?.id
-  const selectedMatch = matches.find((match) => match.id === selectedMatchId) ?? null
+  const [selectedId, setSelectedId] = useState<string | null>(() => searchParams.get('match'))
+  const [previews, setPreviews] = useState<Record<string, ChatMessage>>({})
+  const [people, setPeople] = useState<Map<string, Person>>(new Map())
+  const [filter, setFilter] = useState('')
+  const [permission, setPermission] = useState<Permission>(() => ('Notification' in window ? Notification.permission : 'unsupported'))
+  const selectedRef = useRef(selectedId)
+  const { presence, setTyping } = usePresence(matches.map((m) => m.id), actorId)
 
+  useEffect(() => { selectedRef.current = selectedId }, [selectedId])
+
+  const matchKey = matches.map((m) => m.id).join(',')
+
+  // Names, roles and photos of everyone in these conversations.
   useEffect(() => {
+    const ids = [...new Set(matches.flatMap((m) => [m.student_id, m.mentor_id]))]
+    if (!ids.length) return
     let active = true
-    async function loadPreviews() {
-      if (!matches.length) {
-        setPreviews({})
-        return
-      }
-      const { data } = await supabase.from('messages').select('id, match_id, sender_id, body, created_at')
-        .in('match_id', matches.map(({ id }) => id)).order('created_at', { ascending: false })
-      if (!active) return
-      const latest: Record<string, MessageRow> = {}
-      for (const row of data ?? []) if (!latest[row.match_id]) latest[row.match_id] = row as MessageRow
-      setPreviews(latest)
-    }
-    void loadPreviews()
-    const channel = supabase.channel(`message-previews:${userId ?? 'none'}`).on(
-      'postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' },
-      (payload) => {
-        const row = payload.new as MessageRow
-        if (matches.some((match) => match.id === row.match_id)) setPreviews((current) => ({ ...current, [row.match_id]: row }))
-      },
-    ).subscribe()
-    return () => {
-      active = false
-      void supabase.removeChannel(channel)
-    }
-  }, [matches, userId])
+    void supabase.from('profiles').select('id, full_name, avatar_path, role').in('id', ids)
+      .then(({ data }) => { if (active) setPeople(new Map(((data ?? []) as Person[]).map((p) => [p.id, p]))) })
+    return () => { active = false }
+  }, [matches])
+  const avatarByPath = useSignedUrls('avatars', [...people.values()].map((p) => p.avatar_path))
+  const avatarUrls = useMemo(() => Object.fromEntries([...people.values()].flatMap((p) => (p.avatar_path && avatarByPath[p.avatar_path] ? [[p.id, avatarByPath[p.avatar_path]]] : []))), [people, avatarByPath])
 
+  // The newest message of each conversation, for the list.
   useEffect(() => {
-    if (!selectedMatchId || !userId || !actorId) {
-      return
-    }
+    const ids = matchKey ? matchKey.split(',') : []
+    if (!ids.length) return
     let active = true
-    const matchId = selectedMatchId
-    async function markRead() {
-      await supabase.from('message_reads').upsert(
-        { match_id: matchId, user_id: actorId, read_at: new Date().toISOString() },
-        { onConflict: 'match_id,user_id' },
-      )
-    }
-    async function loadMessages() {
-      setLoading(true)
-      setError(null)
-      const { data, error: loadError } = await supabase.from('messages')
-        .select('id, match_id, sender_id, body, created_at').eq('match_id', matchId)
-        .order('created_at', { ascending: false }).limit(50)
-      if (!active) return
-      if (loadError) setError(friendlyError(loadError))
-      const rows = (data ?? []).reverse() as MessageRow[]
-      setMessages(rows)
-      setHasOlder(rows.length === 50)
-      setLoading(false)
-      await markRead()
-    }
-    void loadMessages()
-    const channel = supabase.channel(`messages:${matchId}`).on(
-      'postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `match_id=eq.${matchId}` },
-      (payload) => {
-        const row = payload.new as MessageRow
-        setMessages((current) => current.some((message) => message.id === row.id) ? current : [...current, row])
-        setPreviews((current) => ({ ...current, [matchId]: row }))
-        void markRead()
-      },
-    ).subscribe()
-    return () => {
-      active = false
-      void supabase.removeChannel(channel)
-    }
-  }, [selectedMatchId, userId, actorId])
+    void Promise.all(ids.map((id) => supabase.from('messages').select(MESSAGE_COLUMNS).eq('match_id', id).order('created_at', { ascending: false }).limit(1)))
+      .then((results) => {
+        if (!active) return
+        const latest: Record<string, ChatMessage> = {}
+        results.forEach(({ data }, index) => { if (data?.[0]) latest[ids[index]] = data[0] as ChatMessage })
+        setPreviews(latest)
+      })
+    return () => { active = false }
+  }, [matchKey])
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }, [messages])
+  const updatePreview = useCallback((row: ChatMessage) => {
+    setPreviews((current) => {
+      const existing = current[row.match_id]
+      if (existing && existing.id !== row.id && existing.created_at > row.created_at) return current
+      return { ...current, [row.match_id]: row }
+    })
+  }, [])
 
-  async function loadOlder() {
-    const oldest = messages[0]
-    if (!selectedMatchId || !oldest) return
-    setLoadingOlder(true)
-    const { data, error: olderError } = await supabase.from('messages')
-      .select('id, match_id, sender_id, body, created_at').eq('match_id', selectedMatchId)
-      .lt('created_at', oldest.created_at).order('created_at', { ascending: false }).limit(50)
-    if (olderError) setError(friendlyError(olderError))
-    const rows = (data ?? []).reverse() as MessageRow[]
-    setMessages((current) => [...rows, ...current])
-    setHasOlder(rows.length === 50)
-    setLoadingOlder(false)
+  // New messages in any conversation: update the list and, if allowed, show a desktop notification.
+  useEffect(() => {
+    if (!actorId || !matchKey) return
+    const ids = new Set(matchKey.split(','))
+    const channel = supabase.channel(`inbox:${actorId}:${viewer?.id ?? ''}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+        const row = payload.new as ChatMessage
+        if (!ids.has(row.match_id)) return
+        updatePreview(row)
+        const fromSomeoneElse = row.sender_id !== actorId
+        const elsewhere = document.visibilityState !== 'visible' || selectedRef.current !== row.match_id
+        if (fromSomeoneElse && elsewhere && 'Notification' in window && Notification.permission === 'granted') {
+          const match = matches.find((m) => m.id === row.match_id)
+          const sender = match ? senderInfo(match, row.sender_id, viewer?.id) : null
+          const name = sender?.kind === 'team' ? 'MentorBridge team' : people.get(row.sender_id)?.full_name ?? 'New message'
+          const notification = new Notification(`${name} · MentorBridge`, { body: row.body || 'Sent a picture', tag: row.match_id })
+          notification.onclick = () => { window.focus(); setSelectedId(row.match_id) }
+        }
+      })
+      .subscribe()
+    return () => { void supabase.removeChannel(channel) }
+  }, [actorId, matchKey, matches, people, updatePreview, viewer?.id])
+
+  async function enableNotifications() {
+    if (!('Notification' in window)) return
+    setPermission(await Notification.requestPermission())
   }
 
-  async function sendMessage(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const cleanBody = body.trim()
-    if (!selectedMatchId || !actorId || !cleanBody || cleanBody.length > 5000) return
-    setSending(true)
-    setError(null)
-    const { error: sendError } = await supabase.from('messages').insert({ match_id: selectedMatchId, sender_id: actorId, body: cleanBody })
-    setSending(false)
-    if (sendError) setError(friendlyError(sendError))
-    else setBody('')
-  }
+  const sorted = useMemo(() => [...matches].sort((a, b) => {
+    const at = previews[a.id]?.created_at ?? a.created_at
+    const bt = previews[b.id]?.created_at ?? b.created_at
+    return bt.localeCompare(at)
+  }), [matches, previews])
 
-  function onComposerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
-      event.preventDefault()
-      event.currentTarget.form?.requestSubmit()
-    }
+  const nameOf = (id: string) => people.get(id)?.full_name ?? ''
+  const labelFor = (match: (typeof matches)[number]) => {
+    const others = [match.student_id, match.mentor_id].filter((id) => id !== viewer?.id)
+    return others.length === 1 ? nameOf(others[0]) || matchLabel(match, viewer?.role) : matchLabel(match, viewer?.role)
   }
+  const visible = sorted.filter((m) => !filter.trim() || labelFor(m).toLocaleLowerCase().includes(filter.trim().toLocaleLowerCase()))
+  const selected = matches.find((m) => m.id === selectedId) ?? null
 
-  if (matchesLoading) return <p className="muted">Loading conversations...</p>
+  if (loading) return <p className="muted">Loading conversations…</p>
 
   return (
-    <div className={`messages-page${selectedMatchId ? ' conversation-open' : ''}`}>
+    <div className={`messages-page${selected ? ' conversation-open' : ''}`}>
       <aside className="conversation-list" aria-label="Conversations">
-        <div className="conversation-list-heading"><p className="eyebrow">{profile?.role === 'admin' ? 'All conversations' : 'Your workspace'}</p><h1>Messages</h1></div>
-        {matches.length ? matches.map((match) => {
-          const other = { full_name: matchLabel(match, profile?.role) }
+        <div className="conversation-list-heading">
+          <p className="eyebrow">{viewer?.role === 'admin' ? 'All conversations' : 'Your conversations'}</p>
+          <h1>Messages</h1>
+          {matches.length > 2 && (
+            <input type="search" className="conversation-filter" placeholder="Find a conversation" aria-label="Find a conversation" value={filter} onChange={(e) => setFilter(e.target.value)} />
+          )}
+          {permission === 'default' && (
+            <button className="text-link notify-link" onClick={() => void enableNotifications()}>Get a notification for new messages</button>
+          )}
+        </div>
+        {visible.length ? visible.map((match) => {
+          const others = [match.student_id, match.mentor_id].filter((id) => id !== viewer?.id)
+          const single = others.length === 1 ? others[0] : null
+          const state = presence[match.id]
+          const online = (state?.online ?? []).some((id) => others.includes(id))
+          const typing = (state?.typing ?? []).filter((id) => id !== actorId)
           const preview = previews[match.id]
           const unread = unreadCounts[match.id] ?? 0
-          return <button key={match.id} className={`conversation-link${selectedMatchId === match.id ? ' selected' : ''}`} aria-current={selectedMatchId === match.id ? 'true' : undefined} onClick={() => { setMessages([]); setSelectedMatchId(match.id) }}>
-            <span className="conversation-avatar" aria-hidden="true">{(other?.full_name ?? '?').slice(0, 1).toUpperCase()}</span>
-            <span className="conversation-copy"><strong>{other?.full_name ?? 'Your match'}</strong><span>{preview?.body ?? 'No messages yet'}</span></span>
-            {unread > 0 && <span className="unread-badge" aria-label={`${unread} unread messages`}>{unread}</span>}
-          </button>
-        }) : <div className="conversation-empty"><strong>No people yet</strong><p>Your conversations will appear here after you are matched.</p></div>}
-      </aside>
-      <section className="conversation-panel" aria-label="Conversation">
-        {!selectedMatch ? <div className="conversation-placeholder"><span className="empty-chat-mark" aria-hidden="true">M</span><h2>{matches.length ? 'Choose a conversation' : 'No conversation yet'}</h2><p className="muted">{matches.length ? 'Select a match to read and send messages.' : 'Your private chat will be ready when you have a match.'}</p></div> : <>
-          <header className="conversation-header"><button className="back-to-conversations" onClick={() => { setMessages([]); setSelectedMatchId(null) }}>Back</button><div><p className="eyebrow">Conversation with</p><h2>{matchLabel(selectedMatch, profile?.role)}</h2></div></header>
-          <div className="message-history" aria-live="polite">
-            {hasOlder && <button className="load-older" onClick={loadOlder} disabled={loadingOlder}>{loadingOlder ? 'Loading...' : 'Load older messages'}</button>}
-            {loading ? <p className="muted centered">Loading messages...</p> : messages.length ? groupMessagesByDay(messages).map((group) => <section className="message-day" key={group.label}>
-              <h3>{group.label}</h3>
-              {group.messages.map((message) => <article key={message.id} className={`message-row${message.sender_id === userId ? ' own-message' : ''}${isTeamMessage(message, selectedMatch) ? ' team-message' : ''}`}><div className="message-bubble">{isTeamMessage(message, selectedMatch) && <span className="team-label">MentorBridge team</span>}<p>{message.body}</p><time dateTime={message.created_at}>{new Intl.DateTimeFormat(undefined, { timeStyle: 'short' }).format(new Date(message.created_at))}</time></div></article>)}
-            </section>) : <div className="conversation-placeholder"><h2>Start the conversation</h2><p className="muted">Only the student, the mentor and the MentorBridge team can read these messages.</p></div>}
-            <div ref={endRef} />
+          const label = labelFor(match)
+          return (
+            <button key={match.id} className={`conversation-link${selectedId === match.id ? ' selected' : ''}${unread ? ' has-unread' : ''}`} aria-current={selectedId === match.id ? 'true' : undefined} onClick={() => setSelectedId(match.id)}>
+              <Avatar name={label} url={single ? avatarUrls[single] : undefined} online={online} />
+              <span className="conversation-copy">
+                <span className="conversation-line">
+                  <strong>{label}</strong>
+                  {preview && <span className="conversation-time">{shortTime(preview.created_at)}</span>}
+                </span>
+                <span className="conversation-role">
+                  {single ? senderInfo(match, single, viewer?.id).roleLabel : 'Student and mentor'}{match.status !== 'active' ? ` · ${match.status}` : ''}
+                </span>
+                <span className={`conversation-preview${typing.length ? ' typing-text' : ''}`}>
+                  {typing.length ? 'typing…' : previewText(preview, match, viewer?.id)}
+                </span>
+              </span>
+              {unread > 0 && <span className="unread-badge" aria-label={`${unread} unread messages`}>{unread}</span>}
+            </button>
+          )
+        }) : (
+          <div className="conversation-empty">
+            <strong>{matches.length ? 'No conversation found' : 'No conversations yet'}</strong>
+            <p>{matches.length ? 'Try another name.' : 'Your conversation opens here as soon as you are matched.'}</p>
           </div>
-          {error && <p className="alert alert-error message-error" role="alert">{error}</p>}
-          {isAdmin && <p className="composer-note">You post as <strong>MentorBridge team</strong>. Both people in this match see your message.</p>}
-          <form className="message-composer" onSubmit={sendMessage}><label className="sr-only" htmlFor="message-body">Write a message</label><textarea id="message-body" rows={2} maxLength={5000} placeholder="Write a message..." value={body} onChange={(event) => setBody(event.target.value)} onKeyDown={onComposerKeyDown} /><div className="composer-footer">{body.length >= 4500 && <span className="character-count">{body.length}/5000</span>}<button className="btn btn-primary btn-sm" disabled={!body.trim() || sending}>{sending ? 'Sending...' : 'Send'}</button></div></form>
-        </>}
-      </section>
+        )}
+      </aside>
+
+      {selected && viewer && actorId ? (
+        <Conversation
+          key={selected.id}
+          match={selected}
+          viewerId={viewer.id}
+          actorId={actorId}
+          isAdmin={isAdmin}
+          people={people}
+          avatarUrls={avatarUrls}
+          presence={presence[selected.id]}
+          setTyping={(typing) => setTyping(selected.id, typing)}
+          onBack={() => setSelectedId(null)}
+          onActivity={updatePreview}
+        />
+      ) : (
+        <section className="conversation-panel" aria-label="Conversation">
+          <div className="conversation-placeholder">
+            <span className="empty-chat-mark" aria-hidden="true">M</span>
+            <h2>{matches.length ? 'Choose a conversation' : 'No conversation yet'}</h2>
+            <p className="muted">{matches.length ? 'Pick someone on the left to read and send messages.' : 'Your private chat will be ready when you have a match.'}</p>
+          </div>
+        </section>
+      )}
     </div>
   )
 }

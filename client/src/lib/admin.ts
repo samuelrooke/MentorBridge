@@ -38,6 +38,27 @@ export type Person = { id: string; full_name: string | null; email: string | nul
 export type Candidates = { students: Person[]; mentors: Person[]; companies: Person[] }
 
 export type WaitlistEntry = Record<string, unknown> & { id: string; role: string; email: string; name: string | null; created_at: string }
+export type Report = {
+  id: string
+  reporter_id: string
+  reported_user_id: string | null
+  match_id: string | null
+  message_id: string | null
+  message_snapshot: string | null
+  message_had_picture: boolean
+  reason: 'harassment' | 'inappropriate' | 'spam' | 'safety' | 'other'
+  details: string | null
+  status: 'open' | 'resolved'
+  admin_note: string | null
+  resolved_at: string | null
+  created_at: string
+  reporter_name: string | null
+  reporter_role: string | null
+  reported_name: string | null
+  reported_role: string | null
+  match_label: string | null
+}
+
 export type ContactMessage = { id: string; name: string | null; email: string; message: string; created_at: string }
 
 export type Overview = {
@@ -53,6 +74,8 @@ export type Overview = {
     targets: { role: 'student' | 'mentor' | 'company'; signups: number; target: number }[]
   }
   contact: { total: number }
+  reports: { open: number }
+  reviews: { total: number; average: number | null; notTookPlace: number }
   recent: { type: 'account' | 'waitlist' | 'contact'; at: string; label: string; detail: string }[]
   upcomingMatches: AdminMatch[]
 }

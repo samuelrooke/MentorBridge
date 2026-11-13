@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { ROLES, allUsers, confirmEmail, deleteAccount, setRole } from '../accounts.js'
 import { matchesWithActivity, recentActivity, summarizeOverview } from '../adminStats.js'
 import { findKeywordMatches } from '../matching.js'
+import { deleteMessage } from '../messages.js'
+import { companyOverview } from './company.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { supabaseAdmin } from '../supabase.js'
 
@@ -28,7 +30,7 @@ async function rows(table, columns = '*') {
 }
 
 async function loadAll() {
-  const [users, profiles, matches, sessions, messages, waitlist, contact] = await Promise.all([
+  const [users, profiles, matches, sessions, messages, waitlist, contact, reports, reviews] = await Promise.all([
     allUsers(supabaseAdmin),
     rows('profiles', 'id, role, full_name, email, created_at'),
     rows('matches', 'id, student_id, mentor_id, company_id, status, created_at'),
@@ -36,8 +38,10 @@ async function loadAll() {
     rows('messages', 'id, match_id, created_at'),
     rows('pilot_requests'),
     rows('contact_messages'),
+    rows('reports', 'id, status'),
+    rows('session_reviews', 'rating, took_place'),
   ])
-  return { users, profiles, matches, sessions, messages, waitlist, contact }
+  return { users, profiles, matches, sessions, messages, waitlist, contact, reports, reviews }
 }
 
 // ---- Overview ----
@@ -208,6 +212,82 @@ router.patch('/matches/:id', async (req, res) => {
 router.delete('/matches/:id', async (req, res) => {
   if (!UUID.test(req.params.id)) return res.status(400).json({ error: 'Unknown match.' })
   const { error } = await supabaseAdmin.from('matches').delete().eq('id', req.params.id)
+  if (error) return res.status(400).json({ error: error.message })
+  res.json({ ok: true })
+})
+
+// The company view, for "View as" a company.
+router.get('/company/:id/overview', async (req, res) => {
+  if (!UUID.test(req.params.id)) return res.status(400).json({ error: 'Unknown company.' })
+  try {
+    res.json(await companyOverview(req.params.id))
+  } catch (error) {
+    fail(res, error)
+  }
+})
+
+// ---- Messages and reports ----
+
+// Removes any message for both people (text and picture). Shown as "Deleted by the MentorBridge team".
+router.delete('/messages/:id', async (req, res) => {
+  if (!UUID.test(req.params.id)) return res.status(400).json({ error: 'Unknown message.' })
+  const { data: message } = await supabaseAdmin.from('messages')
+    .select('id, attachment_path, deleted_at').eq('id', req.params.id).maybeSingle()
+  if (!message) return res.status(404).json({ error: 'Message not found.' })
+  if (message.deleted_at) return res.json({ ok: true })
+  try {
+    await deleteMessage(supabaseAdmin, message, req.user.id)
+    res.json({ ok: true })
+  } catch (error) {
+    fail(res, error)
+  }
+})
+
+router.get('/reports', async (_req, res) => {
+  try {
+    const [reports, profiles, matches] = await Promise.all([
+      rows('reports'),
+      rows('profiles', 'id, full_name, email, role'),
+      rows('matches', 'id, student_id, mentor_id'),
+    ])
+    const person = new Map(profiles.map((p) => [p.id, p]))
+    const nameOf = (id) => (id ? person.get(id)?.full_name || person.get(id)?.email || 'Deleted account' : null)
+    const matchOf = new Map(matches.map((m) => [m.id, m]))
+    res.json(reports
+      .sort((a, b) => (a.status === b.status ? b.created_at.localeCompare(a.created_at) : a.status === 'open' ? -1 : 1))
+      .map((r) => ({
+        ...r,
+        reporter_name: nameOf(r.reporter_id),
+        reporter_role: person.get(r.reporter_id)?.role ?? null,
+        reported_name: nameOf(r.reported_user_id),
+        reported_role: person.get(r.reported_user_id)?.role ?? null,
+        match_label: matchOf.has(r.match_id)
+          ? `${nameOf(matchOf.get(r.match_id).student_id)} with ${nameOf(matchOf.get(r.match_id).mentor_id)}`
+          : null,
+      })))
+  } catch (error) {
+    fail(res, error)
+  }
+})
+
+router.patch('/reports/:id', async (req, res) => {
+  if (!UUID.test(req.params.id)) return res.status(400).json({ error: 'Unknown report.' })
+  const { status, admin_note } = req.body ?? {}
+  const update = {}
+  if (status !== undefined) {
+    if (!['open', 'resolved'].includes(status)) return res.status(400).json({ error: 'Unknown status.' })
+    update.status = status
+    update.resolved_by = status === 'resolved' ? req.user.id : null
+    update.resolved_at = status === 'resolved' ? new Date().toISOString() : null
+  }
+  if (admin_note !== undefined) {
+    if (admin_note !== null && (typeof admin_note !== 'string' || admin_note.length > 2000)) {
+      return res.status(400).json({ error: 'Notes can be at most 2,000 characters.' })
+    }
+    update.admin_note = admin_note?.trim() || null
+  }
+  if (!Object.keys(update).length) return res.status(400).json({ error: 'Nothing to change.' })
+  const { error } = await supabaseAdmin.from('reports').update(update).eq('id', req.params.id)
   if (error) return res.status(400).json({ error: error.message })
   res.json({ ok: true })
 })

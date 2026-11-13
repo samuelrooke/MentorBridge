@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { matchesWithActivity, recentActivity, sourceOf, summarizeOverview } from '../src/adminStats.js'
+import { matchesWithActivity, recentActivity, sourceOf, summarizeOverview, summarizeReviews } from '../src/adminStats.js'
 
 const now = new Date('2026-11-13T12:00:00Z').getTime()
 const day = (offset) => new Date(now + offset * 24 * 60 * 60 * 1000).toISOString()
@@ -98,5 +98,16 @@ describe('recentActivity and sourceOf', () => {
     expect(sourceOf({ utm_source: 'x', referrer: 'y' })).toBe('x')
     expect(sourceOf({ referrer: 'y' })).toBe('y')
     expect(sourceOf({})).toBe('direct')
+  })
+})
+
+describe('summarizeReviews', () => {
+  it('averages ratings of sessions that took place and counts no-shows', () => {
+    expect(summarizeReviews([
+      { rating: 5, took_place: true },
+      { rating: 4, took_place: true },
+      { rating: null, took_place: false },
+    ])).toEqual({ total: 3, average: 4.5, notTookPlace: 1 })
+    expect(summarizeReviews([])).toEqual({ total: 0, average: null, notTookPlace: 0 })
   })
 })

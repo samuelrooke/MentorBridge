@@ -61,6 +61,8 @@ Migration `0010_student_start_preference.sql` adds the student's preferred start
 
 Migration `0012_admin_full_access.sql` lets admins use Schedule and Messages for every match: they can read all conversations and post in them as "MentorBridge team". The privacy statement says so.
 
+**Messaging, reports and reviews.** Migration `0013_messaging_reports.sql` adds pictures (bucket `message-attachments`), replies, edits, reactions, deleted messages, "seen" for both people, and reports. Migration `0014_session_reviews.sql` adds session reviews and makes companies need consent to see profiles. **Apply 0012, 0013 and 0014 before deploying this version**: the Messages page reads the new columns. Editing and deleting go through `POST /api/messages/:id/edit` and `/unsend` (own message, within an hour); admins delete with `DELETE /api/admin/messages/:id`.
+
 **Admin dashboard.** Admins get the admin dashboard on `/dashboard` (overview, users, matches, waiting list, contact). Most of it goes through `/api/admin/*` on the API, which needs the service-role key. "View as" in the top bar shows the platform as any student, mentor or company.
 
 **Sign-up.** `POST /api/signup` (used by the landing form and the platform's Create account) creates the account already confirmed and returns a one-time login for `/auth/confirm`, so no email is sent.

@@ -5,6 +5,11 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 ## [Unreleased]
 
 ### Added
+- Messages works like a messenger: every group of messages shows the sender's photo, name and role (Student, Mentor, MentorBridge team); pictures (pick, paste or drag in; tap to enlarge); replies with a quote; emoji reactions; edit or delete your own message within an hour; "Sent" and "Seen"; "online now" and "typing…"; a "New messages" divider; older messages load as you scroll up, with "Jump to latest"; search in a conversation; clickable links; unread count in the browser tab; optional desktop notifications. Migration 0013.
+- Report a message or a person from the conversation. The database stores a copy of the reported message. Admins get a Reports tab (resolve, team note, delete the message, stop the match, delete the account) and can delete any message.
+- Session reviews: after a session, the student and the mentor each say whether it took place, rate it 1 to 5 and say what went well and what could be better. Both of them and the team can read the reviews. Admin overview shows the number, average and no-shows. Migration 0014.
+- Company view on the platform: interns who shared their progress, their mentor, sessions held and planned, plan progress, the internship brief, and a message form to the team (for example about letting their own staff mentor).
+- Students can share their progress with the company in their match, and stop sharing, on the Matching page. Until now there was no way to give this consent, so companies never saw anything.
 - Admin dashboard (Dashboard for admins) with tabs: Overview (key numbers, what needs attention, sign-ups against the targets, sources, recent activity, upcoming sessions), Users (search, change role, confirm email, see answers, delete), Matches (create, suggestions by shared topics, change status or company, delete), Waiting list (filter, CSV export, remove) and Contact.
 - "View as": admins can see the platform exactly as any student, mentor or company sees it. Changes are made by the admin's own account; messages are posted as "MentorBridge team".
 - Admins can use Schedule and Messages for every match (migration 0012). Messages from the team are labelled "MentorBridge team".
@@ -34,6 +39,8 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - The header and footer logo is a 112 px version (8 KB instead of 293 KB), with proper 32 px and 180 px favicons.
 
 ### Changed
+- Privacy fix (migration 0014): companies could read the profiles of the student and mentor in their matches without the student's consent. They now need the same consent as for the match.
+- The privacy statement covers pictures, editing and deleting messages, reports, session reviews, online and typing status, and what a company sees.
 - Account creation no longer sends a confirmation email, which avoids Supabase's limit of a few emails an hour ("too many attempts"). Email addresses are therefore not verified; turn verification back on after setting up custom SMTP.
 - Links to a section with a form (Find a mentor, Sign up free, Contact) scroll to the form itself instead of the section heading.
 - The header's "Sign up free" on the front page and privacy page opens account creation directly.
