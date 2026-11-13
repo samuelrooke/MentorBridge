@@ -26,7 +26,7 @@ export function useMatches(role: Role | undefined, userId: string | undefined) {
     async function load() {
       setLoading(true)
       setError(null)
-      if (!userId || !role || role === 'admin') {
+      if (!userId || !role) {
         setMatches([])
         setLoading(false)
         return
@@ -34,9 +34,10 @@ export function useMatches(role: Role | undefined, userId: string | undefined) {
       let query = supabase.from('matches')
         .select('id, student_id, mentor_id, company_id, status, created_at, student:student_id(id, full_name), mentor:mentor_id(id, full_name), company:company_id(id, full_name)')
         .order('created_at', { ascending: false })
+      // Admins see every match (row level security allows it); everyone else only their own.
       if (role === 'student') query = query.eq('student_id', userId)
       else if (role === 'mentor') query = query.eq('mentor_id', userId)
-      else query = query.eq('company_id', userId)
+      else if (role === 'company') query = query.eq('company_id', userId)
       const { data, error: queryError } = await query
       if (!active) return
       if (queryError) setError(friendlyError(queryError))

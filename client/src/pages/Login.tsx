@@ -1,15 +1,17 @@
 import { useState, type FormEvent } from 'react'
-import { Navigate, useLocation, useSearchParams } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 import Wordmark from '../components/Wordmark'
+import { api } from '../lib/api'
 import { friendlyError } from '../lib/errors'
 import { supabase } from '../lib/supabase'
 
 // The app runs on mentorbridge.nl next to the landing pages, so "/" is the homepage.
 // Locally the landing runs on its own port: set VITE_LANDING_URL=http://localhost:5174.
 const landingUrl = import.meta.env.VITE_LANDING_URL || '/'
+const privacyUrl = `${landingUrl.replace(/\/$/, '')}/privacy/`
 
-type Mode ='login' | 'signup' | 'forgot' | 'check-email'
+type Mode = 'login' | 'signup' | 'forgot'
 type SignupRole = 'student' | 'mentor' | 'company'
 
 const roles: { value: SignupRole; title: string; hint: string }[] = [
@@ -25,6 +27,7 @@ function isSignupRole(value: string | null): value is SignupRole {
 export default function Login() {
   const { session } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const roleParam = searchParams.get('role')
   // Links from the landing page can open sign-up with a role already chosen: /login?role=mentor
@@ -35,15 +38,14 @@ export default function Login() {
   const [firstName, setFirstName] = useState('')
   const [surname, setSurname] = useState('')
   const [role, setRole] = useState<SignupRole>(isSignupRole(roleParam) ? roleParam : 'student')
+  const [company, setCompany] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [unconfirmed, setUnconfirmed] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [justSignedUp, setJustSignedUp] = useState(false)
 
   const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/dashboard'
-  // New accounts go straight to the short profile questions; returning users go where they were heading.
-  if (session) return <Navigate to={justSignedUp ? '/profile?welcome=1' : from} replace />
+  if (session) return <Navigate to={from} replace />
 
   function switchMode(next: Mode) {
     setMode(next)
@@ -66,32 +68,22 @@ export default function Login() {
         setUnconfirmed(/email not confirmed/i.test(error.message))
       }
     } else if (mode === 'signup') {
-      setJustSignedUp(true)
-      const { data, error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password,
-        options: {
-          data: {
-            role,
-            first_name: firstName.trim(),
-            last_name: surname.trim(),
-            full_name: `${firstName.trim()} ${surname.trim()}`.trim(),
-          },
-          emailRedirectTo: `${window.location.origin}/dashboard`,
-        },
-      })
-      if (error) {
-        setJustSignedUp(false)
-        setError(friendlyError(error))
-      } else if (data.user && data.user.identities?.length === 0) {
-        // One account per email. With email confirmation on, Supabase answers a sign-up for an
-        // existing address with a fake success and no email (so addresses can't be probed).
-        // An empty identities list is the sign of that, so say it plainly instead.
-        setJustSignedUp(false)
-        setError('There is already an account with this email. Log in, or reset your password.')
-      } else if (!data.session) {
-        // Email confirmation is on: show a clear "check your inbox" step instead of a small note.
-        setMode('check-email')
+      // The server creates the account and returns a one-time login (/auth/confirm), so the
+      // person is logged in straight away and lands on the profile questions. No email is
+      // sent, which avoids Supabase's limit of a few emails an hour.
+      try {
+        const { next } = await api<{ next: string | null }>('/signup', {
+          method: 'POST',
+          body: JSON.stringify({ role, first_name: firstName, last_name: surname, email, password, company }),
+        })
+        if (next) {
+          navigate(next)
+          return
+        }
+      } catch (signupError) {
+        const message = (signupError as Error).message
+        // Server messages are written for people; connection problems get the friendly text.
+        setError(/failed to fetch|network|load failed/i.test(message) ? friendlyError(signupError) : message)
       }
     } else if (mode === 'forgot') {
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
@@ -135,24 +127,7 @@ export default function Login() {
         <p>{intro.text}</p>
       </div>
 
-      {mode === 'check-email' ? (
-        <section className="card auth-card" aria-live="polite">
-          <div className="stack-sm">
-            <h2>Check your inbox</h2>
-            <p>We sent a link to <strong>{email.trim()}</strong>. Click it to confirm your email and you&rsquo;re in.</p>
-            <p className="muted">It can take a few minutes. Check your spam folder too.</p>
-          </div>
-          {error && <p className="alert alert-error" role="alert">{error}</p>}
-          {info && <p className="alert alert-info" role="status">{info}</p>}
-          <button type="button" className="btn btn-ghost" onClick={resendConfirmation} disabled={busy}>
-            {busy ? 'Please wait…' : 'Send the email again'}
-          </button>
-          <button type="button" className="link-button self-center" onClick={() => { setJustSignedUp(false); switchMode('signup') }}>
-            Wrong email? Start again
-          </button>
-        </section>
-      ) : (
-        <form className="card auth-card" onSubmit={handleSubmit}>
+      <form className="card auth-card" onSubmit={handleSubmit}>
           {mode === 'forgot' ? (
             <div className="stack-sm">
               <h2>Reset your password</h2>
@@ -190,6 +165,12 @@ export default function Login() {
                   <input value={surname} onChange={(e) => setSurname(e.target.value)} required maxLength={60} autoComplete="family-name" />
                 </label>
               </div>
+              {role === 'company' && (
+                <label>
+                  Company name
+                  <input value={company} onChange={(e) => setCompany(e.target.value)} required maxLength={200} autoComplete="organization" />
+                </label>
+              )}
             </>
           )}
 
@@ -240,6 +221,11 @@ export default function Login() {
             {busy ? 'Please wait…' : mode === 'login' ? 'Log in' : mode === 'signup' ? 'Create account' : 'Send reset link'}
           </button>
 
+          {mode === 'signup' && (
+            <p className="field-hint self-center">
+              How we handle your details: <a href={privacyUrl}>privacy statement</a>.
+            </p>
+          )}
           {mode === 'login' && (
             <button type="button" className="link-button self-center" onClick={() => switchMode('forgot')}>
               Forgot your password?
@@ -251,7 +237,6 @@ export default function Login() {
             </button>
           )}
         </form>
-      )}
     </main>
   )
 }

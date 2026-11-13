@@ -2,8 +2,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
+import { ViewerProvider } from './context/ViewerProvider'
 import Account from './pages/Account'
-import Admin from './pages/Admin'
 import AuthConfirm from './pages/AuthConfirm'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
@@ -16,6 +16,7 @@ import Schedule from './pages/Schedule'
 export default function App() {
   return (
     <AuthProvider>
+      <ViewerProvider>
       <BrowserRouter>
         <Routes>
           <Route index element={<Navigate to="/dashboard" replace />} />
@@ -33,7 +34,7 @@ export default function App() {
             <Route
               path="matching"
               element={
-                <ProtectedRoute roles={['student', 'mentor']}>
+                <ProtectedRoute roles={['student', 'mentor', 'admin']}>
                   <Matching />
                 </ProtectedRoute>
               }
@@ -41,7 +42,7 @@ export default function App() {
             <Route
               path="schedule"
               element={
-                <ProtectedRoute roles={['student', 'mentor']}>
+                <ProtectedRoute roles={['student', 'mentor', 'admin']}>
                   <Schedule />
                 </ProtectedRoute>
               }
@@ -49,25 +50,20 @@ export default function App() {
             <Route
               path="messages"
               element={
-                <ProtectedRoute roles={['student', 'mentor']}>
+                <ProtectedRoute roles={['student', 'mentor', 'admin']}>
                   <Messages />
                 </ProtectedRoute>
               }
             />
             <Route path="profile" element={<Profile />} />
             <Route path="account" element={<Account />} />
-            <Route
-              path="admin"
-              element={
-                <ProtectedRoute roles={['admin']}>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
+            {/* The old manual-matching page is now the Matches tab of the admin dashboard. */}
+            <Route path="admin" element={<Navigate to="/dashboard?tab=matches" replace />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </ViewerProvider>
     </AuthProvider>
   )
 }

@@ -326,6 +326,11 @@
 
   /* ---------- Forms ---------- */
   .form-card { @apply rounded-3xl border border-ink/[0.06] bg-card p-7 text-ink shadow-lift sm:p-9; }
+  .password-input { @apply relative; }
+  .password-input input { @apply w-full pr-20; }
+  .password-toggle {
+    @apply absolute top-1/2 right-2 min-h-9 -translate-y-1/2 cursor-pointer rounded-lg px-3 text-[15px] font-semibold text-accent hover:bg-sunk;
+  }
   .field { @apply flex flex-col gap-2; }
   .field label { @apply font-semibold; }
   .field input,

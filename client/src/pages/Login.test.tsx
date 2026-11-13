@@ -61,6 +61,18 @@ describe('Login', () => {
     expect(screen.getByRole('radio', { name: /Mentor/ })).toBeChecked()
   })
 
+  it('asks companies for their company name', async () => {
+    renderLogin('/login?role=student')
+    expect(screen.queryByLabelText('Company name')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('radio', { name: /Company/ }))
+    expect(screen.getByLabelText('Company name')).toBeRequired()
+  })
+
+  it('links to the privacy statement when creating an account', () => {
+    renderLogin('/login?mode=signup')
+    expect(screen.getByRole('link', { name: 'privacy statement' })).toHaveAttribute('href', '/privacy/')
+  })
+
   it('shows or hides the password', async () => {
     renderLogin()
     const input = screen.getByLabelText('Password')

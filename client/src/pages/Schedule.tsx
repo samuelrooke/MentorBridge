@@ -1,8 +1,8 @@
 import { friendlyError } from '../lib/errors'
 import { useMemo, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useAuth } from '../context/auth'
-import { createIcsContent, type PlatformSession } from '../lib/platform'
+import { useViewer } from '../context/viewer'
+import { createIcsContent, matchLabel, type PlatformSession } from '../lib/platform'
 import { supabase } from '../lib/supabase'
 import { useMatches } from '../lib/useMatches'
 import { useSessions } from '../lib/useSessions'
@@ -36,7 +36,9 @@ function displayDate(value: string | Date, options: Intl.DateTimeFormatOptions =
 }
 
 export default function Schedule() {
-  const { profile } = useAuth()
+  // Whoever the page shows: the logged-in user, the person an admin views as, or (admin) everyone.
+  const { viewer: profile } = useViewer()
+  const adminView = profile?.role === 'admin'
   const { matches, loading: matchesLoading } = useMatches(profile?.role, profile?.id)
   const { sessions, loading: sessionsLoading } = useSessions(matches)
   const [searchParams] = useSearchParams()
@@ -178,13 +180,13 @@ export default function Schedule() {
   return (
     <div className="stack schedule-page">
       <header className="page-heading">
-        <div><p className="eyebrow">Your time together</p><h1>Schedule</h1></div>
+        <div><p className="eyebrow">{adminView ? 'All matches' : 'Your time together'}</p><h1>{adminView ? 'All sessions' : 'Schedule'}</h1></div>
         {matches.length > 0 && <button className="btn btn-primary" onClick={startCreate}>Plan a session</button>}
       </header>
       {message && <p className="alert alert-info" role="status">{message}</p>}
       {error && <p className="alert alert-error" role="alert">{error}</p>}
       {matchesLoading && <p className="muted">Loading matches...</p>}
-      {!matchesLoading && !matches.length && <p className="alert alert-info" role="status">Your calendar is ready. Sessions will appear here when you have a match.</p>}
+      {!matchesLoading && !matches.length && <p className="alert alert-info" role="status">{adminView ? 'There are no matches yet. Create one under Dashboard → Matches, then plan sessions here.' : 'Your calendar is ready. Sessions will appear here when you have a match.'}</p>}
       <div className="schedule-toolbar">
         <div className="segmented-control" aria-label="Schedule view">
           <button aria-pressed={view === 'month'} onClick={() => setView('month')}>Month</button>
@@ -265,8 +267,7 @@ function SessionItem({ session, match, role, onEdit, onDelete, onIcs, googleUrl 
 }
 
 function otherName(match: ReturnType<typeof useMatches>['matches'][number] | undefined, role: string | undefined) {
-  if (!match) return 'Your match'
-  return role === 'student' ? match.mentor?.full_name ?? 'Your mentor' : match.student?.full_name ?? 'Your student'
+  return matchLabel(match, role)
 }
 
 function dayKey(date: Date) {

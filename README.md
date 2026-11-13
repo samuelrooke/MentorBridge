@@ -59,6 +59,12 @@ Migration `0008_platform_schedule_messages.sql` enables Supabase Realtime for se
 
 Migration `0010_student_start_preference.sql` adds the student's preferred start season or a specific date to their profile.
 
+Migration `0012_admin_full_access.sql` lets admins use Schedule and Messages for every match: they can read all conversations and post in them as "MentorBridge team". The privacy statement says so.
+
+**Admin dashboard.** Admins get the admin dashboard on `/dashboard` (overview, users, matches, waiting list, contact). Most of it goes through `/api/admin/*` on the API, which needs the service-role key. "View as" in the top bar shows the platform as any student, mentor or company.
+
+**Sign-up.** `POST /api/signup` (used by the landing form and the platform's Create account) creates the account already confirmed and returns a one-time login for `/auth/confirm`, so no email is sent.
+
 Admins are set by hand in the Supabase SQL editor:
 
 ```sql
