@@ -1,3 +1,4 @@
+import { friendlyError } from '../lib/errors'
 import { useMemo, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/auth'
@@ -123,7 +124,7 @@ export default function Schedule() {
       : await supabase.from('sessions').insert(values)
     setSaving(false)
     if (result.error) {
-      setError(result.error.message)
+      setError(friendlyError(result.error))
       return
     }
     setMessage(editingId ? 'Session updated.' : 'Session planned.')
@@ -133,7 +134,7 @@ export default function Schedule() {
   async function deleteSession(sessionId: string) {
     if (!window.confirm('Delete this session?')) return
     const { error: deleteError } = await supabase.from('sessions').delete().eq('id', sessionId)
-    if (deleteError) setError(deleteError.message)
+    if (deleteError) setError(friendlyError(deleteError))
     else setMessage('Session deleted.')
   }
 

@@ -28,17 +28,23 @@ router.post('/auto-match', requireAuth, async (req, res) => {
   const studentQuery = supabaseAdmin.from('student_profiles')
     .select('id, field_of_study, internship_type, interests, learning_goals')
   const mentorQuery = supabaseAdmin.from('mentor_profiles').select('id, expertise')
-  const [studentsResult, mentorsResult, existingResult] = await Promise.all([
+  const [studentsResult, mentorsResult, existingResult, rolesResult] = await Promise.all([
     req.profile.role === 'student' ? studentQuery.eq('id', req.user.id) : studentQuery,
     req.profile.role === 'mentor' ? mentorQuery.eq('id', req.user.id) : mentorQuery,
     supabaseAdmin.from('matches').select('student_id, mentor_id'),
+    supabaseAdmin.from('profiles').select('id, role').in('role', ['student', 'mentor']),
   ])
 
-  const queryError = studentsResult.error || mentorsResult.error || existingResult.error
+  const queryError = studentsResult.error || mentorsResult.error || existingResult.error || rolesResult.error
   if (queryError) return res.status(500).json({ error: 'Could not check matching keywords.' })
 
+  // Only people whose account still has that role: answers can stay behind when a role changes.
+  const roleOf = new Map((rolesResult.data ?? []).map(({ id, role }) => [id, role]))
+  const students = (studentsResult.data ?? []).filter(({ id }) => roleOf.get(id) === 'student')
+  const mentors = (mentorsResult.data ?? []).filter(({ id }) => roleOf.get(id) === 'mentor')
+
   const existingPairs = new Set((existingResult.data ?? []).map(({ student_id, mentor_id }) => `${student_id}:${mentor_id}`))
-  const candidates = findKeywordMatches(studentsResult.data ?? [], mentorsResult.data ?? [])
+  const candidates = findKeywordMatches(students, mentors)
     .filter(({ student_id, mentor_id }) => !existingPairs.has(`${student_id}:${mentor_id}`))
   if (!candidates.length) return res.json({ created: 0 })
 

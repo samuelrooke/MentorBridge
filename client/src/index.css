@@ -119,6 +119,20 @@
   .auth-intro { @apply flex max-w-lg flex-col gap-5; }
   .auth-intro h1 { @apply text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.04] tracking-[-0.035em]; }
   .auth-intro p { @apply text-xl text-muted; }
+  .back-link { @apply inline-flex items-center gap-2 self-start text-[15px] font-semibold text-accent no-underline hover:text-ink hover:underline underline-offset-4; }
+
+  /* Sign-up form */
+  .role-picker { @apply gap-2; }
+  label.role-option { @apply items-start; }
+  label.role-option input { @apply mt-1; }
+  label.role-option > span { @apply flex flex-col gap-0.5; }
+  label.role-option .muted { @apply text-[15px] font-normal; }
+  .password-field { @apply flex flex-col gap-2 font-semibold; }
+  .password-input { @apply relative; }
+  .password-input input { @apply w-full pr-20; }
+  .password-toggle { @apply absolute top-1/2 right-2 min-h-9 -translate-y-1/2 cursor-pointer rounded-lg px-3 text-[15px] font-semibold text-accent hover:bg-accent-tint; }
+  .field-hint { @apply text-sm font-normal text-muted; }
+  .keyword-picker .field-hint { @apply -mt-1 mb-2; }
   .auth-card { @apply flex w-full flex-col gap-5 justify-self-center shadow-lift; }
 
   .tabs { @apply flex gap-1 rounded-xl bg-paper p-1; }
@@ -335,3 +349,8 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+.finish-profile { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; border-color: var(--color-accent); }
+.finish-profile h2 { margin-bottom: .25rem; }
+
+.name-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1.25rem 1rem; }

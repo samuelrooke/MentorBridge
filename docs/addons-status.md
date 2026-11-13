@@ -1,6 +1,6 @@
 # Add-ons from the marketing guest lecture: status
 
-Last updated 10 November 2026, branch `feature/waitlist-segments`. The lecture notes are the new guideline (version 3 in `MentorBridge_context.md`).
+Last updated 13 November 2026, branch `feature/frontend-seo`. The lecture notes are the new guideline (version 3 in `MentorBridge_context.md`).
 
 Step 1 (audit) is done. Step 2: all P1 items are built. They are **not live yet**: migration 0006 has to be applied to the Supabase database, then the API and the landing pages deployed, in that order.
 
@@ -29,11 +29,11 @@ Statuses: `DONE`, `PARTIAL`, `MISSING`, `CONFLICT`, `NOT CODE`, `BLOCKED` (waiti
 | C3 | P2 | PARTIAL | `npm run pilot-requests` now shows the new fields and sign-ups per source. | No SQL view yet (per week, progress against targets). |
 | C4 | P2 | PARTIAL | Cookie bar for GA4 and GTM, unchanged. | Doesn't cover LinkedIn or Google Ads yet. |
 | C5 | P2 | MISSING | | Needs the LinkedIn partner ID. |
-| C6 | P2 | PARTIAL | Every page has a canonical URL and hreflang links. | No sitemap, robots.txt or verification tag yet. |
+| C6 | P2 | PARTIAL | Canonical and absolute hreflang on every page, `robots.txt`, and a sitemap generated from the page list with `<lastmod>` from git. | Search Console verification tag (needs the team's Google account). |
 | C7 | P3 | MISSING | | UNCLEAR: are ads planned? |
-| C8 | P2 | MISSING | | No Open Graph tags or 1200x627 image yet. |
+| C8 | P2 | DONE | Open Graph and Twitter tags per page and language, 1200x627 images in `landing/public/og/` (`npm run og -w landing`). | |
 | C9 | P3 | MISSING | | Can be made now that the pages and UTM names exist. |
-| D1 | LATER | PARTIAL | Platform app has auth, roles, keyword-based student/mentor matching, profile bios and photos, an overview dashboard, live session schedule, and private live messaging. | Apply migrations 0008, 0009 and 0010 and deploy the client to make all new features live. The waiting list fields (sector list, age range, hours, availability options) aren't in the platform tables yet. |
+| D1 | LATER | PARTIAL | Platform app has auth, roles, keyword-based student/mentor matching, profile bios and photos, an overview dashboard, live session schedule, and private live messaging. | Migrations 0008 to 0011 are applied to the live database (13 November). Still to do: merge `feature/frontend-seo` into `main` so Vercel deploys it. The waiting list fields (sector list, age range, hours, availability options) aren't in the platform tables yet. |
 | D2 | LATER | PARTIAL | Landing colours are tokens in `landing/src/style.css`. Header and footer now exist once (partials), so the name and logo are in fewer places. | No single brand config. |
 | D3 | LATER | NOT CODE | | Investor note UNCLEAR. |
 
@@ -43,7 +43,8 @@ Statuses: `DONE`, `PARTIAL`, `MISSING`, `CONFLICT`, `NOT CODE`, `BLOCKED` (waiti
 2. Deploy the API (Vercel project `mentor-bridge`). The new API needs the new columns, and the old landing form no longer passes its checks (no name, no consent), so steps 2 and 3 belong together.
 3. Deploy the landing pages (Vercel project `landing`).
 4. Test one sign-up per segment on https://mentorbridge.nl and remove the test rows.
-5. Apply `supabase/migrations/0008_platform_schedule_messages.sql` and deploy the client to enable the schedule and messages pages.
+5. Migrations 0008 to 0011 are applied. Merge `feature/frontend-seo` into `devel` and `main`; Vercel deploys the client and landing from `main`.
+6. Then in Supabase, Authentication → URL Configuration: Site URL `https://mentorbridge.nl`, Redirect URL `https://mentorbridge.nl/**`.
 
 ## S0. Inventory (from the audit)
 

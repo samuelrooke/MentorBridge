@@ -1,3 +1,4 @@
+import { friendlyError } from '../lib/errors'
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useAuth } from '../context/auth'
@@ -71,7 +72,7 @@ export default function Messages() {
         .select('id, match_id, sender_id, body, created_at').eq('match_id', matchId)
         .order('created_at', { ascending: false }).limit(50)
       if (!active) return
-      if (loadError) setError(loadError.message)
+      if (loadError) setError(friendlyError(loadError))
       const rows = (data ?? []).reverse() as MessageRow[]
       setMessages(rows)
       setHasOlder(rows.length === 50)
@@ -103,7 +104,7 @@ export default function Messages() {
     const { data, error: olderError } = await supabase.from('messages')
       .select('id, match_id, sender_id, body, created_at').eq('match_id', selectedMatchId)
       .lt('created_at', oldest.created_at).order('created_at', { ascending: false }).limit(50)
-    if (olderError) setError(olderError.message)
+    if (olderError) setError(friendlyError(olderError))
     const rows = (data ?? []).reverse() as MessageRow[]
     setMessages((current) => [...rows, ...current])
     setHasOlder(rows.length === 50)
@@ -118,7 +119,7 @@ export default function Messages() {
     setError(null)
     const { error: sendError } = await supabase.from('messages').insert({ match_id: selectedMatchId, sender_id: userId, body: cleanBody })
     setSending(false)
-    if (sendError) setError(sendError.message)
+    if (sendError) setError(friendlyError(sendError))
     else setBody('')
   }
 

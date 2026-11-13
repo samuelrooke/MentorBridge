@@ -6,7 +6,13 @@ import { useMatches } from '../lib/useMatches'
 import { useSessions } from '../lib/useSessions'
 import type { PlatformMessage, PlatformSession } from '../lib/platform'
 
-const roleNames = { student: 'Student', company: 'Organization', mentor: 'Mentor', admin: 'Admin' }
+const roleNames = { student: 'Student', company: 'Company', mentor: 'Mentor', admin: 'Admin' }
+// The answer that matching needs most, per role. If it's empty, the dashboard asks to finish the profile.
+const keyAnswer = {
+  student: { table: 'student_profiles', column: 'learning_goals' },
+  mentor: { table: 'mentor_profiles', column: 'expertise' },
+  company: { table: 'company_profiles', column: 'organisation_name' },
+} as const
 type Activity = { id: string; match_id: string; title: string; completed_at: string | null; due_date: string | null; sort_order: number }
 type MessagePreview = PlatformMessage & { match_id: string }
 
@@ -20,6 +26,9 @@ export default function Dashboard() {
   const [learningGoals, setLearningGoals] = useState('')
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [referenceTime] = useState(() => Date.now())
+  const [profileDone, setProfileDone] = useState(true)
+  // Greet by first name: saved on the account at sign-up, or the first word of the full name for older accounts.
+  const firstName = (session?.user.user_metadata?.first_name as string | undefined)?.trim() || profile?.full_name?.trim().split(/\s+/)[0]
   const member = profile?.role === 'student' || profile?.role === 'mentor'
   const matchIds = matches.map(({ id }) => id).join(',')
 
@@ -57,6 +66,19 @@ export default function Dashboard() {
   }, [profile?.id, profile?.role])
 
   useEffect(() => {
+    if (!profile || profile.role === 'admin') return
+    const { table, column } = keyAnswer[profile.role]
+    let active = true
+    void supabase.from(table).select(column).eq('id', profile.id).maybeSingle()
+      .then(({ data, error: loadError }) => {
+        if (!active || loadError) return
+        const answer = (data as Record<string, string | null> | null)?.[column]
+        setProfileDone(Boolean(answer?.trim()))
+      })
+    return () => { active = false }
+  }, [profile])
+
+  useEffect(() => {
     if (!profile?.avatar_path) return
     let active = true
     void supabase.storage.from('avatars').createSignedUrl(profile.avatar_path, 60 * 60)
@@ -79,10 +101,22 @@ export default function Dashboard() {
       <header className="dashboard-heading">
         <div className="dashboard-greeting">
           {avatarUrl ? <img className="dashboard-avatar" src={avatarUrl} alt="" /> : <span className="dashboard-avatar-fallback" aria-hidden="true">{profile?.full_name?.slice(0, 1).toUpperCase() ?? '?'}</span>}
-          <div><p className="eyebrow">{profile && roleNames[profile.role]}</p><h1>{profile?.full_name ? `Hello, ${profile.full_name}` : 'Your dashboard'}</h1><p className="muted">{profile?.bio || session?.user.email}</p></div>
+          <div><p className="eyebrow">{profile && roleNames[profile.role]}</p><h1>{firstName ? `Hello, ${firstName}` : 'Your dashboard'}</h1><p className="muted">{profile?.bio || session?.user.email}</p></div>
         </div>
       </header>
-      {error && <p className="alert alert-error">Could not load your matches: {error}</p>}
+      {!profileDone && (
+        <section className="card finish-profile" aria-labelledby="finish-profile-title">
+          <div>
+            <p className="eyebrow">Next step</p>
+            <h2 id="finish-profile-title">Finish your profile</h2>
+            <p className="muted">{profile?.role === 'company'
+              ? 'Tell us about your company so we can set things up. It takes about two minutes.'
+              : 'Answer a few short questions so we can find you a match. It takes about two minutes.'}</p>
+          </div>
+          <Link className="btn btn-primary" to="/profile?welcome=1">Answer the questions</Link>
+        </section>
+      )}
+      {error && <p className="alert alert-error">Could not load your matches. {error}</p>}
       {!matchesLoading && member && <section className="dashboard-metrics" aria-label="Your overview">
         <article className="metric-item"><span>{profile?.role === 'student' ? 'Mentors' : 'Students'}</span><strong>{peopleCount}</strong></article>
         <article className="metric-item"><span>Lessons</span><strong>{sessions.length}</strong></article>

@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import Account from './pages/Account'
 import Admin from './pages/Admin'
+import AuthConfirm from './pages/AuthConfirm'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Matching from './pages/Matching'
@@ -20,6 +21,7 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/auth/confirm" element={<AuthConfirm />} />
           <Route
             element={
               <ProtectedRoute>

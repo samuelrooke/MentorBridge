@@ -1,3 +1,4 @@
+import { friendlyError } from './errors'
 import { useEffect, useState } from 'react'
 import { supabase, type Role } from './supabase'
 
@@ -38,7 +39,7 @@ export function useMatches(role: Role | undefined, userId: string | undefined) {
       else query = query.eq('company_id', userId)
       const { data, error: queryError } = await query
       if (!active) return
-      if (queryError) setError(queryError.message)
+      if (queryError) setError(friendlyError(queryError))
       setMatches((data ?? []) as unknown as MatchRecord[])
       setLoading(false)
     }

@@ -8,7 +8,8 @@
     "start": "node --env-file-if-exists=.env src/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "pilot-requests": "node --env-file-if-exists=.env scripts/list-pilot-requests.js"
+    "pilot-requests": "node --env-file-if-exists=.env scripts/list-pilot-requests.js",
+    "users": "node --env-file-if-exists=.env scripts/users.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",

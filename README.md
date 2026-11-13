@@ -37,9 +37,19 @@ Create three Vercel projects from this repository, each with its own **Root Dire
 1. Deploy the **API** first and copy its URL.
 2. Deploy the **landing page** and **platform app** with `VITE_API_URL` set to that URL.
 3. Set `LANDING_ORIGIN` and `CLIENT_ORIGIN` on the API to their two URLs and redeploy it. In production, CORS only allows these two.
-4. In Supabase, under **Authentication → URL Configuration**, set the platform app's URL as Site URL so confirmation emails link back to it.
+4. In Supabase, under **Authentication → URL Configuration**, set the Site URL to `https://mentorbridge.nl` and add `https://mentorbridge.nl/**` under Redirect URLs, so account emails link back to the site.
+
+**One domain.** Visitors only ever see https://mentorbridge.nl. The landing project forwards the app's paths (`/login`, `/dashboard`, `/profile`, `/schedule`, `/messages`, `/matching`, `/account`, `/admin`, `/reset-password`, `/auth/confirm` and the app's files under `/app-assets/`) to the `client` project, see `landing/vercel.json`. When the app gets a new top-level page, add its path there too. Deploy the `client` project before the landing project when both change, so the forwarded files exist.
 
 `VITE_` variables are built into the page, so redeploy after changing them.
+
+### Account emails without Supabase branding
+
+Out of the box, Supabase sends the confirmation and password emails from its own address, with its own text, and the link goes to `<project>.supabase.co`. To make them MentorBridge emails:
+
+1. **Text and link.** In Supabase, **Authentication → Email Templates**, paste the HTML from `supabase/templates/` into *Confirm signup* (`confirmation.html`), *Reset password* (`recovery.html`) and *Change email address* (`email_change.html`). The subjects are in `supabase/config.toml`. The links then go to the platform's own `/auth/confirm` page. This needs the Site URL from step 4 above.
+2. **Sender.** Under **Authentication → SMTP Settings**, turn on custom SMTP with a mail service (for example Brevo or Resend, both have free tiers) and set the sender name to MentorBridge. Without custom SMTP, Supabase's built-in mail only reaches a few addresses an hour and only the project team's own addresses, so real users may not get the email at all.
+3. **Fastest sign-up (optional).** Under **Authentication → Sign In / Providers → Email**, turning off *Confirm email* logs people in right after sign-up, with no email step. The app handles both settings.
 
 ## Database
 
@@ -53,4 +63,6 @@ Admins are set by hand in the Supabase SQL editor:
 
 ```sql
 update public.profiles set role = 'admin' where email = 'you@example.com';
+-- or from the terminal, with the service-role key in server/.env:
+--   npm run users -- make-admin you@example.com
 ```

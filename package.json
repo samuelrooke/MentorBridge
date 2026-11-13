@@ -15,6 +15,7 @@
     "test": "npm run test --workspaces --if-present",
     "dev:landing": "concurrently -n server,landing -c green,magenta \"npm run dev -w server\" \"npm run dev -w landing\"",
     "pilot-requests": "npm run pilot-requests -w server",
+    "users": "npm run users -w server --",
     "setup": "node scripts/setup.mjs",
     "setup:local": "node scripts/setup.mjs --local",
     "doctor": "node scripts/doctor.mjs",
