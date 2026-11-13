@@ -1,6 +1,6 @@
 # Add-ons from the marketing guest lecture: status
 
-Last updated 10 November 2026, branch `feature/waitlist-segments`. The lecture notes are the new guideline (version 3 in `MentorBridge_context.md`).
+Last updated 13 November 2026, branch `feature/frontend-seo`. The lecture notes are the new guideline (version 3 in `MentorBridge_context.md`).
 
 Step 1 (audit) is done. Step 2: all P1 items are built. They are **not live yet**: migration 0006 has to be applied to the Supabase database, then the API and the landing pages deployed, in that order.
 
@@ -22,18 +22,18 @@ Statuses: `DONE`, `PARTIAL`, `MISSING`, `CONFLICT`, `NOT CODE`, `BLOCKED` (waiti
 | A9 | P2 | MISSING | | UNCLEAR: own page or a section on the organization page. |
 | B1 | P1 | DONE | One form (`landing/partials/signup.html`) on all three pages, posted to `POST /api/pilot-requests`. Same table `pilot_requests` with `role`. Success state per segment. Unique index on (role, email) in migration 0006, API returns 409 and the page shows "already on the waiting list". RLS on, no public policies; inserts go through the API with the service key, so nobody can read rows with the public key. | Migration 0006 not applied yet. It deletes 1 existing duplicate row (keeps the oldest). |
 | B2 | P1 | DONE | Company: contact name, work email, organization, role, sector; optional size and interest (internal / white label / both). Mentor: name, email, age range, hours per month, availability; optional sector. Student: name, email, sector, soft/hard/both, availability. Shared sector list, dropdowns and fixed options, age as ranges. Validated in `server/src/routes/pilotRequests.js`, constrained in migration 0006. | Since 11 November: age ranges under 30 to 60+ and a "mentor for our interns" option for companies (migration 0007). Students get 3 optional follow-up questions. |
-| B3 | P1 | DONE | Required consent checkbox linking to `/privacy/`, stored as `consent_at`. Privacy statement: what we store, what we don't, why, legal basis, who sees it, how long, how to see or remove it, where to complain. | TODO in the page: Supabase region, exact project end date, contact email address. |
-| B4 | P2 | BLOCKED | No email sent by the site. | UNCLEAR: what Gmail is for. |
+| B3 | P1 | DONE | Required consent checkbox linking to `/privacy/`, stored as `consent_at`. Privacy statement: what we store, what we don't, why, legal basis, who sees it, how long, how to see or remove it, where to complain. Contact email: `mentorbridge.nl@outlook.com`. | TODO in the page: Supabase region and exact project end date. |
+| B4 | P2 | DONE | Contact form submissions are stored in Supabase `contact_messages`. Direct contact links use `mentorbridge.nl@outlook.com`. | No automatic email is sent by the site. |
 | C1 | P1 | DONE | `landing/src/main.js` reads `utm_source`, `utm_medium`, `utm_campaign`, the referring host and the first page, keeps them for the session (new UTM tags replace them) and sends them with the sign-up. Stored in new columns. Naming guide: `docs/utm.md`. | |
 | C2 | P1 | DONE | GoatCounter counts views per page plus `form-start-<segment>` and `signup-<segment>`. Conversion = sign-ups ÷ views of that segment's EN + NL page. Explained in `docs/utm.md` and `landing/README.md`. | The old event `pilot-request` is now `signup-company`. |
 | C3 | P2 | PARTIAL | `npm run pilot-requests` now shows the new fields and sign-ups per source. | No SQL view yet (per week, progress against targets). |
 | C4 | P2 | PARTIAL | Cookie bar for GA4 and GTM, unchanged. | Doesn't cover LinkedIn or Google Ads yet. |
 | C5 | P2 | MISSING | | Needs the LinkedIn partner ID. |
-| C6 | P2 | PARTIAL | Every page has a canonical URL and hreflang links. | No sitemap, robots.txt or verification tag yet. |
+| C6 | P2 | PARTIAL | Canonical and absolute hreflang on every page, `robots.txt`, and a sitemap generated from the page list with `<lastmod>` from git. | Search Console verification tag (needs the team's Google account). |
 | C7 | P3 | MISSING | | UNCLEAR: are ads planned? |
-| C8 | P2 | MISSING | | No Open Graph tags or 1200x627 image yet. |
+| C8 | P2 | DONE | Open Graph and Twitter tags per page and language, 1200x627 images in `landing/public/og/` (`npm run og -w landing`). | |
 | C9 | P3 | MISSING | | Can be made now that the pages and UTM names exist. |
-| D1 | LATER | PARTIAL | Platform app has auth, roles, intake profiles and manual matching. | The waiting list fields (sector list, age range, hours, availability options) aren't in the platform tables yet. They're designed so they can be copied over. |
+| D1 | LATER | PARTIAL | Platform app has auth, roles, keyword-based student/mentor matching, profile bios and photos, an overview dashboard, live session schedule, and private live messaging. | Migrations 0008 to 0011 are applied to the live database (13 November). Still to do: merge `feature/frontend-seo` into `main` so Vercel deploys it. The waiting list fields (sector list, age range, hours, availability options) aren't in the platform tables yet. |
 | D2 | LATER | PARTIAL | Landing colours are tokens in `landing/src/style.css`. Header and footer now exist once (partials), so the name and logo are in fewer places. | No single brand config. |
 | D3 | LATER | NOT CODE | | Investor note UNCLEAR. |
 
@@ -43,6 +43,8 @@ Statuses: `DONE`, `PARTIAL`, `MISSING`, `CONFLICT`, `NOT CODE`, `BLOCKED` (waiti
 2. Deploy the API (Vercel project `mentor-bridge`). The new API needs the new columns, and the old landing form no longer passes its checks (no name, no consent), so steps 2 and 3 belong together.
 3. Deploy the landing pages (Vercel project `landing`).
 4. Test one sign-up per segment on https://mentorbridge.nl and remove the test rows.
+5. Migrations 0008 to 0011 are applied. Merge `feature/frontend-seo` into `devel` and `main`; Vercel deploys the client and landing from `main`.
+6. Then in Supabase, Authentication → URL Configuration: Site URL `https://mentorbridge.nl`, Redirect URL `https://mentorbridge.nl/**`.
 
 ## S0. Inventory (from the audit)
 

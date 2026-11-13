@@ -5,6 +5,14 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 ## [Unreleased]
 
 ### Added
+- Platform sign-up in fewer steps: choose student, mentor or company first, then first name, surname, email and password (with a show button). Landing links can preselect the role with `/login?role=mentor`. A "Back to the homepage" link on the login page.
+- After sign-up a clear "Check your inbox" screen with a resend button, and new accounts go straight to a short welcome version of the profile questions. The dashboard shows "Finish your profile" until the main question is answered.
+- MentorBridge email templates for confirming an account, resetting a password and changing an email (`supabase/templates/`). Their links go to the platform's own `/auth/confirm` page instead of the Supabase address. Setup in the README.
+- The platform runs on mentorbridge.nl: log in at https://mentorbridge.nl/login instead of the `.vercel.app` address. The landing project forwards the app's paths to the client project (`landing/vercel.json`), and the app's files moved to `/app-assets/` so they don't clash with the landing's.
+- One account per email: signing up again with a registered email says so (also when email confirmation is on, where Supabase otherwise pretends to succeed). Migration 0011 adds a case-insensitive unique email on profiles and keeps it in step with email changes.
+- `npm run users` lists accounts; `npm run users -- delete <email>` and `npm run users -- make-admin <email>` delete an account (including its photo) or turn it into an admin. Needs the service-role key in `server/.env`.
+- Keyword matching only uses accounts that are currently students or mentors.
+- `<lastmod>` per page in the sitemap, taken from git history (left out when history isn't available).
 - Waiting list with one page per segment: `/students/`, `/mentors/`, `/companies/`, plus a front page that sends visitors to the right one. All in English and Dutch.
 - Waiting list fields per segment: name and sector for everyone (sector optional for mentors); age range, hours per month and availability for mentors; soft or hard skills and availability for students; role, size and how they'd use it for organizations.
 - Consent checkbox on the form and a privacy statement at `/privacy/`, which also explains GoatCounter and the Google Analytics cookies (only after Accept).
@@ -22,6 +30,10 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - The header and footer logo is a 112 px version (8 KB instead of 293 KB), with proper 32 px and 180 px favicons.
 
 ### Changed
+- The call to action is no longer "Join the waiting list": "Sign up free" in the header, "Find a mentor" for students, "Become a mentor" for mentors and "Sign up your company" for companies. The header button now sits left of "Log in". The form itself still explains that people join the waiting list.
+- Profile questions: matching questions first, photo and introduction last as optional, "(optional)" on fields that aren't needed. Mentors pick topics from the same list students choose from, instead of typing keywords, so matches don't depend on spelling, and choose their time per month from a list.
+- Error messages in the platform are plain sentences; technical database or Supabase messages are never shown.
+- Two Dutch page descriptions were shortened to stay under 160 characters, and the last untranslated texts on the mentor page now have Dutch versions.
 - MentorBridge is free for everybody during the first version; the "organizations pay" copy is gone.
 - Mentors are described as experienced professionals with some free time next to their job (part-time and freelance too), not retirees. The mentor page targets "become a mentor next to your job".
 - The same email can sign up only once per segment (migration 0006 removes earlier duplicates, keeping the oldest).

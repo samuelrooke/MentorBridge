@@ -245,6 +245,21 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# MentorBridge emails. The links point to the client's /auth/confirm page (on our
+# own domain) instead of the Supabase host. For the hosted project, paste the same
+# HTML into Dashboard > Authentication > Email Templates (see README).
+[auth.email.template.confirmation]
+subject = "Confirm your email for MentorBridge"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Set a new password for MentorBridge"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new email for MentorBridge"
+content_path = "./supabase/templates/email_change.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"

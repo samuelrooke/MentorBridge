@@ -53,7 +53,7 @@ The landing pages deploy to Vercel (project `landing`, Root Directory `landing`)
 - **Images:** the slots waiting for a photo, and how to add one, are in [`docs/images.md`](../docs/images.md). In short: put the original in `docs/images-src/<slot id>.jpg`, run `npm run images -w landing`, check the alt text in `scripts/slots.mjs` and its Dutch entry. A slot without a photo shows the team photo set as its fallback, or a placeholder box.
 - **Link previews:** `npm run og -w landing` renders `public/og/og-en.jpg` and `og-nl.jpg` from `og-template/og.html` with headless Chrome (set `CHROME_PATH` if it isn't found).
 - **Photo sources:** the sources and licences of `public/slides/*.jpg` aren't recorded yet. Add them to `docs/images.md`.
-- **Privacy statement:** Supabase region, project end date and a contact email address (`TODO` comments in `privacy/index.html`).
+- **Privacy statement:** Supabase region and project end date still need confirmation. Contact email: `mentorbridge.nl@outlook.com`.
 - **Team photos:** replace the initials on the front page with photos (`public/team/<name>.jpg`).
 
 ## Measuring

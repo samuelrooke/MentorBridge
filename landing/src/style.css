@@ -303,6 +303,7 @@
   /* ---------- Audience cards ---------- */
   .audience { @apply flex min-h-64 flex-col gap-3 rounded-3xl border border-ink/[0.08] bg-card p-8 shadow-card sm:p-10; }
   .audience p { @apply max-w-[48ch] text-muted; }
+  .audience-actions { @apply mt-auto flex flex-col items-start gap-3 pt-2; }
   .audience-icon { @apply mb-3 grid size-12 place-items-center rounded-2xl bg-sunk text-accent; }
 
   /* ---------- FAQ ---------- */

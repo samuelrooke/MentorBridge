@@ -1,10 +1,10 @@
-// The MentorBridge logo: the arch icon (public/icon.png) with the name, as on the landing page.
+// The MentorBridge logo: the current landing-page mark with the name.
 export default function Wordmark() {
   return (
     <span className="logo">
-      <img src="/icon.png" alt="" width={512} height={512} />
+      <img src="/logo-112.png" alt="" width={112} height={112} />
       <span>
-        Mentor<span className="text-accent">Bridge</span>
+        Mentor<span className="logo-accent">Bridge</span>
       </span>
     </span>
   )

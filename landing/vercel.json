@@ -7,13 +7,23 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "landing-drab-iota-50.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "landing-drab-iota-50.vercel.app"
+        }
+      ],
       "destination": "https://mentorbridge.nl/:path*",
       "statusCode": 301
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "landing-mentor-bridge2.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "landing-mentor-bridge2.vercel.app"
+        }
+      ],
       "destination": "https://mentorbridge.nl/:path*",
       "statusCode": 301
     }
@@ -21,7 +31,35 @@
   "headers": [
     {
       "source": "/fonts/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/app-assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/app-assets/:file*",
+      "destination": "https://client-seven-blush-72.vercel.app/app-assets/:file*"
+    },
+    {
+      "source": "/:page(login|reset-password|dashboard|matching|schedule|messages|profile|account|admin)",
+      "destination": "https://client-seven-blush-72.vercel.app/index.html"
+    },
+    {
+      "source": "/auth/confirm",
+      "destination": "https://client-seven-blush-72.vercel.app/index.html"
     }
   ]
 }

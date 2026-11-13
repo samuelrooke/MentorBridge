@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { friendlyError } from '../lib/errors'
 import { supabase } from '../lib/supabase'
 
 // Sets a new password for the logged-in user. Used on the reset page
@@ -20,11 +21,7 @@ export default function PasswordForm({ submitLabel, onDone }: { submitLabel: str
     const { error } = await supabase.auth.updateUser({ password })
     setBusy(false)
     if (error) {
-      setError(
-        /different from the old/i.test(error.message)
-          ? 'Choose a password that is different from your old one.'
-          : error.message,
-      )
+      setError(friendlyError(error))
       return
     }
     setPassword('')
