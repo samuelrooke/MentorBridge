@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import { useAuth } from '../context/auth'
+import { useViewer } from '../context/viewer'
 import { supabase } from '../lib/supabase'
 import { useMatches } from '../lib/useMatches'
 import { useSessions } from '../lib/useSessions'
 import type { PlatformMessage, PlatformSession } from '../lib/platform'
+// Loaded only for admins, so students and mentors don't download it.
+const AdminDashboard = lazy(() => import('./AdminDashboard'))
 
 const roleNames = { student: 'Student', company: 'Company', mentor: 'Mentor', admin: 'Admin' }
 // The answer that matching needs most, per role. If it's empty, the dashboard asks to finish the profile.
@@ -16,8 +19,18 @@ const keyAnswer = {
 type Activity = { id: string; match_id: string; title: string; completed_at: string | null; due_date: string | null; sort_order: number }
 type MessagePreview = PlatformMessage & { match_id: string }
 
+// Admins get the admin dashboard; everyone else (and an admin viewing as someone) the member dashboard.
 export default function Dashboard() {
-  const { session, profile } = useAuth()
+  const { viewer } = useViewer()
+  if (viewer?.role === 'admin') return <Suspense fallback={<p className="muted">Loading the admin dashboard…</p>}><AdminDashboard /></Suspense>
+  // A new key per person resets the page state when an admin switches who they view as.
+  return <MemberDashboard key={viewer?.id ?? 'none'} />
+}
+
+function MemberDashboard() {
+  const { session } = useAuth()
+  // "profile" is whoever the page shows: the logged-in user, or the person an admin views as.
+  const { viewer: profile, viewingAs } = useViewer()
   const { matches, loading: matchesLoading, error } = useMatches(profile?.role, profile?.id)
   const { sessions } = useSessions(matches)
   const { unreadCounts } = useOutletContext<{ unreadCounts: Record<string, number> }>()
@@ -28,7 +41,8 @@ export default function Dashboard() {
   const [referenceTime] = useState(() => Date.now())
   const [profileDone, setProfileDone] = useState(true)
   // Greet by first name: saved on the account at sign-up, or the first word of the full name for older accounts.
-  const firstName = (session?.user.user_metadata?.first_name as string | undefined)?.trim() || profile?.full_name?.trim().split(/\s+/)[0]
+  const ownFirstName = viewingAs ? undefined : (session?.user.user_metadata?.first_name as string | undefined)?.trim()
+  const firstName = ownFirstName || profile?.full_name?.trim().split(/\s+/)[0]
   const member = profile?.role === 'student' || profile?.role === 'mentor'
   const matchIds = matches.map(({ id }) => id).join(',')
 
@@ -101,19 +115,21 @@ export default function Dashboard() {
       <header className="dashboard-heading">
         <div className="dashboard-greeting">
           {avatarUrl ? <img className="dashboard-avatar" src={avatarUrl} alt="" /> : <span className="dashboard-avatar-fallback" aria-hidden="true">{profile?.full_name?.slice(0, 1).toUpperCase() ?? '?'}</span>}
-          <div><p className="eyebrow">{profile && roleNames[profile.role]}</p><h1>{firstName ? `Hello, ${firstName}` : 'Your dashboard'}</h1><p className="muted">{profile?.bio || session?.user.email}</p></div>
+          <div><p className="eyebrow">{profile && roleNames[profile.role]}</p><h1>{firstName ? `Hello, ${firstName}` : 'Your dashboard'}</h1><p className="muted">{profile?.bio || (viewingAs ? viewingAs.email : session?.user.email)}</p></div>
         </div>
       </header>
       {!profileDone && (
         <section className="card finish-profile" aria-labelledby="finish-profile-title">
           <div>
             <p className="eyebrow">Next step</p>
-            <h2 id="finish-profile-title">Finish your profile</h2>
-            <p className="muted">{profile?.role === 'company'
-              ? 'Tell us about your company so we can set things up. It takes about two minutes.'
-              : 'Answer a few short questions so we can find you a match. It takes about two minutes.'}</p>
+            <h2 id="finish-profile-title">{viewingAs ? 'Profile not finished' : 'Finish your profile'}</h2>
+            <p className="muted">{viewingAs
+              ? `${firstName ?? 'This person'} hasn’t answered the profile questions yet, so matching can’t use them.`
+              : profile?.role === 'company'
+                ? 'Tell us about your company so we can set things up. It takes about two minutes.'
+                : 'Answer a few short questions so we can find you a match. It takes about two minutes.'}</p>
           </div>
-          <Link className="btn btn-primary" to="/profile?welcome=1">Answer the questions</Link>
+          {!viewingAs && <Link className="btn btn-primary" to="/profile?welcome=1">Answer the questions</Link>}
         </section>
       )}
       {error && <p className="alert alert-error">Could not load your matches. {error}</p>}

@@ -1,12 +1,14 @@
-import { Link } from 'react-router-dom'
-import { useAuth } from '../context/auth'
+import { Link, Navigate } from 'react-router-dom'
+import { useViewer } from '../context/viewer'
 import { useMatches } from '../lib/useMatches'
 
 const roleLabels = { student: 'mentor', mentor: 'student', company: 'match', admin: 'match' }
 
 export default function Matching() {
-  const { profile } = useAuth()
+  const { viewer: profile } = useViewer()
   const { matches, loading, error } = useMatches(profile?.role, profile?.id)
+  // Admins manage all matches in the admin dashboard.
+  if (profile?.role === 'admin') return <Navigate to="/dashboard?tab=matches" replace />
   const otherRole = profile ? roleLabels[profile.role] : 'match'
 
   return (

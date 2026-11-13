@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { countUnreadMessages, createIcsContent, groupMessagesByDay, type PlatformMessage } from './platform'
+import { countUnreadMessages, createIcsContent, groupMessagesByDay, isTeamMessage, matchLabel, type PlatformMessage } from './platform'
 
 const messages: PlatformMessage[] = [
   { id: '1', sender_id: 'other', body: 'Earlier', created_at: '2026-11-10T10:00:00.000Z' },
@@ -39,5 +39,21 @@ describe('platform helpers', () => {
     expect(content).toContain('SUMMARY:Interview\\, practice\\; prep\r\n')
     expect(content).toContain('DESCRIPTION:Sam Student\\nBring notes\\nhttps://example.test/meet\r\n')
     expect(content).toContain('END:VCALENDAR\r\n')
+  })
+
+  it('names the other person, or both for admins and companies', () => {
+    const match = { student_id: 's', mentor_id: 'm', student: { full_name: 'Lisa' }, mentor: { full_name: 'Daan' } }
+    expect(matchLabel(match, 'student')).toBe('Daan')
+    expect(matchLabel(match, 'mentor')).toBe('Lisa')
+    expect(matchLabel(match, 'admin')).toBe('Lisa with Daan')
+    expect(matchLabel(match, 'company')).toBe('Lisa with Daan')
+    expect(matchLabel(undefined, 'student')).toBe('Your match')
+  })
+
+  it('recognises messages from the MentorBridge team', () => {
+    const match = { student_id: 's', mentor_id: 'm' }
+    expect(isTeamMessage({ sender_id: 'admin' }, match)).toBe(true)
+    expect(isTeamMessage({ sender_id: 's' }, match)).toBe(false)
+    expect(isTeamMessage({ sender_id: 'm' }, match)).toBe(false)
   })
 })

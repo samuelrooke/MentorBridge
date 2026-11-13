@@ -71,3 +71,27 @@ export function createIcsContent(session: PlatformSession, matchLabel: string) {
   ]
   return `${lines.join('\r\n')}\r\n`
 }
+type MatchNames = {
+  student_id: string
+  mentor_id: string
+  student: { full_name: string | null } | null
+  mentor: { full_name: string | null } | null
+}
+
+/**
+ * The name to show for a match, from the viewer's side: a student sees their mentor,
+ * a mentor their student, and admins and companies see both.
+ */
+export function matchLabel(match: MatchNames | undefined, role: string | undefined) {
+  if (!match) return 'Your match'
+  const student = match.student?.full_name ?? 'Student'
+  const mentor = match.mentor?.full_name ?? 'Mentor'
+  if (role === 'student') return match.mentor?.full_name ?? 'Your mentor'
+  if (role === 'mentor') return match.student?.full_name ?? 'Your student'
+  return `${student} with ${mentor}`
+}
+
+/** A message written by someone outside the pair: the MentorBridge team. */
+export function isTeamMessage(message: Pick<PlatformMessage, 'sender_id'>, match: Pick<MatchNames, 'student_id' | 'mentor_id'>) {
+  return message.sender_id !== match.student_id && message.sender_id !== match.mentor_id
+}

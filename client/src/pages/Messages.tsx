@@ -1,18 +1,23 @@
 import { friendlyError } from '../lib/errors'
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import { useOutletContext } from 'react-router-dom'
-import { useAuth } from '../context/auth'
-import { groupMessagesByDay, type PlatformMessage } from '../lib/platform'
+import { useOutletContext, useSearchParams } from 'react-router-dom'
+import { useViewer } from '../context/viewer'
+import { groupMessagesByDay, isTeamMessage, matchLabel, type PlatformMessage } from '../lib/platform'
 import { supabase } from '../lib/supabase'
-import { useMatches, type MatchRecord } from '../lib/useMatches'
+import { useMatches } from '../lib/useMatches'
 
 type MessageRow = PlatformMessage & { match_id: string }
 
 export default function Messages() {
-  const { profile } = useAuth()
+  // The conversation is shown from the viewer's side (the person an admin views as, or the
+  // admin). Sending and read markers always use the logged-in account (actorId), so an admin
+  // posts as "MentorBridge team" and never changes someone else's unread state.
+  const { viewer: profile, actorId, isAdmin } = useViewer()
   const { matches, loading: matchesLoading } = useMatches(profile?.role, profile?.id)
   const { unreadCounts } = useOutletContext<{ unreadCounts: Record<string, number> }>()
-  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null)
+  const [searchParams] = useSearchParams()
+  // ?match=<id> opens that conversation straight away (used by the admin dashboard).
+  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(() => searchParams.get('match'))
   const [messages, setMessages] = useState<MessageRow[]>([])
   const [previews, setPreviews] = useState<Record<string, MessageRow>>({})
   const [body, setBody] = useState('')
@@ -54,14 +59,14 @@ export default function Messages() {
   }, [matches, userId])
 
   useEffect(() => {
-    if (!selectedMatchId || !userId) {
+    if (!selectedMatchId || !userId || !actorId) {
       return
     }
     let active = true
     const matchId = selectedMatchId
     async function markRead() {
       await supabase.from('message_reads').upsert(
-        { match_id: matchId, user_id: userId, read_at: new Date().toISOString() },
+        { match_id: matchId, user_id: actorId, read_at: new Date().toISOString() },
         { onConflict: 'match_id,user_id' },
       )
     }
@@ -93,7 +98,7 @@ export default function Messages() {
       active = false
       void supabase.removeChannel(channel)
     }
-  }, [selectedMatchId, userId])
+  }, [selectedMatchId, userId, actorId])
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }, [messages])
 
@@ -114,10 +119,10 @@ export default function Messages() {
   async function sendMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const cleanBody = body.trim()
-    if (!selectedMatchId || !userId || !cleanBody || cleanBody.length > 5000) return
+    if (!selectedMatchId || !actorId || !cleanBody || cleanBody.length > 5000) return
     setSending(true)
     setError(null)
-    const { error: sendError } = await supabase.from('messages').insert({ match_id: selectedMatchId, sender_id: userId, body: cleanBody })
+    const { error: sendError } = await supabase.from('messages').insert({ match_id: selectedMatchId, sender_id: actorId, body: cleanBody })
     setSending(false)
     if (sendError) setError(friendlyError(sendError))
     else setBody('')
@@ -135,9 +140,9 @@ export default function Messages() {
   return (
     <div className={`messages-page${selectedMatchId ? ' conversation-open' : ''}`}>
       <aside className="conversation-list" aria-label="Conversations">
-        <div className="conversation-list-heading"><p className="eyebrow">Your workspace</p><h1>Messages</h1></div>
+        <div className="conversation-list-heading"><p className="eyebrow">{profile?.role === 'admin' ? 'All conversations' : 'Your workspace'}</p><h1>Messages</h1></div>
         {matches.length ? matches.map((match) => {
-          const other = otherPerson(match, profile?.role)
+          const other = { full_name: matchLabel(match, profile?.role) }
           const preview = previews[match.id]
           const unread = unreadCounts[match.id] ?? 0
           return <button key={match.id} className={`conversation-link${selectedMatchId === match.id ? ' selected' : ''}`} aria-current={selectedMatchId === match.id ? 'true' : undefined} onClick={() => { setMessages([]); setSelectedMatchId(match.id) }}>
@@ -149,23 +154,20 @@ export default function Messages() {
       </aside>
       <section className="conversation-panel" aria-label="Conversation">
         {!selectedMatch ? <div className="conversation-placeholder"><span className="empty-chat-mark" aria-hidden="true">M</span><h2>{matches.length ? 'Choose a conversation' : 'No conversation yet'}</h2><p className="muted">{matches.length ? 'Select a match to read and send messages.' : 'Your private chat will be ready when you have a match.'}</p></div> : <>
-          <header className="conversation-header"><button className="back-to-conversations" onClick={() => { setMessages([]); setSelectedMatchId(null) }}>Back</button><div><p className="eyebrow">Conversation with</p><h2>{otherPerson(selectedMatch, profile?.role)?.full_name ?? 'Your match'}</h2></div></header>
+          <header className="conversation-header"><button className="back-to-conversations" onClick={() => { setMessages([]); setSelectedMatchId(null) }}>Back</button><div><p className="eyebrow">Conversation with</p><h2>{matchLabel(selectedMatch, profile?.role)}</h2></div></header>
           <div className="message-history" aria-live="polite">
             {hasOlder && <button className="load-older" onClick={loadOlder} disabled={loadingOlder}>{loadingOlder ? 'Loading...' : 'Load older messages'}</button>}
             {loading ? <p className="muted centered">Loading messages...</p> : messages.length ? groupMessagesByDay(messages).map((group) => <section className="message-day" key={group.label}>
               <h3>{group.label}</h3>
-              {group.messages.map((message) => <article key={message.id} className={`message-row${message.sender_id === userId ? ' own-message' : ''}`}><div className="message-bubble"><p>{message.body}</p><time dateTime={message.created_at}>{new Intl.DateTimeFormat(undefined, { timeStyle: 'short' }).format(new Date(message.created_at))}</time></div></article>)}
-            </section>) : <div className="conversation-placeholder"><h2>Start the conversation</h2><p className="muted">Messages between you and your match stay private.</p></div>}
+              {group.messages.map((message) => <article key={message.id} className={`message-row${message.sender_id === userId ? ' own-message' : ''}${isTeamMessage(message, selectedMatch) ? ' team-message' : ''}`}><div className="message-bubble">{isTeamMessage(message, selectedMatch) && <span className="team-label">MentorBridge team</span>}<p>{message.body}</p><time dateTime={message.created_at}>{new Intl.DateTimeFormat(undefined, { timeStyle: 'short' }).format(new Date(message.created_at))}</time></div></article>)}
+            </section>) : <div className="conversation-placeholder"><h2>Start the conversation</h2><p className="muted">Only the student, the mentor and the MentorBridge team can read these messages.</p></div>}
             <div ref={endRef} />
           </div>
           {error && <p className="alert alert-error message-error" role="alert">{error}</p>}
+          {isAdmin && <p className="composer-note">You post as <strong>MentorBridge team</strong>. Both people in this match see your message.</p>}
           <form className="message-composer" onSubmit={sendMessage}><label className="sr-only" htmlFor="message-body">Write a message</label><textarea id="message-body" rows={2} maxLength={5000} placeholder="Write a message..." value={body} onChange={(event) => setBody(event.target.value)} onKeyDown={onComposerKeyDown} /><div className="composer-footer">{body.length >= 4500 && <span className="character-count">{body.length}/5000</span>}<button className="btn btn-primary btn-sm" disabled={!body.trim() || sending}>{sending ? 'Sending...' : 'Send'}</button></div></form>
         </>}
       </section>
     </div>
   )
-}
-
-function otherPerson(match: MatchRecord, role: string | undefined) {
-  return role === 'student' ? match.mentor : match.student
 }
