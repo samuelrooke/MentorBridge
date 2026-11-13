@@ -163,8 +163,8 @@ if (form) {
   let signupId = null
 
   const BUTTON = {
-    en: { student: 'Join the waiting list', mentor: 'Join as a mentor', company: 'Join as a company' },
-    nl: { student: 'Meld je aan voor de wachtlijst', mentor: 'Meld je aan als mentor', company: 'Meld je aan als bedrijf' },
+    en: { student: 'Find a mentor', mentor: 'Sign up as a mentor', company: 'Sign up as a company' },
+    nl: { student: 'Vind een mentor', mentor: 'Meld je aan als mentor', company: 'Meld je aan als bedrijf' },
   }
 
   // Show the fields for this segment. Hidden fields are disabled, so they are neither checked nor sent.
@@ -501,6 +501,7 @@ window.matchMedia('(min-width: 64rem)').addEventListener('change', (event) => {
 })
 
 // ---- Log in: the button goes to the platform app ----
-// The HTML points at the live app; VITE_APP_URL overrides it (e.g. http://localhost:5173 locally).
+// The HTML links to /login on mentorbridge.nl (landing/vercel.json forwards it to the app).
+// VITE_APP_URL overrides it, e.g. http://localhost:5173 when running locally.
 const APP_URL = (import.meta.env.VITE_APP_URL ?? '').replace(/\/$/, '')
 if (APP_URL) for (const link of document.querySelectorAll('[data-app-login]')) link.href = `${APP_URL}/login`
