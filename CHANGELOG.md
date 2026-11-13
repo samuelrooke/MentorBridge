@@ -5,6 +5,10 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 ## [Unreleased]
 
 ### Added
+- Admin dashboard (Dashboard for admins) with tabs: Overview (key numbers, what needs attention, sign-ups against the targets, sources, recent activity, upcoming sessions), Users (search, change role, confirm email, see answers, delete), Matches (create, suggestions by shared topics, change status or company, delete), Waiting list (filter, CSV export, remove) and Contact.
+- "View as": admins can see the platform exactly as any student, mentor or company sees it. Changes are made by the admin's own account; messages are posted as "MentorBridge team".
+- Admins can use Schedule and Messages for every match (migration 0012). Messages from the team are labelled "MentorBridge team".
+- The landing form creates a MentorBridge account (first name, surname, email, password; company name for companies) and logs the person in on the platform, where they answer the profile questions. `POST /api/signup` creates the account without sending an email.
 - Platform sign-up in fewer steps: choose student, mentor or company first, then first name, surname, email and password (with a show button). Landing links can preselect the role with `/login?role=mentor`. A "Back to the homepage" link on the login page.
 - After sign-up a clear "Check your inbox" screen with a resend button, and new accounts go straight to a short welcome version of the profile questions. The dashboard shows "Finish your profile" until the main question is answered.
 - MentorBridge email templates for confirming an account, resetting a password and changing an email (`supabase/templates/`). Their links go to the platform's own `/auth/confirm` page instead of the Supabase address. Setup in the README.
@@ -30,6 +34,11 @@ All notable changes to MentorBridge. The format follows [Keep a Changelog](https
 - The header and footer logo is a 112 px version (8 KB instead of 293 KB), with proper 32 px and 180 px favicons.
 
 ### Changed
+- Account creation no longer sends a confirmation email, which avoids Supabase's limit of a few emails an hour ("too many attempts"). Email addresses are therefore not verified; turn verification back on after setting up custom SMTP.
+- Links to a section with a form (Find a mentor, Sign up free, Contact) scroll to the form itself instead of the section heading.
+- The header's "Sign up free" on the front page and privacy page opens account creation directly.
+- The privacy statement covers accounts, matches and messages, including that the team can read and write in conversations.
+- Text on dark red (own chat messages, unread badges, the selected calendar day) is light again: the colour it used was never defined, so it showed dark text on dark red (1.7:1).
 - The call to action is no longer "Join the waiting list": "Sign up free" in the header, "Find a mentor" for students, "Become a mentor" for mentors and "Sign up your company" for companies. The header button now sits left of "Log in". The form itself still explains that people join the waiting list.
 - Profile questions: matching questions first, photo and introduction last as optional, "(optional)" on fields that aren't needed. Mentors pick topics from the same list students choose from, instead of typing keywords, so matches don't depend on spelling, and choose their time per month from a list.
 - Error messages in the platform are plain sentences; technical database or Supabase messages are never shown.

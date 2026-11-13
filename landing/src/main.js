@@ -10,27 +10,27 @@ const LANG = document.documentElement.lang === 'nl' ? 'nl' : 'en'
 const UI = {
   en: {
     sending: 'Sending…',
-    sendAnswers: 'Send answers',
+    creating: 'Creating your account…',
     sendMessage: 'Send message',
+    show: 'Show',
+    hide: 'Hide',
+    logIn: 'Log in',
     errorGeneric: 'Sorry, something went wrong. Please try again in a moment.',
-    errorAnswers: 'Sorry, something went wrong. You can try again or skip.',
-    errorOffline: "Sorry, we couldn't send your details. Check your connection and try again.",
-    errorOfflineAnswers: "Sorry, we couldn't send your answers. Check your connection and try again, or skip.",
+    errorOffline: "Sorry, we couldn't create your account. Check your connection and try again.",
     errorOfflineMessage: "Sorry, we couldn't send your message. Check your connection and try again.",
-    errorAvailability: 'Please choose when you are available.',
     play: 'Play slideshow',
     pause: 'Pause slideshow',
   },
   nl: {
     sending: 'Versturen…',
-    sendAnswers: 'Antwoorden versturen',
+    creating: 'Je account wordt aangemaakt…',
     sendMessage: 'Bericht versturen',
+    show: 'Toon',
+    hide: 'Verberg',
+    logIn: 'Inloggen',
     errorGeneric: 'Sorry, er ging iets mis. Probeer het zo nog eens.',
-    errorAnswers: 'Sorry, er ging iets mis. Probeer het opnieuw of sla over.',
-    errorOffline: 'Sorry, we konden je gegevens niet versturen. Controleer je verbinding en probeer het opnieuw.',
-    errorOfflineAnswers: 'Sorry, we konden je antwoorden niet versturen. Controleer je verbinding en probeer het opnieuw, of sla over.',
+    errorOffline: 'Sorry, we konden je account niet aanmaken. Controleer je verbinding en probeer het opnieuw.',
     errorOfflineMessage: 'Sorry, we konden je bericht niet versturen. Controleer je verbinding en probeer het opnieuw.',
-    errorAvailability: 'Kies wanneer je beschikbaar bent.',
     play: 'Diavoorstelling afspelen',
     pause: 'Diavoorstelling pauzeren',
   },
@@ -64,6 +64,16 @@ const SERVER_NL = {
   'Please choose when you need your internship.': 'Kies wanneer je je stage nodig hebt.',
   'Please choose from the listed kinds of help.': 'Kies uit de genoemde soorten hulp.',
   'Please write a message.': 'Schrijf een bericht.',
+  'Choose student, mentor or company.': 'Kies student, mentor of bedrijf.',
+  'Please enter your first name.': 'Vul je voornaam in.',
+  'Please enter your surname.': 'Vul je achternaam in.',
+  'Names must be 60 characters or fewer.': 'Namen mogen maximaal 60 tekens zijn.',
+  'Your password needs at least 8 characters.': 'Je wachtwoord moet minstens 8 tekens hebben.',
+  'Your password can be at most 72 characters.': 'Je wachtwoord mag maximaal 72 tekens zijn.',
+  'There is already an account with this email. Log in instead.': 'Er is al een account met dit e-mailadres. Log in.',
+  'Too many sign-ups from this connection. Wait ten minutes and try again.': 'Te veel aanmeldingen vanaf deze verbinding. Wacht tien minuten en probeer het opnieuw.',
+  'We could not create your account. Check your details and try again.': 'We konden je account niet aanmaken. Controleer je gegevens en probeer het opnieuw.',
+  'Sign-up is not available right now.': 'Aanmelden lukt nu even niet.',
   'Message must be 2000 characters or fewer.': 'Je bericht mag maximaal 2000 tekens zijn.',
 }
 function serverError(message, fallback) {
@@ -145,27 +155,54 @@ if (variant) {
   countEvent(`ab/hero-${variant}`)
 }
 
-// ---- Waiting list form ----
+// ---- Links to a form ----
+// "Find a mentor", "Sign up free" and "Contact" point at a section (#signup, #contact). On
+// phones the form sits below the section's heading and text, so jumping to the section shows
+// headings, not the form. These links scroll to the form itself instead, and on devices with a
+// mouse also put the cursor in the first field. (No auto-focus on touch screens: it would pop
+// up the keyboard.)
+function formIn(hash) {
+  if (!hash || hash.length < 2) return null
+  const section = document.getElementById(decodeURIComponent(hash.slice(1)))
+  return section?.querySelector('.form-card') ?? null
+}
+
+function goToForm(card) {
+  card.scrollIntoView({ block: 'start' })
+  if (window.matchMedia('(pointer: fine)').matches) {
+    card.querySelector('input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea')?.focus({ preventScroll: true })
+  }
+}
+
+document.addEventListener('click', (event) => {
+  const link = event.target.closest('a[href*="#"]')
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return
+  const url = new URL(link.href, window.location.href)
+  if (url.pathname !== window.location.pathname) return
+  const card = formIn(url.hash)
+  if (!card) return
+  event.preventDefault()
+  history.pushState(null, '', url.hash)
+  goToForm(card)
+})
+
+// Arriving from another page with a link such as /#contact.
+const arrivalCard = formIn(window.location.hash)
+if (arrivalCard) window.addEventListener('load', () => goToForm(arrivalCard), { once: true })
+
+// ---- Account form ----
 // One form for all three segments. The page says which segment it is (<body data-segment>).
-// GoatCounter counts page views per page (/students/, /mentors/, /companies/ and the /nl/ versions),
-// plus the events form-start-<segment> and signup-<segment>, so
-// conversion per segment = signup-<segment> ÷ views of that segment's pages.
-const form = document.querySelector('#pilot-form')
+// It creates the account (POST /api/signup) and sends the person to the platform, logged in,
+// where they answer the short profile questions.
+// Each new account sends a "sign_up" event with the segment to Google Analytics (only after
+// the visitor accepts cookies) and to Tag Manager's dataLayer.
+const form = document.querySelector('#signup-form')
 if (form) {
   const segment = document.body.dataset.segment
   const button = form.querySelector('button[type="submit"]')
   const errorBox = document.querySelector('#form-error')
-  const thanks = document.querySelector('#pilot-thanks')
-  const answersForm = document.querySelector('#answers-form')
-  const answersButton = answersForm.querySelector('button[type="submit"]')
-  const answersError = document.querySelector('#answers-error')
-  const availability = form.querySelector('[data-availability]')
-  let signupId = null
-
-  const BUTTON = {
-    en: { student: 'Find a mentor', mentor: 'Sign up as a mentor', company: 'Sign up as a company' },
-    nl: { student: 'Vind een mentor', mentor: 'Meld je aan als mentor', company: 'Meld je aan als bedrijf' },
-  }
+  const password = form.elements.password
+  const toggle = form.querySelector('[data-password-toggle]')
 
   // Show the fields for this segment. Hidden fields are disabled, so they are neither checked nor sent.
   for (const group of form.querySelectorAll('[data-for-role]')) {
@@ -173,12 +210,22 @@ if (form) {
     group.hidden = !visible
     for (const input of group.querySelectorAll('input, select')) input.disabled = !visible
   }
-  // Sector is optional for mentors only.
-  form.elements.sector.required = segment !== 'mentor'
-  button.textContent = BUTTON[LANG][segment]
 
-  const showError = (message) => {
+  toggle.addEventListener('click', () => {
+    const show = password.type === 'password'
+    password.type = show ? 'text' : 'password'
+    toggle.textContent = show ? t.hide : t.show
+    toggle.setAttribute('aria-pressed', String(show))
+  })
+
+  const showError = (message, withLogin = false) => {
     errorBox.textContent = message
+    if (withLogin) {
+      const link = document.createElement('a')
+      link.href = `${APP_URL}/login`
+      link.textContent = t.logIn
+      errorBox.append(' ', link)
+    }
     errorBox.hidden = false
   }
 
@@ -188,30 +235,16 @@ if (form) {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
     errorBox.hidden = true
-
     // Let the browser explain missing or invalid fields first.
     if (!form.reportValidity()) return
-    const fields = new FormData(form)
-    // Checkbox groups can't be marked required in HTML, so check "at least one" here.
-    if (availability && !availability.hidden && !fields.getAll('availability').length) {
-      showError(t.errorAvailability)
-      availability.querySelector('input').focus()
-      return
-    }
 
-    const data = {
-      ...Object.fromEntries(fields),
-      availability: fields.getAll('availability'),
-      consent: form.elements.consent.checked,
-      variant,
-      ...source,
-    }
+    const data = { ...Object.fromEntries(new FormData(form)), ...source }
     const label = button.textContent
     button.disabled = true
-    button.textContent = t.sending
+    button.textContent = t.creating
 
     try {
-      const res = await fetch(`${API_URL}/api/pilot-requests`, {
+      const res = await fetch(`${API_URL}/api/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -222,81 +255,17 @@ if (form) {
         countEvent(`signup-${segment}`, `Signed up: ${segment}`)
         window.dataLayer?.push({ event: 'sign_up', role: segment, variant })
         if (document.querySelector('#ga-script')) window.gtag('event', 'sign_up', { role: segment, variant })
-        form.hidden = true
-        // Students get four optional follow-up questions; everyone else sees the thank-you.
-        if (segment === 'student' && body.id) showAnswers(body.id)
-        else showThanks()
+        // Logged in on the platform; the page there asks the profile questions.
+        if (body.next) window.location.assign(`${APP_URL}${body.next}`)
         return
       }
-      // Already on the list for this segment: nothing to fix, so say so kindly.
-      if (res.status === 409 && body.duplicate) {
-        form.hidden = true
-        showThanks({ duplicate: true })
-        return
-      }
-      showError(res.status === 400 ? serverError(body.error, t.errorGeneric) : t.errorGeneric)
+      if (res.status === 409 && body.duplicate) return showError(serverError(body.error, t.errorGeneric), true)
+      showError([400, 429, 503].includes(res.status) ? serverError(body.error, t.errorGeneric) : t.errorGeneric)
     } catch {
       showError(t.errorOffline)
     } finally {
       button.disabled = false
       button.textContent = label
-    }
-  })
-
-  function showThanks({ duplicate = false } = {}) {
-    answersForm.hidden = true
-    thanks.querySelector('[data-thanks="new"]').hidden = duplicate
-    thanks.querySelector('[data-thanks="duplicate"]').hidden = !duplicate
-    thanks.hidden = false
-    thanks.focus()
-  }
-
-  // ---- Step 2: optional follow-up questions for students ----
-  function showAnswers(id) {
-    signupId = id
-    answersForm.hidden = false
-    answersForm.focus()
-  }
-
-  document.querySelector('#answers-skip').addEventListener('click', () => showThanks())
-
-  answersForm.addEventListener('submit', async (event) => {
-    event.preventDefault()
-    answersError.hidden = true
-
-    const fields = new FormData(answersForm)
-    const answers = {
-      has_placement: fields.get('has_placement'),
-      applications_sent: fields.get('applications_sent'),
-      help_wanted: fields.getAll('help_wanted'),
-      needed_by: fields.get('needed_by'),
-    }
-    // Nothing chosen is the same as skipping.
-    if (!answers.has_placement && !answers.applications_sent && !answers.help_wanted.length && !answers.needed_by) {
-      return showThanks()
-    }
-
-    answersButton.disabled = true
-    answersButton.textContent = t.sending
-    try {
-      const res = await fetch(`${API_URL}/api/pilot-requests/${signupId}/answers`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(answers),
-      })
-      if (res.ok) {
-        countEvent('student-answers', 'Student answered questions')
-        return showThanks()
-      }
-      const body = await res.json().catch(() => ({}))
-      answersError.textContent = res.status === 400 ? serverError(body.error, t.errorAnswers) : t.errorAnswers
-      answersError.hidden = false
-    } catch {
-      answersError.textContent = t.errorOfflineAnswers
-      answersError.hidden = false
-    } finally {
-      answersButton.disabled = false
-      answersButton.textContent = t.sendAnswers
     }
   })
 }

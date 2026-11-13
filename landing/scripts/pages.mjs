@@ -20,11 +20,11 @@ export const partialsDir = path.join(root, 'partials')
 export const SITE_URL = 'https://mentorbridge.nl'
 
 export const PAGES = [
-  { name: 'home', file: 'index.html', path: '/', segment: '', cta: '/#choose' },
+  { name: 'home', file: 'index.html', path: '/', segment: '', cta: '/login?mode=signup' },
   { name: 'students', file: 'students/index.html', path: '/students/', segment: 'student', cta: '#signup' },
   { name: 'mentors', file: 'mentors/index.html', path: '/mentors/', segment: 'mentor', cta: '#signup' },
   { name: 'companies', file: 'companies/index.html', path: '/companies/', segment: 'company', cta: '#signup' },
-  { name: 'privacy', file: 'privacy/index.html', path: '/privacy/', segment: '', cta: '/#choose' },
+  { name: 'privacy', file: 'privacy/index.html', path: '/privacy/', segment: '', cta: '/login?mode=signup' },
 ]
 
 // Finds the page for a file path or URL like /students/index.html or /students/.
