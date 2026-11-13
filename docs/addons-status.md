@@ -33,7 +33,7 @@ Statuses: `DONE`, `PARTIAL`, `MISSING`, `CONFLICT`, `NOT CODE`, `BLOCKED` (waiti
 | C7 | P3 | MISSING | | UNCLEAR: are ads planned? |
 | C8 | P2 | DONE | Open Graph and Twitter tags per page and language, 1200x627 images in `landing/public/og/` (`npm run og -w landing`). | |
 | C9 | P3 | MISSING | | Can be made now that the pages and UTM names exist. |
-| D1 | LATER | PARTIAL | Platform app: auth, roles, keyword matching, profiles, dashboard, schedule, messages, and an admin dashboard with "View as" (13 November). Migrations up to 0011 are applied. | Apply migration 0012 so admins can use Schedule and Messages. |
+| D1 | LATER | PARTIAL | Platform app: auth, roles, keyword matching, profiles, dashboard, schedule with session reviews, a full messenger (pictures, replies, reactions, seen, typing, reports), a company view with student consent, and an admin dashboard with "View as" and reports (13 November). | Apply migrations 0012, 0013 and 0014 before deploying. |
 | D2 | LATER | PARTIAL | Landing colours are tokens in `landing/src/style.css`. Header and footer now exist once (partials), so the name and logo are in fewer places. | No single brand config. |
 | D3 | LATER | NOT CODE | | Investor note UNCLEAR. |
 

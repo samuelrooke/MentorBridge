@@ -8,6 +8,7 @@ import { useSessions } from '../lib/useSessions'
 import type { PlatformMessage, PlatformSession } from '../lib/platform'
 // Loaded only for admins, so students and mentors don't download it.
 const AdminDashboard = lazy(() => import('./AdminDashboard'))
+const CompanyDashboard = lazy(() => import('./CompanyDashboard'))
 
 const roleNames = { student: 'Student', company: 'Company', mentor: 'Mentor', admin: 'Admin' }
 // The answer that matching needs most, per role. If it's empty, the dashboard asks to finish the profile.
@@ -17,12 +18,13 @@ const keyAnswer = {
   company: { table: 'company_profiles', column: 'organisation_name' },
 } as const
 type Activity = { id: string; match_id: string; title: string; completed_at: string | null; due_date: string | null; sort_order: number }
-type MessagePreview = PlatformMessage & { match_id: string }
+type MessagePreview = PlatformMessage & { match_id: string; attachment_path?: string | null; deleted_at?: string | null }
 
 // Admins get the admin dashboard; everyone else (and an admin viewing as someone) the member dashboard.
 export default function Dashboard() {
   const { viewer } = useViewer()
   if (viewer?.role === 'admin') return <Suspense fallback={<p className="muted">Loading the admin dashboard…</p>}><AdminDashboard /></Suspense>
+  if (viewer?.role === 'company') return <Suspense fallback={<p className="muted">Loading…</p>}><CompanyDashboard key={viewer.id} /></Suspense>
   // A new key per person resets the page state when an admin switches who they view as.
   return <MemberDashboard key={viewer?.id ?? 'none'} />
 }
@@ -57,7 +59,7 @@ function MemberDashboard() {
       const ids = matchIds.split(',')
       const [activityResult, messageResult] = await Promise.all([
         supabase.from('plan_activities').select('id, match_id, title, completed_at, due_date, sort_order').in('match_id', ids).order('sort_order'),
-        supabase.from('messages').select('id, match_id, sender_id, body, created_at').in('match_id', ids).order('created_at', { ascending: false }),
+        supabase.from('messages').select('id, match_id, sender_id, body, created_at, attachment_path, deleted_at').in('match_id', ids).order('created_at', { ascending: false }).limit(200),
       ])
       if (!active) return
       setActivities((activityResult.data ?? []) as Activity[])
@@ -166,7 +168,7 @@ function MemberDashboard() {
           <Link to="/messages" className="card overview-section message-summary">
             <div className="overview-title"><p className="eyebrow">Messages</p>{unreadTotal > 0 && <span className="unread-badge">{unreadTotal} unread</span>}</div>
             <h2>{latestMessageMatch?.[profile.role === 'student' ? 'mentor' : 'student']?.full_name ?? (matches.length ? 'Your conversations' : 'No people yet')}</h2>
-            <p className="muted">{latestMessage?.body ?? (matches.length ? 'No messages yet. Start a conversation with your match.' : 'Your people list and private chat will appear here after you are matched.')}</p>
+            <p className="muted">{latestMessage ? (latestMessage.deleted_at ? 'Message deleted' : latestMessage.body || 'Photo') : (matches.length ? 'No messages yet. Start a conversation with your match.' : 'Your people list and private chat will appear here after you are matched.')}</p>
             <span className="text-link">Open messages</span>
           </Link>
 

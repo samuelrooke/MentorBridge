@@ -17,7 +17,7 @@ export function sourceOf(request) {
   return 'direct'
 }
 
-export function summarizeOverview({ users = [], profiles = [], matches = [], sessions = [], messages = [], waitlist = [], contact = [] }, now = Date.now()) {
+export function summarizeOverview({ users = [], profiles = [], matches = [], sessions = [], messages = [], waitlist = [], contact = [], reports = [], reviews = [] }, now = Date.now()) {
   const roleOf = new Map(profiles.map((p) => [p.id, p.role]))
   const byRole = { student: 0, mentor: 0, company: 0, admin: 0 }
   for (const user of users) {
@@ -77,7 +77,16 @@ export function summarizeOverview({ users = [], profiles = [], matches = [], ses
       targets: SEGMENTS.map((role) => ({ role, signups: signupsByRole[role], target: TARGETS[role] })),
     },
     contact: { total: contact.length },
+    reports: { open: count(reports, (r) => r.status === 'open') },
+    reviews: summarizeReviews(reviews),
   }
+}
+
+// Session reviews: how many, the average rating of sessions that took place, and no-shows.
+export function summarizeReviews(reviews = []) {
+  const rated = reviews.filter((r) => r.took_place && Number.isInteger(r.rating))
+  const average = rated.length ? Math.round((rated.reduce((total, r) => total + r.rating, 0) / rated.length) * 10) / 10 : null
+  return { total: reviews.length, average, notTookPlace: count(reviews, (r) => r.took_place === false) }
 }
 
 // One row per match with names and activity, newest match first.

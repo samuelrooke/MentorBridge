@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useViewer } from '../context/viewer'
 import {
   MATCH_STATUSES, downloadFile, formatDate, matchesSearch, toCsv,
-  type AdminMatch, type AdminUser, type Candidates, type ContactMessage, type MatchStatus, type Overview, type Suggestion, type WaitlistEntry,
+  type AdminMatch, type AdminUser, type Candidates, type ContactMessage, type MatchStatus, type Overview, type Report, type Suggestion, type WaitlistEntry,
 } from '../lib/admin'
 import { api } from '../lib/api'
 import { supabase, type Profile, type Role } from '../lib/supabase'
@@ -12,6 +12,7 @@ const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'users', label: 'Users' },
   { id: 'matches', label: 'Matches' },
+  { id: 'reports', label: 'Reports' },
   { id: 'waitlist', label: 'Waiting list' },
   { id: 'contact', label: 'Contact' },
 ] as const
@@ -88,6 +89,7 @@ export default function AdminDashboard() {
         {tab === 'overview' && <OverviewTab openTab={openTab} />}
         {tab === 'users' && <UsersTab initialFilter={searchParams.get('filter') ?? ''} />}
         {tab === 'matches' && <MatchesTab />}
+        {tab === 'reports' && <ReportsTab />}
         {tab === 'waitlist' && <WaitlistTab />}
         {tab === 'contact' && <ContactTab />}
       </section>
@@ -105,6 +107,7 @@ function OverviewTab({ openTab }: { openTab: (id: TabId, extra?: Record<string, 
   if (error || !data) return <p className="alert alert-error" role="alert">Could not load the overview. {error}</p>
 
   const attention = [
+    { count: data.reports?.open ?? 0, text: 'open reports of misbehaviour', go: () => openTab('reports') },
     { count: data.accounts.unconfirmed, text: 'accounts haven’t confirmed their email', go: () => openTab('users', { filter: 'unconfirmed' }) },
     { count: data.matches.studentsWithoutMatch, text: 'students have no open match', go: () => openTab('matches') },
     { count: data.matches.mentorsWithoutMatch, text: 'mentors have no open match', go: () => openTab('matches') },
@@ -122,6 +125,9 @@ function OverviewTab({ openTab }: { openTab: (id: TabId, extra?: Record<string, 
         <Kpi label="Upcoming sessions" value={data.sessions.upcoming} detail={`${data.sessions.next7Days} in the next 7 days`} to="/schedule" />
         <Kpi label="Messages" value={data.messages.total} detail={`${data.messages.last7Days} in the last 7 days`} to="/messages" />
         <Kpi label="Contact form" value={data.contact.total} detail="Messages from mentorbridge.nl" onClick={() => openTab('contact')} />
+        <Kpi label="Session reviews" value={data.reviews?.total ?? 0}
+          detail={data.reviews?.total ? `${data.reviews.average ? `Average ${data.reviews.average} of 5` : 'No ratings yet'} · ${data.reviews.notTookPlace} didn’t take place` : 'No reviews yet'}
+          to="/schedule" />
       </div>
 
       <div className="admin-grid">
@@ -462,6 +468,106 @@ function MatchesTab() {
           {!visible.length && <p className="muted centered">{matches.data?.length ? 'No matches fit these filters.' : 'No matches yet. Create one above.'}</p>}
         </div>
       )}
+    </>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Reports
+// ---------------------------------------------------------------------------
+
+const reasonLabel: Record<Report['reason'], string> = {
+  harassment: 'Harassment or bullying',
+  inappropriate: 'Inappropriate or offensive content',
+  spam: 'Spam or advertising',
+  safety: 'Feels unsafe',
+  other: 'Something else',
+}
+
+function ReportsTab() {
+  const { data, error, loading, reload } = useAdminData<Report[]>('/admin/reports')
+  const [show, setShow] = useState<'open' | 'resolved' | 'all'>('open')
+  const [notes, setNotes] = useState<Record<string, string>>({})
+  const [status, setStatus] = useState<{ text: string; error?: boolean } | null>(null)
+  const reports = (data ?? []).filter((r) => show === 'all' || r.status === show)
+  const openCount = (data ?? []).filter((r) => r.status === 'open').length
+
+  async function run(action: () => Promise<unknown>, done: string) {
+    setStatus(null)
+    try {
+      await action()
+      setStatus({ text: done })
+      reload()
+    } catch (e) {
+      setStatus({ text: (e as Error).message, error: true })
+    }
+  }
+
+  return (
+    <>
+      <div className="admin-filters">
+        <div className="segmented-control" role="group" aria-label="Which reports">
+          {(['open', 'resolved', 'all'] as const).map((value) => (
+            <button key={value} aria-pressed={show === value} onClick={() => setShow(value)}>
+              {value === 'open' ? `Open (${openCount})` : value === 'resolved' ? 'Resolved' : 'All'}
+            </button>
+          ))}
+        </div>
+      </div>
+      {status && <p className={`alert ${status.error ? 'alert-error' : 'alert-info'}`} role={status.error ? 'alert' : 'status'}>{status.text}</p>}
+      {loading ? <p className="muted">Loading reports…</p> : error ? <p className="alert alert-error" role="alert">Could not load reports. {error}</p> : reports.length ? (
+        <div className="report-list">
+          {reports.map((r) => (
+            <article key={r.id} className={`card stack-sm report-card${r.status === 'open' ? ' open' : ''}`}>
+              <div className="card-heading">
+                <div>
+                  <p className="eyebrow">{reasonLabel[r.reason]}</p>
+                  <h2>{r.reporter_name ?? 'Someone'} reported {r.reported_name ?? 'a person'}</h2>
+                  <p className="muted small">
+                    {r.reporter_role ? `${roleLabel[r.reporter_role] ?? r.reporter_role} → ` : ''}{r.reported_role ? roleLabel[r.reported_role] ?? r.reported_role : ''}
+                    {r.match_label ? ` · Match: ${r.match_label}` : ''} · {formatDate(r.created_at, true)}
+                  </p>
+                </div>
+                <span className={`pill ${r.status === 'open' ? 'pill-open' : 'pill-good'}`}>{r.status === 'open' ? 'Open' : 'Resolved'}</span>
+              </div>
+              {r.message_id && (
+                <blockquote className="report-quote">
+                  {r.message_snapshot || (r.message_had_picture ? '' : '(empty message)')}
+                  {r.message_had_picture && <span className="muted small">{r.message_snapshot ? ' · ' : ''}The message had a picture.</span>}
+                </blockquote>
+              )}
+              {r.details && <p><strong>Reporter’s details:</strong> {r.details}</p>}
+              <label className="w-full">Team note (only admins see this)
+                <textarea rows={2} maxLength={2000} value={notes[r.id] ?? r.admin_note ?? ''} onChange={(e) => setNotes({ ...notes, [r.id]: e.target.value })} />
+              </label>
+              <div className="row-actions">
+                {notes[r.id] !== undefined && notes[r.id] !== (r.admin_note ?? '') && (
+                  <button className="btn btn-ghost btn-sm" onClick={() => void run(() => api(`/admin/reports/${r.id}`, { method: 'PATCH', body: JSON.stringify({ admin_note: notes[r.id] }) }), 'Note saved.')}>Save note</button>
+                )}
+                <button className="btn btn-primary btn-sm" onClick={() => void run(() => api(`/admin/reports/${r.id}`, { method: 'PATCH', body: JSON.stringify({ status: r.status === 'open' ? 'resolved' : 'open', ...(notes[r.id] !== undefined ? { admin_note: notes[r.id] } : {}) }) }), r.status === 'open' ? 'Marked as resolved.' : 'Reopened.')}>
+                  {r.status === 'open' ? 'Mark resolved' : 'Reopen'}
+                </button>
+                {r.match_id && <Link className="text-link" to={`/messages?match=${r.match_id}`}>Open the conversation</Link>}
+                {r.message_id && (
+                  <button className="text-link danger-link" onClick={() => {
+                    if (window.confirm('Delete the reported message for everyone? The report keeps its copy.')) void run(() => api(`/admin/messages/${r.message_id}`, { method: 'DELETE' }), 'Message deleted.')
+                  }}>Delete the message</button>
+                )}
+                {r.match_id && (
+                  <button className="text-link danger-link" onClick={() => {
+                    if (window.confirm('Stop this match? Its status becomes “cancelled”. Messages stay readable for the team.')) void run(() => api(`/admin/matches/${r.match_id}`, { method: 'PATCH', body: JSON.stringify({ status: 'cancelled' }) }), 'Match stopped.')
+                  }}>Stop the match</button>
+                )}
+                {r.reported_user_id && (
+                  <button className="text-link danger-link" onClick={() => {
+                    if (window.confirm(`Delete the account of ${r.reported_name}? This removes their profile and every match they are in, with its messages. It can’t be undone.`)) void run(() => api(`/admin/users/${r.reported_user_id}`, { method: 'DELETE' }), 'Account deleted.')
+                  }}>Delete their account</button>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : <p className="muted">{show === 'open' ? 'No open reports.' : 'No reports here.'}</p>}
     </>
   )
 }

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 import { useViewer } from '../context/viewer'
@@ -18,6 +19,11 @@ export default function Layout() {
   const unreadCounts = useUnreadCounts(matches, viewer?.id)
   const unreadTotal = Object.values(unreadCounts).reduce((total, count) => total + count, 0)
   const role = viewer?.role
+
+  // Unread messages in the browser tab, like other messengers: "(2) MentorBridge".
+  useEffect(() => {
+    document.title = unreadTotal ? `(${unreadTotal}) MentorBridge | Your workspace` : 'MentorBridge | Your workspace'
+  }, [unreadTotal])
   const hasMatchPages = role === 'student' || role === 'mentor' || role === 'admin'
 
   function backToAdmin() {
